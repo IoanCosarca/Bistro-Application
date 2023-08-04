@@ -1,8 +1,8 @@
 package com.ntt.bistroapplication.model;
 
 import jakarta.persistence.*;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -13,18 +13,50 @@ public class Product {
     @Enumerated(value = EnumType.STRING)
     private ProductType productType;
     private Double price;
-//    @ManyToMany()
-//    @JoinTable(name = "product_ingredients", joinColumns = @JoinColumn(name = "product_id"),
-//            inverseJoinColumns = @JoinColumn(name = "ingredient_id"))
-//    private Set<Ingredient> recipe;
+    @OneToMany(mappedBy = "product")
+    private Set<Ingredient> ingredients = new HashSet<>();
+    @ManyToOne
+    private PlacedOrder order;
 
     public Product() {}
+
+    public Long getId() {
+        return id;
+    }
 
     public void setId(Long id) {
         this.id = id;
     }
 
-    public Long getId() {
-        return id;
+    public ProductType getProductType() {
+        return productType;
+    }
+
+    public void setProductType(ProductType productType) {
+        this.productType = productType;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public Set<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(Set<Ingredient> ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public PlacedOrder getOrder() {
+        return order;
+    }
+
+    public void setOrder(PlacedOrder placedOrder) {
+        this.order = placedOrder;
     }
 }
