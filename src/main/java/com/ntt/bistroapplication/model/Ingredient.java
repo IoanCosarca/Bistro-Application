@@ -12,8 +12,8 @@ public class Ingredient {
     @Enumerated(value = EnumType.STRING)
     private IngredientType name;
     private Double cost;
-    @ManyToOne
-    private Product product;
+    @ManyToMany(mappedBy = "ingredients")
+    private Set<Product> product;
 
     public Ingredient() {}
 
@@ -41,11 +41,11 @@ public class Ingredient {
         this.cost = cost;
     }
 
-    public Product getProduct() {
+    public Set<Product> getProduct() {
         return product;
     }
 
-    public void setProduct(Product product) {
+    public void setProduct(Set<Product> product) {
         this.product = product;
     }
 }

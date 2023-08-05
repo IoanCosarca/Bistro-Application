@@ -12,7 +12,9 @@ public class PlacedOrder {
     private Long id;
     @ManyToOne
     private Customer customer;
-    @OneToMany(mappedBy = "order")
+    @ManyToMany
+    @JoinTable(name = "order_products", joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id"))
     private List<Product> products = new ArrayList<>();
     private Double totalPrice;
 

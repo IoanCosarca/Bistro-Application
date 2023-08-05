@@ -1,12 +1,12 @@
 # Initialize the product table
-INSERT INTO product (price, product_type) VALUES (0, '');
-INSERT INTO product (price, product_type) VALUES (0, 'CAKE');
-INSERT INTO product (price, product_type) VALUES (0, 'CROISSANT');
-INSERT INTO product (price, product_type) VALUES (0, 'DONUT');
-INSERT INTO product (price, product_type) VALUES (0, 'PASTA');
-INSERT INTO product (price, product_type) VALUES (0, 'PIZZA');
-INSERT INTO product (price, product_type) VALUES (0, 'RISOTTO');
-INSERT INTO product (price, product_type) VALUES (0, 'WAFFLES');
+# INSERT INTO product (price, product_type) VALUES (0, '');
+# INSERT INTO product (price, product_type) VALUES (0, 'CAKE');
+# INSERT INTO product (price, product_type) VALUES (0, 'CROISSANT');
+# INSERT INTO product (price, product_type) VALUES (0, 'DONUT');
+# INSERT INTO product (price, product_type) VALUES (0, 'PASTA');
+# INSERT INTO product (price, product_type) VALUES (0, 'PIZZA');
+# INSERT INTO product (price, product_type) VALUES (0, 'RISOTTO');
+# INSERT INTO product (price, product_type) VALUES (0, 'WAFFLES');
 
 # Initialize the customer table
 INSERT INTO customer (name) VALUE ('');
@@ -36,7 +36,7 @@ INSERT INTO ingredient (cost, name) VALUE (8.1, 'BACON');
 INSERT INTO ingredient (cost, name) VALUE (3.5, 'MUSHROOMS');
 INSERT INTO ingredient (cost, name) VALUE (4.6, 'PEPPERS');
 INSERT INTO ingredient (cost, name) VALUE (4.1, 'CORN');
-INSERT INTO ingredient (cost, name) VALUE (19.8, 'RISOTTO_RICE');
+INSERT INTO ingredient (cost, name) VALUE (19.8, 'RICE');
 INSERT INTO ingredient (cost, name) VALUE (2, 'ONION');
 INSERT INTO ingredient (cost, name) VALUE (3.7, 'CELERY');
 INSERT INTO ingredient (cost, name) VALUE (2.7, 'BASIL');

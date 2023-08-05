@@ -18,7 +18,7 @@ public enum IngredientType {
     MUSHROOMS,
     PEPPERS,
     CORN,
-    RISOTTO_RICE,
+    RICE,
     ONION,
     CELERY,
     BASIL,

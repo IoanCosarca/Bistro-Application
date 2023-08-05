@@ -3,6 +3,7 @@ package com.ntt.bistroapplication.model;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -10,13 +11,16 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String name;
     @Enumerated(value = EnumType.STRING)
     private ProductType productType;
-    private Double price;
-    @OneToMany(mappedBy = "product")
+    @ManyToMany
+    @JoinTable(name = "product_ingredients", joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "ingredient_id"))
     private Set<Ingredient> ingredients = new HashSet<>();
-    @ManyToOne
-    private PlacedOrder order;
+    private Double price = 0.0;
+    @ManyToMany(mappedBy = "products")
+    private List<PlacedOrder> order;
 
     public Product() {}
 
@@ -28,20 +32,20 @@ public class Product {
         this.id = id;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public ProductType getProductType() {
         return productType;
     }
 
     public void setProductType(ProductType productType) {
         this.productType = productType;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
     }
 
     public Set<Ingredient> getIngredients() {
@@ -52,11 +56,25 @@ public class Product {
         this.ingredients = ingredients;
     }
 
-    public PlacedOrder getOrder() {
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public void setPrice() {
+        for (Ingredient ingredient : ingredients) {
+            this.price += ingredient.getCost();
+        }
+    }
+
+    public List<PlacedOrder> getOrder() {
         return order;
     }
 
-    public void setOrder(PlacedOrder placedOrder) {
-        this.order = placedOrder;
+    public void setOrder(List<PlacedOrder> order) {
+        this.order = order;
     }
 }
