@@ -3,7 +3,6 @@ package com.ntt.bistroapplication.controller;
 import com.ntt.bistroapplication.model.Product;
 import com.ntt.bistroapplication.service.ProductService;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Set;
 
@@ -29,5 +28,13 @@ public class ProductController {
 
     public Product getByID(Integer id) {
         return productService.getProduct(Long.valueOf(id));
+    }
+
+    public void updatePrice(Product product, Double newPrice) {
+        productService.updatePrice(product, newPrice);
+    }
+
+    public void deleteByID(Integer id) {
+        productService.removeProduct(Long.valueOf(id));
     }
 }

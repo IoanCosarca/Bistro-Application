@@ -41,13 +41,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void updatePrice(Double newPrice) {
-
+    public void updatePrice(Product product, Double newPrice)
+    {
+        product.setPrice(newPrice);
+        productRepository.save(product);
     }
 
     @Override
     public void removeProduct(Long id) {
-
+        productRepository.deleteById(id);
     }
 
     @Override

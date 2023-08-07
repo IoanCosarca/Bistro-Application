@@ -57,10 +57,30 @@ public class BistroApplication {
             productController.listProducts();
 
             System.out.println("-------------Find Product By ID---------------");
-            System.out.println(productController.getByID(7));
-            System.out.println(productController.getByID(10));
+            try
+            {
+                System.out.println(productController.getByID(7));
+                System.out.println(productController.getByID(2));
+                System.out.println(productController.getByID(10));
+            }
+            catch (NonexistentProductException e) {
+                System.out.println(e.getMessage() + "\n" +
+                        Arrays.toString(Arrays.stream(e.getStackTrace())
+                                .map(s -> s + "\n")
+                                .toArray()));
+            }
+
+            System.out.println("-------------Update Price of Product---------------");
+            Product pizzaNewPrice = productController.getByID(6);
+            productController.updatePrice(pizzaNewPrice, 45.0);
+            productController.listProducts();
+
+            System.out.println("-------------Remove Product by ID---------------");
+            productController.deleteByID(3);
+            productController.deleteByID(15);
+            productController.listProducts();
         }
-        catch (MissingIngredientException | NonexistentProductException e) {
+        catch (MissingIngredientException e) {
             System.out.println(e.getMessage() + "\n" +
                     Arrays.toString(Arrays.stream(e.getStackTrace()).map(s -> s + "\n").toArray()));
         }
