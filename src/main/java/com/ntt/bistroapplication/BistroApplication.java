@@ -1,11 +1,9 @@
 package com.ntt.bistroapplication;
 
+import com.ntt.bistroapplication.controller.CustomerController;
 import com.ntt.bistroapplication.controller.IngredientController;
 import com.ntt.bistroapplication.controller.ProductController;
-import com.ntt.bistroapplication.model.Ingredient;
-import com.ntt.bistroapplication.model.IngredientType;
-import com.ntt.bistroapplication.model.Product;
-import com.ntt.bistroapplication.model.ProductType;
+import com.ntt.bistroapplication.model.*;
 import com.ntt.bistroapplication.service.MissingIngredientException;
 import com.ntt.bistroapplication.service.NonexistentProductException;
 import org.springframework.boot.SpringApplication;
@@ -26,6 +24,9 @@ public class BistroApplication {
                     (ProductController) ctx.getBean("productController");
             IngredientController ingredientController =
                     (IngredientController) ctx.getBean("ingredientController");
+            CustomerController customerController =
+                    (CustomerController) ctx.getBean("customerController");
+
             Set<Ingredient> databaseIngredients = ingredientController.returnIngredients();
 
             System.out.println("-------------List Products---------------");
@@ -79,6 +80,18 @@ public class BistroApplication {
             productController.deleteByID(3);
             productController.deleteByID(15);
             productController.listProducts();
+
+            System.out.println("-------------List Customers---------------");
+            customerController.listCustomers();
+
+            System.out.println("-------------Add Customer---------------");
+            Customer andreea = new Customer("Andreea");
+            customerController.addCustomer(andreea);
+            customerController.listCustomers();
+
+            System.out.println("-------------Remove Customer by ID---------------");
+            customerController.deleteByID(1);
+            customerController.listCustomers();
         }
         catch (MissingIngredientException e) {
             System.out.println(e.getMessage() + "\n" +
