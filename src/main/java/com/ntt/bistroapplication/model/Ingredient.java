@@ -17,6 +17,12 @@ public class Ingredient {
 
     public Ingredient() {}
 
+    public Ingredient(IngredientType name, Double cost)
+    {
+        this.name = name;
+        this.cost = cost;
+    }
+
     public Long getId() {
         return id;
     }
@@ -47,5 +53,33 @@ public class Ingredient {
 
     public void setProduct(Set<Product> product) {
         this.product = product;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Ingredient that = (Ingredient) o;
+
+        if (getId() != null ? !getId().equals(that.getId()) : that.getId() != null) return false;
+        if (getName() != that.getName()) return false;
+        return getCost().equals(that.getCost());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getId() != null ? getId().hashCode() : 0;
+        result = 31 * result + getName().hashCode();
+        result = 31 * result + getCost().hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "{id=" + id +
+                ", name=" + name +
+                ", cost=" + cost +
+                '}';
     }
 }

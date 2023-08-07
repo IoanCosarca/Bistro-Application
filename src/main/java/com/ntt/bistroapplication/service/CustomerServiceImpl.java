@@ -16,7 +16,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void addCustomer(Customer customer) {
-
+        System.out.println("Hello from customer service");
     }
 
     @Override

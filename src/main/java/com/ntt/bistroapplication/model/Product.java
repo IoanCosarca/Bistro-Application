@@ -14,7 +14,7 @@ public class Product {
     private String name;
     @Enumerated(value = EnumType.STRING)
     private ProductType productType;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "product_ingredients", joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "ingredient_id"))
     private Set<Ingredient> ingredients = new HashSet<>();
@@ -76,5 +76,38 @@ public class Product {
 
     public void setOrder(List<PlacedOrder> order) {
         this.order = order;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Product product = (Product) o;
+
+        if (!getId().equals(product.getId())) return false;
+        if (!getName().equals(product.getName())) return false;
+        if (getProductType() != product.getProductType()) return false;
+        return getIngredients().equals(product.getIngredients());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getId().hashCode();
+        result = 31 * result + getName().hashCode();
+        result = 31 * result + getProductType().hashCode();
+        result = 31 * result + getIngredients().hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Product:" + '\n' +
+                "id=" + id +
+                ", '" + name + '\'' +
+                ", " + productType +
+                ", ingredients: " + ingredients +
+                ", price=" + price +
+                '}';
     }
 }
