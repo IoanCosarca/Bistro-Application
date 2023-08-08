@@ -5,6 +5,7 @@ import com.ntt.bistroapplication.repository.CustomerRepository;
 import com.ntt.bistroapplication.repository.IngredientRepository;
 import com.ntt.bistroapplication.repository.ProductRepository;
 import com.ntt.bistroapplication.service.MissingIngredientException;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -27,7 +28,7 @@ public class BistroBootstrap implements ApplicationListener<ContextRefreshedEven
     }
 
     @Override
-    public void onApplicationEvent(ContextRefreshedEvent event)
+    public void onApplicationEvent(@NotNull ContextRefreshedEvent event)
     {
         ingredientRepository.saveAll(getIngredients());
         productRepository.saveAll(getProducts());
@@ -38,79 +39,79 @@ public class BistroBootstrap implements ApplicationListener<ContextRefreshedEven
     {
         Set<Ingredient> ingredients = new HashSet<>();
 
-        Ingredient flour = new Ingredient(IngredientType.FLOUR, 10.4);
+        Ingredient flour = new Ingredient(IngredientType.FLOUR, 5.2);
         ingredients.add(flour);
 
-        Ingredient eggs = new Ingredient(IngredientType.EGGS, 8.6);
+        Ingredient eggs = new Ingredient(IngredientType.EGGS, 4.3);
         ingredients.add(eggs);
 
-        Ingredient milk = new Ingredient(IngredientType.MILK, 6.5);
+        Ingredient milk = new Ingredient(IngredientType.MILK, 3.2);
         ingredients.add(milk);
 
-        Ingredient sugar = new Ingredient(IngredientType.SUGAR, 4.1);
+        Ingredient sugar = new Ingredient(IngredientType.SUGAR, 2.0);
         ingredients.add(sugar);
 
-        Ingredient sunflowerOil = new Ingredient(IngredientType.SUNFLOWER_OIL, 8.5);
+        Ingredient sunflowerOil = new Ingredient(IngredientType.SUNFLOWER_OIL, 4.2);
         ingredients.add(sunflowerOil);
 
-        Ingredient salt = new Ingredient(IngredientType.SALT, 2.9);
+        Ingredient salt = new Ingredient(IngredientType.SALT, 1.4);
         ingredients.add(salt);
 
-        Ingredient butter = new Ingredient(IngredientType.BUTTER, 3.9);
+        Ingredient butter = new Ingredient(IngredientType.BUTTER, 1.9);
         ingredients.add(butter);
 
-        Ingredient yeast = new Ingredient(IngredientType.YEAST, 5.5);
+        Ingredient yeast = new Ingredient(IngredientType.YEAST, 2.7);
         ingredients.add(yeast);
 
-        Ingredient pasta = new Ingredient(IngredientType.PASTA, 6.0);
+        Ingredient pasta = new Ingredient(IngredientType.PASTA, 3.0);
         ingredients.add(pasta);
 
-        Ingredient tomatoSauce = new Ingredient(IngredientType.TOMATO_SAUCE, 9.0);
+        Ingredient tomatoSauce = new Ingredient(IngredientType.TOMATO_SAUCE, 4.5);
         ingredients.add(tomatoSauce);
 
-        Ingredient meatballs = new Ingredient(IngredientType.MEATBALLS, 12.7);
+        Ingredient meatballs = new Ingredient(IngredientType.MEATBALLS, 6.3);
         ingredients.add(meatballs);
 
-        Ingredient garlic = new Ingredient(IngredientType.GARLIC, 2.2);
+        Ingredient garlic = new Ingredient(IngredientType.GARLIC, 1.1);
         ingredients.add(garlic);
 
-        Ingredient cheese = new Ingredient(IngredientType.CHEESE, 7.0);
+        Ingredient cheese = new Ingredient(IngredientType.CHEESE, 3.5);
         ingredients.add(cheese);
 
-        Ingredient bacon = new Ingredient(IngredientType.BACON, 8.1);
+        Ingredient bacon = new Ingredient(IngredientType.BACON, 4.0);
         ingredients.add(bacon);
 
-        Ingredient mushrooms = new Ingredient(IngredientType.MUSHROOMS, 3.5);
+        Ingredient mushrooms = new Ingredient(IngredientType.MUSHROOMS, 1.7);
         ingredients.add(mushrooms);
 
-        Ingredient peppers = new Ingredient(IngredientType.PEPPERS, 4.6);
+        Ingredient peppers = new Ingredient(IngredientType.PEPPERS, 2.3);
         ingredients.add(peppers);
 
-        Ingredient corn = new Ingredient(IngredientType.CORN, 4.1);
+        Ingredient corn = new Ingredient(IngredientType.CORN, 2.0);
         ingredients.add(corn);
 
-        Ingredient rice = new Ingredient(IngredientType.RICE, 19.8);
+        Ingredient rice = new Ingredient(IngredientType.RICE, 9.4);
         ingredients.add(rice);
 
-        Ingredient onion = new Ingredient(IngredientType.ONION, 2.0);
+        Ingredient onion = new Ingredient(IngredientType.ONION, 1.0);
         ingredients.add(onion);
 
-        Ingredient celery = new Ingredient(IngredientType.CELERY, 3.7);
+        Ingredient celery = new Ingredient(IngredientType.CELERY, 1.8);
         ingredients.add(celery);
 
-        Ingredient basil = new Ingredient(IngredientType.BASIL, 2.7);
+        Ingredient basil = new Ingredient(IngredientType.BASIL, 1.2);
         ingredients.add(basil);
 
-        Ingredient chocolateCream = new Ingredient(IngredientType.CHOCOLATE_CREAM, 5.0);
+        Ingredient chocolateCream = new Ingredient(IngredientType.CHOCOLATE_CREAM, 2.5);
         ingredients.add(chocolateCream);
 
-        Ingredient strawberryJam = new Ingredient(IngredientType.STRAWBERRY_JAM, 4.2);
+        Ingredient strawberryJam = new Ingredient(IngredientType.STRAWBERRY_JAM, 2.0);
         ingredients.add(strawberryJam);
 
-        Ingredient peachesJam = new Ingredient(IngredientType.PEACHES_JAM, 4.2);
+        Ingredient peachesJam = new Ingredient(IngredientType.PEACHES_JAM, 2.2);
         ingredients.add(peachesJam);
 
-        Ingredient raspberryJam = new Ingredient(IngredientType.RASPBERRIES_JAM, 4.2);
+        Ingredient raspberryJam = new Ingredient(IngredientType.RASPBERRIES_JAM, 2.4);
         ingredients.add(raspberryJam);
 
         return ingredients;
@@ -162,7 +163,7 @@ public class BistroBootstrap implements ApplicationListener<ContextRefreshedEven
         products.add(strawberryWaffles);
 
         Product croissant = new Product();
-        croissant.setName("Croissant");
+        croissant.setName("Simple Croissant");
         croissant.setProductType(ProductType.CROISSANT);
         ingredients = new HashSet<>();
         ingredients.add(ingredientRepository.findByName(IngredientType.YEAST).get());
@@ -239,6 +240,76 @@ public class BistroBootstrap implements ApplicationListener<ContextRefreshedEven
         simpleRisotto.setPrice();
 
         products.add(simpleRisotto);
+
+        Product peachesCroissant = new Product();
+        peachesCroissant.setName("Peaches Croissant");
+        peachesCroissant.setProductType(ProductType.CROISSANT);
+        ingredients = new HashSet<>();
+        ingredients.add(ingredientRepository.findByName(IngredientType.BUTTER).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.EGGS).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.YEAST).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.SUGAR).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.FLOUR).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.MILK).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.PEACHES_JAM).get());
+        peachesCroissant.setIngredients(ingredients);
+        peachesCroissant.setPrice();
+
+        products.add(peachesCroissant);
+
+        Product simpleSpaghetti = new Product();
+        simpleSpaghetti.setName("Simple Spaghetti");
+        simpleSpaghetti.setProductType(ProductType.PASTA);
+        ingredients = new HashSet<>();
+        ingredients.add(ingredientRepository.findByName(IngredientType.PASTA).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.MEATBALLS).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.TOMATO_SAUCE).get());
+        simpleSpaghetti.setIngredients(ingredients);
+        simpleSpaghetti.setPrice();
+
+        products.add(simpleSpaghetti);
+
+        Product chocolateWaffles = new Product();
+        chocolateWaffles.setName("Chocolate Waffles");
+        chocolateWaffles.setProductType(ProductType.WAFFLES);
+        ingredients = new HashSet<>();
+        ingredients.add(ingredientRepository.findByName(IngredientType.MILK).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.SUGAR).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.BUTTER).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.FLOUR).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.EGGS).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.CHOCOLATE_CREAM).get());
+        chocolateWaffles.setIngredients(ingredients);
+        chocolateWaffles.setPrice();
+
+        products.add(chocolateWaffles);
+
+        Product cheesePizza = new Product();
+        cheesePizza.setName("Cheese Pizza");
+        cheesePizza.setProductType(ProductType.PIZZA);
+        ingredients = new HashSet<>();
+        ingredients.add(ingredientRepository.findByName(IngredientType.FLOUR).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.CHEESE).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.YEAST).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.TOMATO_SAUCE).get());
+        cheesePizza.setIngredients(ingredients);
+        cheesePizza.setPrice();
+
+        products.add(cheesePizza);
+
+        Product plainCake = new Product();
+        plainCake.setName("Plain Cake");
+        plainCake.setProductType(ProductType.CAKE);
+        ingredients = new HashSet<>();
+        ingredients.add(ingredientRepository.findByName(IngredientType.FLOUR).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.SUGAR).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.BUTTER).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.EGGS).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.MILK).get());
+        plainCake.setIngredients(ingredients);
+        plainCake.setPrice();
+
+        products.add(plainCake);
 
         return products;
     }

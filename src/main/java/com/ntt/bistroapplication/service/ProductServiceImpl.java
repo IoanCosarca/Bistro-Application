@@ -51,9 +51,4 @@ public class ProductServiceImpl implements ProductService {
     public void removeProduct(Long id) {
         productRepository.deleteById(id);
     }
-
-    @Override
-    public Set<Product> getTop3() {
-        return null;
-    }
 }

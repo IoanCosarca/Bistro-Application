@@ -14,6 +14,10 @@ public class ProductController {
         this.productService = productService;
     }
 
+    public Set<Product> returnProducts() {
+        return productService.getProducts();
+    }
+
     public void listProducts()
     {
         Set<Product> products = productService.getProducts();

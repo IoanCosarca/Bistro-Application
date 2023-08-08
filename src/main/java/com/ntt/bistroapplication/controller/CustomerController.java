@@ -14,6 +14,10 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
+    public Set<Customer> returnCustomers() {
+        return customerService.getCustomers();
+    }
+
     public void listCustomers()
     {
         Set<Customer> customers = customerService.getCustomers();

@@ -14,6 +14,4 @@ public interface ProductService {
     void updatePrice(Product product, Double newPrice);
 
     void removeProduct(Long id);
-
-    Set<Product> getTop3();
 }

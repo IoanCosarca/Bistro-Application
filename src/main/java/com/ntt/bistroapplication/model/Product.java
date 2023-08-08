@@ -2,6 +2,7 @@ package com.ntt.bistroapplication.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -20,7 +21,7 @@ public class Product {
     private Set<Ingredient> ingredients = new HashSet<>();
     private Double price = 0.0;
     @ManyToMany(mappedBy = "products")
-    private List<PlacedOrder> order;
+    private List<PlacedOrder> order = new ArrayList<>();
 
     public Product() {}
 
@@ -64,7 +65,9 @@ public class Product {
         this.price = price;
     }
 
-    public void setPrice() {
+    public void setPrice()
+    {
+        this.price = 0.0;
         for (Ingredient ingredient : ingredients) {
             this.price += ingredient.getCost();
         }
@@ -102,7 +105,7 @@ public class Product {
 
     @Override
     public String toString() {
-        return "Product:" + '\n' +
+        return '\n' + "Product:" + '\n' +
                 "id=" + id +
                 ", '" + name + '\'' +
                 ", " + productType +

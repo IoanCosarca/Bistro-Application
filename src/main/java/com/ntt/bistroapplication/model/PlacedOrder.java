@@ -10,13 +10,13 @@ public class PlacedOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Customer customer;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "order_products", joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id"))
     private List<Product> products = new ArrayList<>();
-    private Double totalPrice;
+    private Double totalPrice = 0.0;
 
     public PlacedOrder() {}
 
@@ -50,5 +50,31 @@ public class PlacedOrder {
 
     public void setTotalPrice(Double totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public void setTotalPrice() {
+        for (Product p : products) {
+            this.totalPrice += p.getPrice();
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PlacedOrder order = (PlacedOrder) o;
+
+        if (!getCustomer().equals(order.getCustomer())) return false;
+        if (!getProducts().equals(order.getProducts())) return false;
+        return getTotalPrice().equals(order.getTotalPrice());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getCustomer().hashCode();
+        result = 31 * result + getProducts().hashCode();
+        result = 31 * result + getTotalPrice().hashCode();
+        return result;
     }
 }
