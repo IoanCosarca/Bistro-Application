@@ -2,6 +2,8 @@ package com.ntt.bistroapplication.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -14,6 +16,8 @@ public class Ingredient {
     private Double cost;
     @ManyToMany(mappedBy = "ingredients")
     private Set<Product> product;
+    @OneToMany(mappedBy = "topping")
+    private List<OrderedProduct> toppings = new ArrayList<>();
 
     public Ingredient() {}
 
@@ -55,6 +59,14 @@ public class Ingredient {
         this.product = product;
     }
 
+    public List<OrderedProduct> getToppings() {
+        return toppings;
+    }
+
+    public void setToppings(List<OrderedProduct> toppings) {
+        this.toppings = toppings;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -62,15 +74,13 @@ public class Ingredient {
 
         Ingredient that = (Ingredient) o;
 
-        if (getId() != null ? !getId().equals(that.getId()) : that.getId() != null) return false;
         if (getName() != that.getName()) return false;
         return getCost().equals(that.getCost());
     }
 
     @Override
     public int hashCode() {
-        int result = getId() != null ? getId().hashCode() : 0;
-        result = 31 * result + getName().hashCode();
+        int result = getName().hashCode();
         result = 31 * result + getCost().hashCode();
         return result;
     }

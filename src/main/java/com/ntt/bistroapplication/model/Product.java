@@ -20,8 +20,8 @@ public class Product {
             inverseJoinColumns = @JoinColumn(name = "ingredient_id"))
     private Set<Ingredient> ingredients = new HashSet<>();
     private Double price = 0.0;
-    @ManyToMany(mappedBy = "products")
-    private List<PlacedOrder> order = new ArrayList<>();
+    @OneToMany(mappedBy = "product")
+    private List<OrderedProduct> orderedProduct = new ArrayList<>();
 
     public Product() {}
 
@@ -73,12 +73,12 @@ public class Product {
         }
     }
 
-    public List<PlacedOrder> getOrder() {
-        return order;
+    public List<OrderedProduct> getOrderedProduct() {
+        return orderedProduct;
     }
 
-    public void setOrder(List<PlacedOrder> order) {
-        this.order = order;
+    public void setOrderedProduct(List<OrderedProduct> orderedProduct) {
+        this.orderedProduct = orderedProduct;
     }
 
     @Override
@@ -88,18 +88,14 @@ public class Product {
 
         Product product = (Product) o;
 
-        if (!getId().equals(product.getId())) return false;
         if (!getName().equals(product.getName())) return false;
-        if (getProductType() != product.getProductType()) return false;
-        return getIngredients().equals(product.getIngredients());
+        return getProductType() == product.getProductType();
     }
 
     @Override
     public int hashCode() {
-        int result = getId().hashCode();
-        result = 31 * result + getName().hashCode();
+        int result = getName().hashCode();
         result = 31 * result + getProductType().hashCode();
-        result = 31 * result + getIngredients().hashCode();
         return result;
     }
 

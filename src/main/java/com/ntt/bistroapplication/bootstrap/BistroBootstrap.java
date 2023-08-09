@@ -117,6 +117,7 @@ public class BistroBootstrap implements ApplicationListener<ContextRefreshedEven
         return ingredients;
     }
 
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     private List<Product> getProducts()
     {
         List<Product> products = new ArrayList<>();

@@ -93,40 +93,50 @@ public class BistroApplication {
             customerController.listCustomers();
 
             System.out.println("-------------List Top 3 Most Wanted Products---------------");
-            List<Product> order1Products = new ArrayList<>();
-            order1Products.add(findProduct("Spaghetti with garlic", databaseProducts));
-            order1Products.add(findProduct("Prosciutto Fungi Plus", databaseProducts));
-            order1Products.add(findProduct("Chocolate Cake", databaseProducts));
+            OrderedProduct o1Product1 =
+                    new OrderedProduct(findProduct("Spaghetti with garlic", databaseProducts));
+            OrderedProduct o1Product2 =
+                    new OrderedProduct(findProduct("Prosciutto Fungi Plus", databaseProducts));
+            OrderedProduct o1Product3 =
+                    new OrderedProduct(findProduct("Chocolate Cake", databaseProducts));
+            List<OrderedProduct> order1Products =
+                    new ArrayList<>(Arrays.asList(o1Product1, o1Product2, o1Product3));
             PlacedOrder order1 = new PlacedOrder();
             order1.setProducts(order1Products);
             order1.setTotalPrice();
 
-            List<Product> order2Products = new ArrayList<>();
-            order2Products.add(findProduct("Chocolate Donut", databaseProducts));
-            order2Products.add(findProduct("Chocolate Cake", databaseProducts));
-            Product extra = findProduct("Plain Cake", databaseProducts);
-            assert extra != null;
-            Set<Ingredient> ingredientSet = extra.getIngredients();
-            ingredientSet.add(findIngredient(IngredientType.RASPBERRIES_JAM, databaseIngredients));
-            extra.setIngredients(ingredientSet);
-            extra.setPrice();
-            order2Products.add(extra);
+            OrderedProduct o2Product1 =
+                    new OrderedProduct(findProduct("Chocolate Donut", databaseProducts));
+            OrderedProduct o2Product2 =
+                    new OrderedProduct(findProduct("Chocolate Cake", databaseProducts));
+            OrderedProduct o2Product3 =
+                    new OrderedProduct(findProduct("Plain Cake", databaseProducts));
+            o2Product3.setTopping(findIngredient(IngredientType.RASPBERRIES_JAM,
+                    databaseIngredients));
+            List<OrderedProduct> order2Products =
+                    new ArrayList<>(Arrays.asList(o2Product1, o2Product2, o2Product3));
             PlacedOrder order2 = new PlacedOrder();
             order2.setProducts(order2Products);
-//            System.out.println(order2.getProducts());
             order2.setTotalPrice();
 
-            List<Product> order3Products = new ArrayList<>();
-            order3Products.add(findProduct("Prosciutto Fungi Plus", databaseProducts));
-            order3Products.add(findProduct("Cheese Pizza", databaseProducts));
-            order3Products.add(findProduct("Chocolate Waffles", databaseProducts));
+            OrderedProduct o3Product1 =
+                    new OrderedProduct(findProduct("Prosciutto Fungi Plus", databaseProducts));
+            OrderedProduct o3Product2 =
+                    new OrderedProduct(findProduct("Cheese Pizza", databaseProducts));
+            OrderedProduct o3Product3 =
+                    new OrderedProduct(findProduct("Chocolate Waffles", databaseProducts));
+            List<OrderedProduct> order3Products =
+                    new ArrayList<>(Arrays.asList(o3Product1, o3Product2, o3Product3));
             PlacedOrder order3 = new PlacedOrder();
             order3.setProducts(order3Products);
             order3.setTotalPrice();
 
-            List<Product> order4Products = new ArrayList<>();
-            order4Products.add(findProduct("Strawberry Waffles", databaseProducts));
-            order4Products.add(findProduct("Spaghetti with garlic", databaseProducts));
+            OrderedProduct o4Product1 =
+                    new OrderedProduct(findProduct("Strawberry Waffles", databaseProducts));
+            OrderedProduct o4Product2 =
+                    new OrderedProduct(findProduct("Spaghetti with garlic", databaseProducts));
+            List<OrderedProduct> order4Products =
+                    new ArrayList<>(Arrays.asList(o4Product1, o4Product2));
             PlacedOrder order4 = new PlacedOrder();
             order4.setProducts(order4Products);
             order4.setTotalPrice();

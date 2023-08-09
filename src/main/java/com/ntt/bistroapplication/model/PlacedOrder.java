@@ -12,10 +12,10 @@ public class PlacedOrder {
     private Long id;
     @ManyToOne(fetch = FetchType.EAGER)
     private Customer customer;
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "order_products", joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id"))
-    private List<Product> products = new ArrayList<>();
+    private List<OrderedProduct> products = new ArrayList<>();
     private Double totalPrice = 0.0;
 
     public PlacedOrder() {}
@@ -36,11 +36,11 @@ public class PlacedOrder {
         this.customer = customer;
     }
 
-    public List<Product> getProducts() {
+    public List<OrderedProduct> getProducts() {
         return products;
     }
 
-    public void setProducts(List<Product> products) {
+    public void setProducts(List<OrderedProduct> products) {
         this.products = products;
     }
 
@@ -53,28 +53,12 @@ public class PlacedOrder {
     }
 
     public void setTotalPrice() {
-        for (Product p : products) {
-            this.totalPrice += p.getPrice();
+        for (OrderedProduct p : products)
+        {
+            this.totalPrice += p.getProduct().getPrice();
+            if (p.getTopping() != null) {
+                this.totalPrice += p.getTopping().getCost();
+            }
         }
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        PlacedOrder order = (PlacedOrder) o;
-
-        if (!getCustomer().equals(order.getCustomer())) return false;
-        if (!getProducts().equals(order.getProducts())) return false;
-        return getTotalPrice().equals(order.getTotalPrice());
-    }
-
-    @Override
-    public int hashCode() {
-        int result = getCustomer().hashCode();
-        result = 31 * result + getProducts().hashCode();
-        result = 31 * result + getTotalPrice().hashCode();
-        return result;
     }
 }
