@@ -20,6 +20,16 @@ public class BistroApplication {
         try
         {
             ApplicationContext ctx = SpringApplication.run(BistroApplication.class, args);
+
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("The tables have been created and initialized!");
+            String str = "";
+            while (!str.equals("Begin"))
+            {
+                System.out.println("Type \"Begin\" to start!");
+                str = scanner.next();
+            }
+
             ProductController productController =
                     (ProductController) ctx.getBean("productController");
             IngredientController ingredientController =
@@ -164,7 +174,7 @@ public class BistroApplication {
 
             System.out.println(orderController.getTop3());
         }
-        catch (MissingIngredientException e) {
+        catch (MissingIngredientException | NonexistentProductException e) {
             System.out.println(e.getMessage() + "\n" +
                     Arrays.toString(Arrays.stream(e.getStackTrace()).map(s -> s + "\n").toArray()));
         }
@@ -172,22 +182,25 @@ public class BistroApplication {
 
     private static Ingredient findIngredient(IngredientType ingredientType,
                                              Set<Ingredient> databaseIngredients)
+            throws MissingIngredientException
     {
         for (Ingredient i : databaseIngredients) {
             if (i.getName().equals(ingredientType)) {
                 return i;
             }
         }
-        return null;
+        throw new MissingIngredientException("There's been an error while searching for this " +
+                "ingredient: " + ingredientType);
     }
 
     private static Product findProduct(String productName, Set<Product> databaseProducts)
+            throws NonexistentProductException
     {
         for (Product p : databaseProducts) {
             if (p.getName().equals(productName)) {
                 return p;
             }
         }
-        return null;
+        throw new NonexistentProductException(productName + " is not a valid product name!");
     }
 }
