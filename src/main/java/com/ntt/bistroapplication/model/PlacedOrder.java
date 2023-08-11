@@ -61,4 +61,45 @@ public class PlacedOrder {
             }
         }
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PlacedOrder that = (PlacedOrder) o;
+
+        if (!getCustomer().equals(that.getCustomer())) return false;
+        return listEquals(that);
+    }
+
+    private boolean listEquals(PlacedOrder that)
+    {
+        List<OrderedProduct> thisProducts = this.getProducts();
+        List<OrderedProduct> thatProducts = that.getProducts();
+        if (thisProducts.size() != thatProducts.size()) return false;
+        for (OrderedProduct product : thatProducts) {
+            if (!thisProducts.contains(product)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getCustomer().hashCode();
+        result = 31 * result + getProducts().hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "PlacedOrder{" +
+                "id=" + id +
+                ", customer=" + customer +
+                ", products=" + products +
+                ", totalPrice=" + totalPrice +
+                '}' + "\n";
+    }
 }

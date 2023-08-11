@@ -4,7 +4,7 @@ import com.ntt.bistroapplication.model.Ingredient;
 import com.ntt.bistroapplication.model.IngredientType;
 import com.ntt.bistroapplication.model.Product;
 import com.ntt.bistroapplication.model.ProductType;
-import com.ntt.bistroapplication.service.MissingIngredientException;
+import com.ntt.bistroapplication.exception.MissingIngredientException;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;

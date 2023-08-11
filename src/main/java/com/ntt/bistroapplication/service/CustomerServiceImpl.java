@@ -5,6 +5,7 @@ import com.ntt.bistroapplication.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -16,8 +17,12 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void addCustomer(Customer newCustomer) {
-        customerRepository.save(newCustomer);
+    public void addCustomer(Customer newCustomer)
+    {
+        Optional<Customer> optionalCustomer = customerRepository.findByName(newCustomer.getName());
+        if (optionalCustomer.isEmpty()) {
+            customerRepository.save(newCustomer);
+        }
     }
 
     @Override

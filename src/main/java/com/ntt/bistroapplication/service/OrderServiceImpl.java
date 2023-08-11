@@ -18,7 +18,22 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void addOrder(PlacedOrder order) {
+    public void addOrder(PlacedOrder order)
+    {
+        Optional<Set<PlacedOrder>> optionalCustomer =
+                orderRepository.findByCustomer(order.getCustomer());
+        if (optionalCustomer.isEmpty())
+        {
+            orderRepository.save(order);
+            return;
+        }
+        Set<PlacedOrder> customerOrders = optionalCustomer.get();
+
+        for (PlacedOrder placedOrder : customerOrders) {
+            if (placedOrder.equals(order)) {
+                return;
+            }
+        }
         orderRepository.save(order);
     }
 

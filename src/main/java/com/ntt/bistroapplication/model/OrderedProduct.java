@@ -56,8 +56,26 @@ public class OrderedProduct {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        OrderedProduct that = (OrderedProduct) o;
+
+        if (!getProduct().equals(that.getProduct())) return false;
+        return getTopping() != null ? getTopping().equals(that.getTopping()) : that.getTopping() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getProduct().hashCode();
+        result = 31 * result + (getTopping() != null ? getTopping().hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public String toString() {
-        return "OrderedProduct{" +
+        return "\n" + "OrderedProduct{" +
                 "id=" + id +
                 ", product=" + product +
                 ", topping=" + topping +

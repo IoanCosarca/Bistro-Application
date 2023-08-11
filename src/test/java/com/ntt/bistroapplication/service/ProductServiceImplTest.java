@@ -1,11 +1,13 @@
 package com.ntt.bistroapplication.service;
 
+import com.ntt.bistroapplication.exception.NonexistentProductException;
 import com.ntt.bistroapplication.model.Ingredient;
 import com.ntt.bistroapplication.model.IngredientType;
 import com.ntt.bistroapplication.model.Product;
 import com.ntt.bistroapplication.model.ProductType;
 import com.ntt.bistroapplication.repository.IngredientRepository;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -19,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class ProductServiceImplTest {
     @Autowired
     private ProductService productService;
-    @Autowired
+    @Mock
     private IngredientRepository ingredientRepository;
 
     @Test

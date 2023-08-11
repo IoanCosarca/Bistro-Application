@@ -1,5 +1,6 @@
 package com.ntt.bistroapplication.service;
 
+import com.ntt.bistroapplication.exception.NonexistentProductException;
 import com.ntt.bistroapplication.model.Product;
 import com.ntt.bistroapplication.repository.ProductRepository;
 import org.springframework.stereotype.Service;
