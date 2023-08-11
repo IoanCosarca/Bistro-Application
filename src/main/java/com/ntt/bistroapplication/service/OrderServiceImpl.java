@@ -6,10 +6,7 @@ import com.ntt.bistroapplication.model.Product;
 import com.ntt.bistroapplication.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,16 +28,14 @@ public class OrderServiceImpl implements OrderService {
         Set<PlacedOrder> allOrders = new HashSet<>();
         orderRepository.findAll().iterator().forEachRemaining(allOrders::add);
         var MapFrequency = allOrders.stream()
-                .map(PlacedOrder::getProducts)
-                .flatMap(Collection::stream)
-                .collect(Collectors.groupingBy(e -> e, Collectors.counting()));
-        var highest3 = MapFrequency.entrySet()
+                .flatMap(placedOrder -> placedOrder.getProducts().stream())
+                .collect(Collectors.groupingBy(OrderedProduct::getProduct, Collectors.counting()));
+
+        return MapFrequency.entrySet()
                 .stream()
-                .sorted(Map.Entry.<OrderedProduct, Long>comparingByValue().reversed())
+                .sorted(Map.Entry.<Product, Long>comparingByValue().reversed())
                 .limit(3)
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-        Set<Product> top3Products = new HashSet<>();
-        highest3.forEach((product, frequency) -> top3Products.add(product.getProduct()));
-        return top3Products;
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toSet());
     }
 }

@@ -68,7 +68,7 @@ public class BistroApplication {
             {
                 System.out.println(productController.getByID(7));
                 System.out.println(productController.getByID(2));
-                System.out.println(productController.getByID(10));
+                System.out.println(productController.getByID(14));
             }
             catch (NonexistentProductException e) {
                 System.out.println(e.getMessage() + "\n" +

@@ -1,9 +1,9 @@
-package com.ntt.bistroapplication.bootstrap;
+package com.ntt.bistroapplication.repository;
 
-import com.ntt.bistroapplication.model.*;
-import com.ntt.bistroapplication.repository.CustomerRepository;
-import com.ntt.bistroapplication.repository.IngredientRepository;
-import com.ntt.bistroapplication.repository.ProductRepository;
+import com.ntt.bistroapplication.model.Ingredient;
+import com.ntt.bistroapplication.model.IngredientType;
+import com.ntt.bistroapplication.model.Product;
+import com.ntt.bistroapplication.model.ProductType;
 import com.ntt.bistroapplication.service.MissingIngredientException;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.context.ApplicationListener;
@@ -13,108 +13,25 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 
 @Component
-public class BistroBootstrap implements ApplicationListener<ContextRefreshedEvent> {
-    private final IngredientRepository ingredientRepository;
+public class ProductSeeder implements ApplicationListener<ContextRefreshedEvent> {
     private final ProductRepository productRepository;
-    private final CustomerRepository customerRepository;
+    private final IngredientRepository ingredientRepository;
 
-    public BistroBootstrap(IngredientRepository ingredientRepository,
-                           ProductRepository productRepository,
-                           CustomerRepository customerRepository)
+    public ProductSeeder(ProductRepository productRepository,
+                         IngredientRepository ingredientRepository)
     {
-        this.ingredientRepository = ingredientRepository;
         this.productRepository = productRepository;
-        this.customerRepository = customerRepository;
+        this.ingredientRepository = ingredientRepository;
     }
 
     @Override
     public void onApplicationEvent(@NotNull ContextRefreshedEvent event)
     {
-        ingredientRepository.saveAll(getIngredients());
-        productRepository.saveAll(getProducts());
-        customerRepository.saveAll(getCustomers());
-    }
-
-    private Set<Ingredient> getIngredients()
-    {
-        Set<Ingredient> ingredients = new HashSet<>();
-
-        Ingredient flour = new Ingredient(IngredientType.FLOUR, 5.2);
-        ingredients.add(flour);
-
-        Ingredient eggs = new Ingredient(IngredientType.EGGS, 4.3);
-        ingredients.add(eggs);
-
-        Ingredient milk = new Ingredient(IngredientType.MILK, 3.2);
-        ingredients.add(milk);
-
-        Ingredient sugar = new Ingredient(IngredientType.SUGAR, 2.0);
-        ingredients.add(sugar);
-
-        Ingredient sunflowerOil = new Ingredient(IngredientType.SUNFLOWER_OIL, 4.2);
-        ingredients.add(sunflowerOil);
-
-        Ingredient salt = new Ingredient(IngredientType.SALT, 1.4);
-        ingredients.add(salt);
-
-        Ingredient butter = new Ingredient(IngredientType.BUTTER, 1.9);
-        ingredients.add(butter);
-
-        Ingredient yeast = new Ingredient(IngredientType.YEAST, 2.7);
-        ingredients.add(yeast);
-
-        Ingredient pasta = new Ingredient(IngredientType.PASTA, 3.0);
-        ingredients.add(pasta);
-
-        Ingredient tomatoSauce = new Ingredient(IngredientType.TOMATO_SAUCE, 4.5);
-        ingredients.add(tomatoSauce);
-
-        Ingredient meatballs = new Ingredient(IngredientType.MEATBALLS, 6.3);
-        ingredients.add(meatballs);
-
-        Ingredient garlic = new Ingredient(IngredientType.GARLIC, 1.1);
-        ingredients.add(garlic);
-
-        Ingredient cheese = new Ingredient(IngredientType.CHEESE, 3.5);
-        ingredients.add(cheese);
-
-        Ingredient bacon = new Ingredient(IngredientType.BACON, 4.0);
-        ingredients.add(bacon);
-
-        Ingredient mushrooms = new Ingredient(IngredientType.MUSHROOMS, 1.7);
-        ingredients.add(mushrooms);
-
-        Ingredient peppers = new Ingredient(IngredientType.PEPPERS, 2.3);
-        ingredients.add(peppers);
-
-        Ingredient corn = new Ingredient(IngredientType.CORN, 2.0);
-        ingredients.add(corn);
-
-        Ingredient rice = new Ingredient(IngredientType.RICE, 9.4);
-        ingredients.add(rice);
-
-        Ingredient onion = new Ingredient(IngredientType.ONION, 1.0);
-        ingredients.add(onion);
-
-        Ingredient celery = new Ingredient(IngredientType.CELERY, 1.8);
-        ingredients.add(celery);
-
-        Ingredient basil = new Ingredient(IngredientType.BASIL, 1.2);
-        ingredients.add(basil);
-
-        Ingredient chocolateCream = new Ingredient(IngredientType.CHOCOLATE_CREAM, 2.5);
-        ingredients.add(chocolateCream);
-
-        Ingredient strawberryJam = new Ingredient(IngredientType.STRAWBERRY_JAM, 2.0);
-        ingredients.add(strawberryJam);
-
-        Ingredient peachesJam = new Ingredient(IngredientType.PEACHES_JAM, 2.2);
-        ingredients.add(peachesJam);
-
-        Ingredient raspberryJam = new Ingredient(IngredientType.RASPBERRIES_JAM, 2.4);
-        ingredients.add(raspberryJam);
-
-        return ingredients;
+        Set<Product> databaseProducts = new HashSet<>();
+        productRepository.findAll().iterator().forEachRemaining(databaseProducts::add);
+        if (databaseProducts.size() == 0) {
+            productRepository.saveAll(getProducts());
+        }
     }
 
     @SuppressWarnings("OptionalGetWithoutIsPresent")
@@ -313,25 +230,5 @@ public class BistroBootstrap implements ApplicationListener<ContextRefreshedEven
         products.add(plainCake);
 
         return products;
-    }
-
-    private Set<Customer> getCustomers()
-    {
-        Set<Customer> customers = new HashSet<>();
-
-        Customer ionut = new Customer("Ionut");
-        customers.add(ionut);
-        Customer claudiu = new Customer("Claudiu");
-        customers.add(claudiu);
-        Customer cristian = new Customer("Cristian");
-        customers.add(cristian);
-        Customer catalin = new Customer("Catalin");
-        customers.add(catalin);
-        Customer vlad = new Customer("Vlad");
-        customers.add(vlad);
-        Customer rares = new Customer("Rares");
-        customers.add(rares);
-
-        return customers;
     }
 }

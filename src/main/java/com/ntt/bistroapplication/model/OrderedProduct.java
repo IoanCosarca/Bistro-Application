@@ -54,4 +54,13 @@ public class OrderedProduct {
     public void setOrder(List<PlacedOrder> order) {
         this.order = order;
     }
+
+    @Override
+    public String toString() {
+        return "OrderedProduct{" +
+                "id=" + id +
+                ", product=" + product +
+                ", topping=" + topping +
+                '}';
+    }
 }
