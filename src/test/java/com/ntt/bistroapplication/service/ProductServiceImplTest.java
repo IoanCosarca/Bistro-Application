@@ -1,80 +1,102 @@
 package com.ntt.bistroapplication.service;
 
 import com.ntt.bistroapplication.exception.NonexistentProductException;
-import com.ntt.bistroapplication.model.Ingredient;
-import com.ntt.bistroapplication.model.IngredientType;
 import com.ntt.bistroapplication.model.Product;
 import com.ntt.bistroapplication.model.ProductType;
-import com.ntt.bistroapplication.repository.IngredientRepository;
+import com.ntt.bistroapplication.repository.ProductRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.MockitoAnnotations;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-@SpringBootTest
 class ProductServiceImplTest {
-    @Autowired
-    private ProductService productService;
     @Mock
-    private IngredientRepository ingredientRepository;
+    private ProductRepository productRepository;
+    @InjectMocks
+    private ProductServiceImpl productService;
+
+    @BeforeEach
+    void setUp()
+    {
+        MockitoAnnotations.openMocks(this);
+        productService = new ProductServiceImpl(productRepository);
+    }
 
     @Test
     void addProduct()
     {
         // Given
-        Ingredient dummyIngredient = new Ingredient();
-        dummyIngredient.setName(IngredientType.PASTA);
-        dummyIngredient.setCost(6.0);
-
-        ingredientRepository.save(dummyIngredient);
-
+        Set<Product> products = new HashSet<>();
         Product dummyProduct = new Product();
         dummyProduct.setName("Pasta");
         dummyProduct.setProductType(ProductType.PASTA);
-
-        Set<Ingredient> ingredients = new HashSet<>();
-        ingredients.add(dummyIngredient);
-        dummyProduct.setIngredients(ingredients);
-        dummyProduct.setPrice();
+        products.add(dummyProduct);
 
         // When
         productService.addProduct(dummyProduct);
+        when(productRepository.findAll()).thenReturn(products);
+        Set<Product> databaseProducts = productService.getProducts();
 
         // Then
-        assertEquals(13, productService.getProducts().size());
-        assertEquals(6, dummyProduct.getPrice());
+        assertEquals(1, databaseProducts.size());
+        assertEquals(1, products.size());
+        verify(productRepository, times(1)).save(dummyProduct);
     }
 
     @Test
     void getProducts()
     {
         // Given
-        Set<Product> databaseProducts;
+        Set<Product> products = new HashSet<>();
+        Product cake = new Product();
+        cake.setName("Cake");
+        cake.setProductType(ProductType.CAKE);
+        Product pizza = new Product();
+        pizza.setName("Pizza");
+        pizza.setProductType(ProductType.PIZZA);
+        products.add(cake);
+        products.add(pizza);
 
         // When
-        databaseProducts = productService.getProducts();
+        when(productRepository.findAll()).thenReturn(products);
+        Set<Product> databaseProducts = productService.getProducts();
 
         // Then
-        assertEquals(12, databaseProducts.size());
+        assertEquals(2, databaseProducts.size());
+        assertEquals(2, products.size());
+        verify(productRepository, times(1)).findAll();
     }
 
     @Test
     void getProduct() throws NonexistentProductException
     {
         // Given
-        Product product;
+        Product cake = new Product();
+        cake.setName("Cake");
+        cake.setProductType(ProductType.CAKE);
+        cake.setId(1L);
+        Product pizza = new Product();
+        pizza.setName("Pizza");
+        pizza.setProductType(ProductType.PIZZA);
+        pizza.setId(2L);
 
         // When
-        product = productService.getProduct(6L);
+        productService.addProduct(cake);
+        productService.addProduct(pizza);
+        when(productRepository.findById(1L)).thenReturn(Optional.of(cake));
+        Product result = productService.getProduct(1L);
 
         // Then
-        assertEquals(ProductType.PIZZA, product.getProductType());
+        assertEquals(ProductType.CAKE, result.getProductType());
+        verify(productRepository, times(1)).findById(1L);
     }
 
     @Test
@@ -86,24 +108,49 @@ class ProductServiceImplTest {
     void updatePrice()
     {
         // Given
-        Product dummyProduct = productService.getProduct(11L);
+        Product cake = new Product();
+        cake.setName("Cake");
+        cake.setProductType(ProductType.CAKE);
+        cake.setId(1L);
+        cake.setPrice(6.0);
 
         // When
-        productService.updatePrice(dummyProduct, 20.0);
+        productService.addProduct(cake);
+        productService.updatePrice(cake, 7.0);
+        when(productRepository.findById(1L)).thenReturn(Optional.of(cake));
+        Product result = productService.getProduct(1L);
 
         // Then
-        dummyProduct = productService.getProduct(11L);
-        assertEquals(20, dummyProduct.getPrice());
+        assertEquals(7.0, result.getPrice());
+        verify(productRepository, times(2)).save(result);
     }
 
     @Test
     void removeProduct()
     {
+        // Given
+        Set<Product> products = new HashSet<>();
+        Product cake = new Product();
+        cake.setName("Cake");
+        cake.setProductType(ProductType.CAKE);
+        cake.setId(1L);
+        Product pizza = new Product();
+        pizza.setName("Pizza");
+        pizza.setProductType(ProductType.PIZZA);
+        pizza.setId(2L);
+        products.add(cake);
+
         // When
-        productService.removeProduct(8L);
+        productService.addProduct(cake);
+        productService.addProduct(pizza);
+        productService.removeProduct(2L);
+        when(productRepository.findAll()).thenReturn(products);
+        Set<Product> databaseProducts = productService.getProducts();
 
         // Then
-        assertEquals(11, productService.getProducts().size());
-        assertThrows(NonexistentProductException.class, () -> productService.getProduct(8L));
+        assertEquals(1, databaseProducts.size());
+        assertEquals(1, products.size());
+        assertThrows(NonexistentProductException.class, () -> productService.getProduct(2L));
+        verify(productRepository, times(1)).deleteById(2L);
     }
 }

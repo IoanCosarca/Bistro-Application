@@ -2,36 +2,48 @@ package com.ntt.bistroapplication.service;
 
 import com.ntt.bistroapplication.model.Customer;
 import com.ntt.bistroapplication.repository.CustomerRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class CustomerServiceImplTest {
     @Mock
-    private CustomerService customerService;
-    @InjectMocks
     private CustomerRepository customerRepository;
+    @InjectMocks
+    private CustomerServiceImpl customerService;
+
+    @BeforeEach
+    void setUp()
+    {
+        MockitoAnnotations.openMocks(this);
+        customerService = new CustomerServiceImpl(customerRepository);
+    }
 
     @Test
     void addCustomer()
     {
         // Given
+        Set<Customer> customers = new HashSet<>();
         Customer alin = new Customer("Alin");
+        customers.add(alin);
 
         // When
         customerService.addCustomer(alin);
+        when(customerRepository.findAll()).thenReturn(customers);
+        Set<Customer> databaseCustomers = customerService.getCustomers();
 
         // Then
-        assertNotNull(customerService.getCustomers());
-        Set<Customer> databaseCustomers = customerService.getCustomers();
-        assertEquals(7, databaseCustomers.size());
+        assertEquals(1, databaseCustomers.size());
+        assertEquals(1, customers.size());
+        verify(customerRepository, times(1)).save(alin);
     }
 
     @Test
@@ -39,7 +51,6 @@ class CustomerServiceImplTest {
     {
         // Given
         Set<Customer> customers = new HashSet<>();
-        Set<Customer> databaseCustomers;
         Customer alin = new Customer("Alin");
         Customer lucian = new Customer("Lucian");
         customers.add(alin);
@@ -47,26 +58,33 @@ class CustomerServiceImplTest {
 
         // When
         when(customerRepository.findAll()).thenReturn(customers);
-        databaseCustomers = customerService.getCustomers();
+        Set<Customer> databaseCustomers = customerService.getCustomers();
 
         // Then
+        assertEquals(2, databaseCustomers.size());
         assertEquals(2, customers.size());
-        assertEquals(7, databaseCustomers.size());
-        verify(customerRepository, times(0)).findAll();
+        verify(customerRepository, times(1)).findAll();
     }
 
     @Test
     void removeCustomer()
     {
         // Given
-        Set<Customer> databaseCustomers = customerService.getCustomers();
-        int number = databaseCustomers.size();
+        Set<Customer> customers = new HashSet<>();
+        Customer alin = new Customer("Alin");
+        Customer lucian = new Customer("Lucian");
+        customers.add(lucian);
 
         // When
-        customerService.removeCustomer((long) number);
+        customerService.addCustomer(alin);
+        customerService.addCustomer(lucian);
+        customerService.removeCustomer(1L);
+        when(customerRepository.findAll()).thenReturn(customers);
+        Set<Customer> databaseCustomers = customerService.getCustomers();
 
         // Then
-        databaseCustomers = customerService.getCustomers();
-        assertEquals(number - 1, databaseCustomers.size());
+        assertEquals(1, databaseCustomers.size());
+        assertEquals(1, customers.size());
+        verify(customerRepository, times(1)).deleteById(1L);
     }
 }

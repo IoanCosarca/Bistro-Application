@@ -1,29 +1,50 @@
 package com.ntt.bistroapplication.service;
 
 import com.ntt.bistroapplication.model.Ingredient;
+import com.ntt.bistroapplication.model.IngredientType;
+import com.ntt.bistroapplication.repository.IngredientRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
+import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-@SpringBootTest
 class IngredientServiceImplTest {
-    @Autowired
-    private IngredientService ingredientService;
+    @Mock
+    private IngredientRepository ingredientRepository;
+    @InjectMocks
+    private IngredientServiceImpl ingredientService;
+
+    @BeforeEach
+    void setUp()
+    {
+        MockitoAnnotations.openMocks(this);
+        ingredientService = new IngredientServiceImpl(ingredientRepository);
+    }
 
     @Test
     void getIngredients()
     {
         // Given
-        Set<Ingredient> databaseIngredients;
+        Set<Ingredient> ingredients = new HashSet<>();
+        Ingredient salt = new Ingredient(IngredientType.SALT, 2.5);
+        Ingredient sugar = new Ingredient(IngredientType.SUGAR, 2.2);
+        ingredients.add(salt);
+        ingredients.add(sugar);
 
         // When
-        databaseIngredients = ingredientService.getIngredients();
+        when(ingredientRepository.findAll()).thenReturn(ingredients);
+        Set<Ingredient> databaseIngredients = ingredientService.getIngredients();
 
         // Then
-        assertEquals(25, databaseIngredients.size());
+        assertEquals(2, databaseIngredients.size());
+        assertEquals(2, ingredients.size());
+        verify(ingredientRepository, times(1)).findAll();
     }
 }
