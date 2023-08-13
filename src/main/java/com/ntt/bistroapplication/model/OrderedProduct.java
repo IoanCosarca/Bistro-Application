@@ -60,17 +60,14 @@ public class OrderedProduct {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        OrderedProduct that = (OrderedProduct) o;
+        OrderedProduct product1 = (OrderedProduct) o;
 
-        if (!getProduct().equals(that.getProduct())) return false;
-        return getTopping() != null ? getTopping().equals(that.getTopping()) : that.getTopping() == null;
+        return getProduct().equals(product1.getProduct());
     }
 
     @Override
     public int hashCode() {
-        int result = getProduct().hashCode();
-        result = 31 * result + (getTopping() != null ? getTopping().hashCode() : 0);
-        return result;
+        return getProduct().hashCode();
     }
 
     @Override
