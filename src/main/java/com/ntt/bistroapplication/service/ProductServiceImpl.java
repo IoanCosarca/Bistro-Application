@@ -1,10 +1,12 @@
 package com.ntt.bistroapplication.service;
 
 import com.ntt.bistroapplication.exception.NonexistentProductException;
+import com.ntt.bistroapplication.model.Ingredient;
 import com.ntt.bistroapplication.model.Product;
 import com.ntt.bistroapplication.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -18,8 +20,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void addProduct(Product product) {
-        productRepository.save(product);
+    public void addProduct(Product product)
+    {
+        Optional<Product> optionalProduct = productRepository.findByName(product.getName());
+        if (optionalProduct.isEmpty())
+        {
+            setProductPrice(product);
+            productRepository.save(product);
+        }
     }
 
     @Override
@@ -31,18 +39,36 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product getProduct(Long id)
+    public Product getByID(Long id) throws NonexistentProductException
     {
         Optional<Product> productOptional = productRepository.findById(id);
-        if (productOptional.isEmpty()) {
-            throw new NonexistentProductException("The product with the given ID couldn't be " +
-                    "found");
-        }
-        return productOptional.get();
+        final Product[] foundProduct = { new Product() };
+        productOptional.ifPresentOrElse(
+                product -> foundProduct[0] = product,
+                () -> {
+                    throw new NonexistentProductException(
+                            "The product with the given ID couldn't be found");
+                }
+        );
+        return foundProduct[0];
     }
 
     @Override
-    public void updatePrice(Product product, Double newPrice)
+    public Product getByName(String name) throws NonexistentProductException
+    {
+        Optional<Product> productOptional = productRepository.findByName(name);
+        final Product[] foundProduct = { new Product() };
+        productOptional.ifPresentOrElse(
+                product -> foundProduct[0] = product,
+                () -> {
+                    throw new NonexistentProductException(name + " is not a valid product name!");
+                }
+        );
+        return foundProduct[0];
+    }
+
+    @Override
+    public void updatePrice(Product product, BigDecimal newPrice)
     {
         product.setPrice(newPrice);
         productRepository.save(product);
@@ -51,5 +77,15 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void removeProduct(Long id) {
         productRepository.deleteById(id);
+    }
+
+    public void setProductPrice(Product product)
+    {
+        BigDecimal price = BigDecimal.ZERO;
+        Set<Ingredient> ingredients = product.getIngredients();
+        for (Ingredient ingredient : ingredients) {
+            price = price.add(ingredient.getCost());
+        }
+        product.setPrice(price);
     }
 }

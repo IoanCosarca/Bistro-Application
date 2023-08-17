@@ -19,7 +19,7 @@ public class OrderController {
         orderService.addOrder(order);
     }
 
-    public Set<Product> getTop3() {
-        return orderService.getTop3();
+    public Set<Product> getTopN(int n) {
+        return orderService.getMostWantedProducts(n);
     }
 }

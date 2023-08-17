@@ -23,11 +23,11 @@ public class CustomerSeeder implements ApplicationListener<ContextRefreshedEvent
         Set<Customer> databaseCustomers = new HashSet<>();
         customerRepository.findAll().iterator().forEachRemaining(databaseCustomers::add);
         if (databaseCustomers.size() == 0) {
-            customerRepository.saveAll(getCustomers());
+            customerRepository.saveAll(populateCustomers());
         }
     }
 
-    private Set<Customer> getCustomers()
+    private Set<Customer> populateCustomers()
     {
         Set<Customer> customers = new HashSet<>();
 

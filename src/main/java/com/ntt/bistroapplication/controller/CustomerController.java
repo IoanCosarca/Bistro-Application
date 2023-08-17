@@ -14,16 +14,8 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
-    public Set<Customer> returnCustomers() {
+    public Set<Customer> getCustomers() {
         return customerService.getCustomers();
-    }
-
-    public void listCustomers()
-    {
-        Set<Customer> customers = customerService.getCustomers();
-        for (Customer customer : customers) {
-            System.out.println(customer.toString());
-        }
     }
 
     public void addCustomer(Customer newCustomer) {

@@ -3,11 +3,13 @@ package com.ntt.bistroapplication.service;
 import com.ntt.bistroapplication.model.*;
 import com.ntt.bistroapplication.repository.OrderRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +21,13 @@ class OrderServiceImplTest {
     private OrderRepository orderRepository;
     @InjectMocks
     private OrderServiceImpl orderService;
+    static final String productName1 = "Pizza";
+    static final String productName2 = "Pasta";
+    static final ProductType type1 = ProductType.PIZZA;
+    static final ProductType type2 = ProductType.PASTA;
+    static final BigDecimal price1 = BigDecimal.valueOf(5.5);
+    static final BigDecimal price2 = BigDecimal.valueOf(4.0);
+    static final String customerName = "Mircea";
 
     @BeforeEach
     void setUp()
@@ -28,17 +37,18 @@ class OrderServiceImplTest {
     }
 
     @Test
-    void addOrder()
+    @DisplayName(value = "Test if an order is added.")
+    void testAddOrder()
     {
         // Given
         Product product1 = new Product();
-        product1.setName("Pizza");
-        product1.setProductType(ProductType.PIZZA);
-        product1.setPrice(5.5);
+        product1.setName(productName1);
+        product1.setProductType(type1);
+        product1.setPrice(price1);
         Product product2 = new Product();
-        product2.setName("Pasta");
-        product2.setProductType(ProductType.PASTA);
-        product2.setPrice(4.0);
+        product2.setName(productName2);
+        product2.setProductType(type2);
+        product2.setPrice(price2);
 
         OrderedProduct orderedProduct1 = new OrderedProduct(product1);
         OrderedProduct orderedProduct2 = new OrderedProduct(product2);
@@ -47,12 +57,11 @@ class OrderServiceImplTest {
         orderedProducts.add(orderedProduct1);
         orderedProducts.add(orderedProduct2);
 
-        Customer customer = new Customer("Mircea");
+        Customer customer = new Customer(customerName);
 
         PlacedOrder order = new PlacedOrder();
         order.setProducts(orderedProducts);
         order.setCustomer(customer);
-        order.setTotalPrice();
 
         List<PlacedOrder> orders = new ArrayList<>();
         orders.add(order);
@@ -63,7 +72,7 @@ class OrderServiceImplTest {
 
         // Then
         assertEquals(1, orders.size());
-        assertEquals(9.5, orders.get(0).getTotalPrice());
+        assertEquals(price1.add(price2), orders.get(0).getTotalPrice());
         verify(orderRepository, times(1)).save(order);
     }
 }

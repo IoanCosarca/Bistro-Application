@@ -2,6 +2,7 @@ package com.ntt.bistroapplication.model;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,13 +11,13 @@ public class PlacedOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     private Customer customer;
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "order_products", joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id"))
     private List<OrderedProduct> products = new ArrayList<>();
-    private Double totalPrice = 0.0;
+    private BigDecimal totalPrice = BigDecimal.ZERO;
 
     public PlacedOrder() {}
 
@@ -44,22 +45,12 @@ public class PlacedOrder {
         this.products = products;
     }
 
-    public Double getTotalPrice() {
+    public BigDecimal getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(Double totalPrice) {
+    public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
-    }
-
-    public void setTotalPrice() {
-        for (OrderedProduct p : products)
-        {
-            this.totalPrice += p.getProduct().getPrice();
-            if (p.getTopping() != null) {
-                this.totalPrice += p.getTopping().getCost();
-            }
-        }
     }
 
     @Override

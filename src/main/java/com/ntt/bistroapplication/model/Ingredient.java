@@ -2,6 +2,7 @@ package com.ntt.bistroapplication.model;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -11,9 +12,8 @@ public class Ingredient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Enumerated(value = EnumType.STRING)
-    private IngredientType name;
-    private Double cost;
+    private String name;
+    private BigDecimal cost;
     @ManyToMany(mappedBy = "ingredients")
     private Set<Product> product;
     @OneToMany(mappedBy = "topping")
@@ -21,7 +21,7 @@ public class Ingredient {
 
     public Ingredient() {}
 
-    public Ingredient(IngredientType name, Double cost)
+    public Ingredient(String name, BigDecimal cost)
     {
         this.name = name;
         this.cost = cost;
@@ -35,19 +35,19 @@ public class Ingredient {
         this.id = id;
     }
 
-    public IngredientType getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(IngredientType name) {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public Double getCost() {
+    public BigDecimal getCost() {
         return cost;
     }
 
-    public void setCost(Double cost) {
+    public void setCost(BigDecimal cost) {
         this.cost = cost;
     }
 
@@ -74,7 +74,7 @@ public class Ingredient {
 
         Ingredient that = (Ingredient) o;
 
-        if (getName() != that.getName()) return false;
+        if (!getName().equals(that.getName())) return false;
         return getCost().equals(that.getCost());
     }
 

@@ -1,9 +1,11 @@
 package com.ntt.bistroapplication.controller;
 
+import com.ntt.bistroapplication.exception.NonexistentProductException;
 import com.ntt.bistroapplication.model.Product;
 import com.ntt.bistroapplication.service.ProductService;
 import org.springframework.stereotype.Controller;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 @Controller
@@ -14,27 +16,23 @@ public class ProductController {
         this.productService = productService;
     }
 
-    public Set<Product> returnProducts() {
+    public Set<Product> getProducts() {
         return productService.getProducts();
-    }
-
-    public void listProducts()
-    {
-        Set<Product> products = productService.getProducts();
-        for (Product p : products) {
-            System.out.println(p.toString());
-        }
     }
 
     public void saveProduct(Product product) {
         productService.addProduct(product);
     }
 
-    public Product getByID(Integer id) {
-        return productService.getProduct(Long.valueOf(id));
+    public Product getByID(Integer id) throws NonexistentProductException {
+        return productService.getByID(Long.valueOf(id));
     }
 
-    public void updatePrice(Product product, Double newPrice) {
+    public Product getByName(String name) throws NonexistentProductException {
+        return productService.getByName(name);
+    }
+
+    public void updatePrice(Product product, BigDecimal newPrice) {
         productService.updatePrice(product, newPrice);
     }
 

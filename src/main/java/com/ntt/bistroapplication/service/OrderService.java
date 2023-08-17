@@ -8,5 +8,5 @@ import java.util.Set;
 public interface OrderService {
     void addOrder(PlacedOrder order);
 
-    Set<Product> getTop3();
+    Set<Product> getMostWantedProducts(int n);
 }

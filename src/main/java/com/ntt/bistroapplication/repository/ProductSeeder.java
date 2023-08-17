@@ -5,6 +5,7 @@ import com.ntt.bistroapplication.model.IngredientType;
 import com.ntt.bistroapplication.model.Product;
 import com.ntt.bistroapplication.model.ProductType;
 import com.ntt.bistroapplication.exception.MissingIngredientException;
+import com.ntt.bistroapplication.service.ProductServiceImpl;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -16,12 +17,15 @@ import java.util.*;
 public class ProductSeeder implements ApplicationListener<ContextRefreshedEvent> {
     private final ProductRepository productRepository;
     private final IngredientRepository ingredientRepository;
+    private final ProductServiceImpl productService;
 
     public ProductSeeder(ProductRepository productRepository,
-                         IngredientRepository ingredientRepository)
+                         IngredientRepository ingredientRepository,
+                         ProductServiceImpl productService)
     {
         this.productRepository = productRepository;
         this.ingredientRepository = ingredientRepository;
+        this.productService = productService;
     }
 
     @Override
@@ -30,12 +34,12 @@ public class ProductSeeder implements ApplicationListener<ContextRefreshedEvent>
         Set<Product> databaseProducts = new HashSet<>();
         productRepository.findAll().iterator().forEachRemaining(databaseProducts::add);
         if (databaseProducts.size() == 0) {
-            productRepository.saveAll(getProducts());
+            productRepository.saveAll(populateProducts());
         }
     }
 
     @SuppressWarnings("OptionalGetWithoutIsPresent")
-    private List<Product> getProducts()
+    private List<Product> populateProducts()
     {
         List<Product> products = new ArrayList<>();
 
@@ -43,9 +47,10 @@ public class ProductSeeder implements ApplicationListener<ContextRefreshedEvent>
         IngredientType[] types = IngredientType.values();
         for (IngredientType type : types)
         {
-            Optional<Ingredient> optionalIngredient = ingredientRepository.findByName(type);
+            Optional<Ingredient> optionalIngredient =
+                    ingredientRepository.findByName(type.getName());
             if (optionalIngredient.isEmpty()) {
-                throw new MissingIngredientException(type.toString() + " not found!");
+                throw new MissingIngredientException(type + " not found!");
             }
         }
 
@@ -53,14 +58,14 @@ public class ProductSeeder implements ApplicationListener<ContextRefreshedEvent>
         chocolateCake.setName("Chocolate Cake");
         chocolateCake.setProductType(ProductType.CAKE);
         Set<Ingredient> ingredients = new HashSet<>();
-        ingredients.add(ingredientRepository.findByName(IngredientType.FLOUR).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.EGGS).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.MILK).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.SUGAR).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.BUTTER).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.CHOCOLATE_CREAM).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.FLOUR.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.EGGS.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.MILK.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.SUGAR.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.BUTTER.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.CHOCOLATE.getName()).get());
         chocolateCake.setIngredients(ingredients);
-        chocolateCake.setPrice();
+        productService.setProductPrice(chocolateCake);
 
         products.add(chocolateCake);
 
@@ -68,15 +73,15 @@ public class ProductSeeder implements ApplicationListener<ContextRefreshedEvent>
         strawberryWaffles.setName("Strawberry Waffles");
         strawberryWaffles.setProductType(ProductType.WAFFLES);
         ingredients = new HashSet<>();
-        ingredients.add(ingredientRepository.findByName(IngredientType.MILK).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.FLOUR).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.EGGS).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.SUGAR).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.BUTTER).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.SALT).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.STRAWBERRY_JAM).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.MILK.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.FLOUR.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.EGGS.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.SUGAR.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.BUTTER.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.SALT.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.STRAWBERRY.getName()).get());
         strawberryWaffles.setIngredients(ingredients);
-        strawberryWaffles.setPrice();
+        productService.setProductPrice(strawberryWaffles);
 
         products.add(strawberryWaffles);
 
@@ -84,16 +89,16 @@ public class ProductSeeder implements ApplicationListener<ContextRefreshedEvent>
         croissant.setName("Simple Croissant");
         croissant.setProductType(ProductType.CROISSANT);
         ingredients = new HashSet<>();
-        ingredients.add(ingredientRepository.findByName(IngredientType.YEAST).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.SUGAR).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.FLOUR).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.MILK).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.SALT).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.SUNFLOWER_OIL).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.BUTTER).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.EGGS).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.YEAST.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.SUGAR.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.FLOUR.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.MILK.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.SALT.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.SUN_OIL.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.BUTTER.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.EGGS.getName()).get());
         croissant.setIngredients(ingredients);
-        croissant.setPrice();
+        productService.setProductPrice(croissant);
 
         products.add(croissant);
 
@@ -101,14 +106,14 @@ public class ProductSeeder implements ApplicationListener<ContextRefreshedEvent>
         chocolateDonut.setName("Chocolate Donut");
         chocolateDonut.setProductType(ProductType.DONUT);
         ingredients = new HashSet<>();
-        ingredients.add(ingredientRepository.findByName(IngredientType.YEAST).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.FLOUR).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.SUGAR).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.EGGS).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.BUTTER).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.CHOCOLATE_CREAM).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.YEAST.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.FLOUR.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.SUGAR.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.BUTTER.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.EGGS.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.CHOCOLATE.getName()).get());
         chocolateDonut.setIngredients(ingredients);
-        chocolateDonut.setPrice();
+        productService.setProductPrice(chocolateDonut);
 
         products.add(chocolateDonut);
 
@@ -116,13 +121,14 @@ public class ProductSeeder implements ApplicationListener<ContextRefreshedEvent>
         spaghettiGarlic.setName("Spaghetti with garlic");
         spaghettiGarlic.setProductType(ProductType.PASTA);
         ingredients = new HashSet<>();
-        ingredients.add(ingredientRepository.findByName(IngredientType.PASTA).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.TOMATO_SAUCE).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.MEATBALLS).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.GARLIC).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.BASIL).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.PASTA.getName()).get());
+        ingredients.add(ingredientRepository.findByName(
+                IngredientType.TOMATO_SAUCE.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.MEATBALLS.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.GARLIC.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.BASIL.getName()).get());
         spaghettiGarlic.setIngredients(ingredients);
-        spaghettiGarlic.setPrice();
+        productService.setProductPrice(spaghettiGarlic);
 
         products.add(spaghettiGarlic);
 
@@ -130,16 +136,17 @@ public class ProductSeeder implements ApplicationListener<ContextRefreshedEvent>
         prosciuttoFungiPlus.setName("Prosciutto Fungi Plus");
         prosciuttoFungiPlus.setProductType(ProductType.PIZZA);
         ingredients = new HashSet<>();
-        ingredients.add(ingredientRepository.findByName(IngredientType.FLOUR).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.YEAST).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.TOMATO_SAUCE).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.CHEESE).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.BACON).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.BASIL).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.MUSHROOMS).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.CORN).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.FLOUR.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.YEAST.getName()).get());
+        ingredients.add(ingredientRepository.findByName(
+                IngredientType.TOMATO_SAUCE.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.CHEESE.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.BACON.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.BASIL.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.MUSHROOMS.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.CORN.getName()).get());
         prosciuttoFungiPlus.setIngredients(ingredients);
-        prosciuttoFungiPlus.setPrice();
+        productService.setProductPrice(prosciuttoFungiPlus);
 
         products.add(prosciuttoFungiPlus);
 
@@ -147,15 +154,15 @@ public class ProductSeeder implements ApplicationListener<ContextRefreshedEvent>
         simpleRisotto.setName("Simple Risotto");
         simpleRisotto.setProductType(ProductType.RISOTTO);
         ingredients = new HashSet<>();
-        ingredients.add(ingredientRepository.findByName(IngredientType.RICE).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.ONION).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.GARLIC).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.CHEESE).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.CELERY).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.SUNFLOWER_OIL).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.BUTTER).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.RICE.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.ONION.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.GARLIC.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.CHEESE.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.CELERY.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.SUN_OIL.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.BUTTER.getName()).get());
         simpleRisotto.setIngredients(ingredients);
-        simpleRisotto.setPrice();
+        productService.setProductPrice(simpleRisotto);
 
         products.add(simpleRisotto);
 
@@ -163,15 +170,15 @@ public class ProductSeeder implements ApplicationListener<ContextRefreshedEvent>
         peachesCroissant.setName("Peaches Croissant");
         peachesCroissant.setProductType(ProductType.CROISSANT);
         ingredients = new HashSet<>();
-        ingredients.add(ingredientRepository.findByName(IngredientType.BUTTER).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.EGGS).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.YEAST).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.SUGAR).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.FLOUR).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.MILK).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.PEACHES_JAM).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.BUTTER.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.EGGS.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.YEAST.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.SUGAR.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.FLOUR.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.MILK.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.PEACHES.getName()).get());
         peachesCroissant.setIngredients(ingredients);
-        peachesCroissant.setPrice();
+        productService.setProductPrice(peachesCroissant);
 
         products.add(peachesCroissant);
 
@@ -179,11 +186,12 @@ public class ProductSeeder implements ApplicationListener<ContextRefreshedEvent>
         simpleSpaghetti.setName("Simple Spaghetti");
         simpleSpaghetti.setProductType(ProductType.PASTA);
         ingredients = new HashSet<>();
-        ingredients.add(ingredientRepository.findByName(IngredientType.PASTA).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.MEATBALLS).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.TOMATO_SAUCE).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.PASTA.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.MEATBALLS.getName()).get());
+        ingredients.add(ingredientRepository.findByName(
+                IngredientType.TOMATO_SAUCE.getName()).get());
         simpleSpaghetti.setIngredients(ingredients);
-        simpleSpaghetti.setPrice();
+        productService.setProductPrice(simpleSpaghetti);
 
         products.add(simpleSpaghetti);
 
@@ -191,14 +199,14 @@ public class ProductSeeder implements ApplicationListener<ContextRefreshedEvent>
         chocolateWaffles.setName("Chocolate Waffles");
         chocolateWaffles.setProductType(ProductType.WAFFLES);
         ingredients = new HashSet<>();
-        ingredients.add(ingredientRepository.findByName(IngredientType.MILK).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.SUGAR).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.BUTTER).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.FLOUR).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.EGGS).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.CHOCOLATE_CREAM).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.MILK.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.SUGAR.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.BUTTER.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.FLOUR.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.EGGS.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.CHOCOLATE.getName()).get());
         chocolateWaffles.setIngredients(ingredients);
-        chocolateWaffles.setPrice();
+        productService.setProductPrice(chocolateWaffles);
 
         products.add(chocolateWaffles);
 
@@ -206,12 +214,13 @@ public class ProductSeeder implements ApplicationListener<ContextRefreshedEvent>
         cheesePizza.setName("Cheese Pizza");
         cheesePizza.setProductType(ProductType.PIZZA);
         ingredients = new HashSet<>();
-        ingredients.add(ingredientRepository.findByName(IngredientType.FLOUR).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.CHEESE).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.YEAST).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.TOMATO_SAUCE).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.FLOUR.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.CHEESE.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.YEAST.getName()).get());
+        ingredients.add(ingredientRepository.findByName(
+                IngredientType.TOMATO_SAUCE.getName()).get());
         cheesePizza.setIngredients(ingredients);
-        cheesePizza.setPrice();
+        productService.setProductPrice(cheesePizza);
 
         products.add(cheesePizza);
 
@@ -219,13 +228,13 @@ public class ProductSeeder implements ApplicationListener<ContextRefreshedEvent>
         plainCake.setName("Plain Cake");
         plainCake.setProductType(ProductType.CAKE);
         ingredients = new HashSet<>();
-        ingredients.add(ingredientRepository.findByName(IngredientType.FLOUR).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.SUGAR).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.BUTTER).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.EGGS).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.MILK).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.FLOUR.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.SUGAR.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.BUTTER.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.EGGS.getName()).get());
+        ingredients.add(ingredientRepository.findByName(IngredientType.MILK.getName()).get());
         plainCake.setIngredients(ingredients);
-        plainCake.setPrice();
+        productService.setProductPrice(plainCake);
 
         products.add(plainCake);
 

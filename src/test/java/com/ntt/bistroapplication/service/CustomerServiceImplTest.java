@@ -3,6 +3,7 @@ package com.ntt.bistroapplication.service;
 import com.ntt.bistroapplication.model.Customer;
 import com.ntt.bistroapplication.repository.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -19,6 +20,8 @@ class CustomerServiceImplTest {
     private CustomerRepository customerRepository;
     @InjectMocks
     private CustomerServiceImpl customerService;
+    static final String name1 = "Alin";
+    static final String name2 = "Lucian";
 
     @BeforeEach
     void setUp()
@@ -28,11 +31,12 @@ class CustomerServiceImplTest {
     }
 
     @Test
-    void addCustomer()
+    @DisplayName(value = "Test if a customer is added.")
+    void testAddCustomer()
     {
         // Given
         Set<Customer> customers = new HashSet<>();
-        Customer alin = new Customer("Alin");
+        Customer alin = new Customer(name1);
         customers.add(alin);
 
         // When
@@ -47,12 +51,13 @@ class CustomerServiceImplTest {
     }
 
     @Test
-    void getCustomers()
+    @DisplayName(value = "Test if all the customers can be returned.")
+    void testGetCustomers()
     {
         // Given
         Set<Customer> customers = new HashSet<>();
-        Customer alin = new Customer("Alin");
-        Customer lucian = new Customer("Lucian");
+        Customer alin = new Customer(name1);
+        Customer lucian = new Customer(name2);
         customers.add(alin);
         customers.add(lucian);
 
@@ -67,12 +72,13 @@ class CustomerServiceImplTest {
     }
 
     @Test
-    void removeCustomer()
+    @DisplayName(value = "Test if a customer can be removed.")
+    void testRemoveCustomer()
     {
         // Given
         Set<Customer> customers = new HashSet<>();
-        Customer alin = new Customer("Alin");
-        Customer lucian = new Customer("Lucian");
+        Customer alin = new Customer(name1);
+        Customer lucian = new Customer(name2);
         customers.add(lucian);
 
         // When

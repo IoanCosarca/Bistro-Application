@@ -6,6 +6,7 @@ import com.ntt.bistroapplication.model.Product;
 import com.ntt.bistroapplication.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -24,21 +25,21 @@ public class OrderServiceImpl implements OrderService {
                 orderRepository.findByCustomer(order.getCustomer());
         if (optionalCustomer.isEmpty())
         {
+            setOrderPrice(order);
             orderRepository.save(order);
             return;
         }
         Set<PlacedOrder> customerOrders = optionalCustomer.get();
 
-        for (PlacedOrder placedOrder : customerOrders) {
-            if (placedOrder.equals(order)) {
-                return;
-            }
+        if (customerOrders.stream().anyMatch(placedOrder -> placedOrder.equals(order))) {
+            return;
         }
+        setOrderPrice(order);
         orderRepository.save(order);
     }
 
     @Override
-    public Set<Product> getTop3()
+    public Set<Product> getMostWantedProducts(int n)
     {
         Set<PlacedOrder> allOrders = new HashSet<>();
         orderRepository.findAll().iterator().forEachRemaining(allOrders::add);
@@ -49,8 +50,22 @@ public class OrderServiceImpl implements OrderService {
         return MapFrequency.entrySet()
                 .stream()
                 .sorted(Map.Entry.<Product, Long>comparingByValue().reversed())
-                .limit(3)
+                .limit(n)
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toSet());
+    }
+
+    public void setOrderPrice(PlacedOrder order)
+    {
+        List<OrderedProduct> products = order.getProducts();
+        BigDecimal totalPrice = BigDecimal.ZERO;
+        for (OrderedProduct p : products)
+        {
+            totalPrice = totalPrice.add(p.getProduct().getPrice());
+            if (p.getTopping() != null) {
+                totalPrice = totalPrice.add(p.getTopping().getCost());
+            }
+        }
+        order.setTotalPrice(totalPrice);
     }
 }

@@ -1,16 +1,20 @@
 package com.ntt.bistroapplication;
 
+import com.ntt.bistroapplication.console.CustomerConsole;
+import com.ntt.bistroapplication.console.MainConsole;
+import com.ntt.bistroapplication.console.ProductConsole;
 import com.ntt.bistroapplication.controller.CustomerController;
 import com.ntt.bistroapplication.controller.IngredientController;
 import com.ntt.bistroapplication.controller.OrderController;
 import com.ntt.bistroapplication.controller.ProductController;
-import com.ntt.bistroapplication.model.*;
 import com.ntt.bistroapplication.exception.MissingIngredientException;
 import com.ntt.bistroapplication.exception.NonexistentProductException;
+import com.ntt.bistroapplication.model.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 @SpringBootApplication
@@ -22,11 +26,11 @@ public class BistroApplication {
             ApplicationContext ctx = SpringApplication.run(BistroApplication.class, args);
 
             Scanner scanner = new Scanner(System.in);
-            System.out.println("The tables have been created and initialized!");
+            MainConsole.printMessage("The tables have been created and initialized!");
             String str = "";
             while (!str.equals("Begin"))
             {
-                System.out.println("Type \"Begin\" to start!");
+                MainConsole.printMessage("Type \"Begin\" to start!");
                 str = scanner.next();
             }
 
@@ -38,120 +42,88 @@ public class BistroApplication {
                     (CustomerController) ctx.getBean("customerController");
             OrderController orderController = (OrderController) ctx.getBean("orderController");
 
-            Set<Ingredient> databaseIngredients = ingredientController.returnIngredients();
-            Set<Product> databaseProducts = productController.returnProducts();
+            listProducts(productController);
 
-            System.out.println("-------------List Products---------------");
-            productController.listProducts();
+            addProduct(productController, ingredientController);
 
-            System.out.println("-------------List with new Product---------------");
-            Product fruitCake = new Product();
-            fruitCake.setName("Fruit Cake");
-            fruitCake.setProductType(ProductType.CAKE);
-            Set<Ingredient> ingredients = new HashSet<>();
-            ingredients.add(findIngredient(IngredientType.FLOUR, databaseIngredients));
-            ingredients.add(findIngredient(IngredientType.EGGS, databaseIngredients));
-            ingredients.add(findIngredient(IngredientType.MILK, databaseIngredients));
-            ingredients.add(findIngredient(IngredientType.SUGAR, databaseIngredients));
-            ingredients.add(findIngredient(IngredientType.BUTTER, databaseIngredients));
-            ingredients.add(findIngredient(IngredientType.STRAWBERRY_JAM, databaseIngredients));
-            ingredients.add(findIngredient(IngredientType.PEACHES_JAM, databaseIngredients));
-            ingredients.add(findIngredient(IngredientType.RASPBERRIES_JAM, databaseIngredients));
-            fruitCake.setIngredients(ingredients);
-            fruitCake.setPrice();
-
-            productController.saveProduct(fruitCake);
-            productController.listProducts();
-
-            System.out.println("-------------Find Product By ID---------------");
             try
             {
-                System.out.println(productController.getByID(7));
-                System.out.println(productController.getByID(2));
-                System.out.println(productController.getByID(14));
+                listProductByID(productController, 7);
+                listProductByID(productController, 2);
+                listProductByID(productController, 14);
             }
             catch (NonexistentProductException e) {
-                System.out.println(e.getMessage() + "\n" +
+                MainConsole.printMessage(e.getMessage() + "\n" +
                         Arrays.toString(Arrays.stream(e.getStackTrace())
                                 .map(s -> s + "\n")
                                 .toArray()));
             }
 
-            System.out.println("-------------Update Price of Product---------------");
             Product pizzaNewPrice = productController.getByID(6);
-            productController.updatePrice(pizzaNewPrice, 45.0);
-            productController.listProducts();
+            updatePriceOfProduct(productController, pizzaNewPrice, 45.0);
+            Product wafflesNewPrice = productController.getByID(10);
+            updatePriceOfProduct(productController, wafflesNewPrice, 17.5);
 
-            System.out.println("-------------Remove Product by ID---------------");
-            productController.deleteByID(3);
-            productController.deleteByID(15);
-            productController.listProducts();
+            removeProductByID(productController, 3);
+            removeProductByID(productController, 15);
+            listProducts(productController);
 
-            System.out.println("-------------List Customers---------------");
-            customerController.listCustomers();
-
-            System.out.println("-------------Add Customer---------------");
             Customer andreea = new Customer("Andreea");
+            addCustomer(customerController, andreea);
             customerController.addCustomer(andreea);
             Customer roxana = new Customer();
             roxana.setName("Roxana");
-            customerController.addCustomer(roxana);
-            customerController.listCustomers();
+            addCustomer(customerController, roxana);
 
-            System.out.println("-------------Remove Customer by ID---------------");
-            customerController.deleteByID(1);
-            customerController.listCustomers();
+            removeCustomerByID(customerController, 1);
+            removeCustomerByID(customerController, 5);
+            listCustomers(customerController);
 
-            System.out.println("-------------List Top 3 Most Wanted Products---------------");
             OrderedProduct o1Product1 =
-                    new OrderedProduct(findProduct("Spaghetti with garlic", databaseProducts));
+                    new OrderedProduct(productController.getByName("Spaghetti with garlic"));
             OrderedProduct o1Product2 =
-                    new OrderedProduct(findProduct("Prosciutto Fungi Plus", databaseProducts));
+                    new OrderedProduct(productController.getByName("Prosciutto Fungi Plus"));
             OrderedProduct o1Product3 =
-                    new OrderedProduct(findProduct("Chocolate Cake", databaseProducts));
+                    new OrderedProduct(productController.getByName("Chocolate Cake"));
             List<OrderedProduct> order1Products =
                     new ArrayList<>(Arrays.asList(o1Product1, o1Product2, o1Product3));
             PlacedOrder order1 = new PlacedOrder();
             order1.setProducts(order1Products);
-            order1.setTotalPrice();
 
             OrderedProduct o2Product1 =
-                    new OrderedProduct(findProduct("Chocolate Donut", databaseProducts));
+                    new OrderedProduct(productController.getByName("Chocolate Donut"));
             OrderedProduct o2Product2 =
-                    new OrderedProduct(findProduct("Chocolate Cake", databaseProducts));
+                    new OrderedProduct(productController.getByName("Chocolate Cake"));
             OrderedProduct o2Product3 =
-                    new OrderedProduct(findProduct("Plain Cake", databaseProducts));
-            o2Product3.setTopping(findIngredient(IngredientType.RASPBERRIES_JAM,
-                    databaseIngredients));
+                    new OrderedProduct(productController.getByName("Plain Cake"));
+            o2Product3.setTopping(
+                    ingredientController.getIngredient(IngredientType.RASPBERRY.getName()));
             List<OrderedProduct> order2Products =
                     new ArrayList<>(Arrays.asList(o2Product1, o2Product2, o2Product3));
             PlacedOrder order2 = new PlacedOrder();
             order2.setProducts(order2Products);
-            order2.setTotalPrice();
 
             OrderedProduct o3Product1 =
-                    new OrderedProduct(findProduct("Prosciutto Fungi Plus", databaseProducts));
+                    new OrderedProduct(productController.getByName("Prosciutto Fungi Plus"));
             OrderedProduct o3Product2 =
-                    new OrderedProduct(findProduct("Cheese Pizza", databaseProducts));
+                    new OrderedProduct(productController.getByName("Cheese Pizza"));
             OrderedProduct o3Product3 =
-                    new OrderedProduct(findProduct("Chocolate Waffles", databaseProducts));
+                    new OrderedProduct(productController.getByName("Chocolate Waffles"));
             List<OrderedProduct> order3Products =
                     new ArrayList<>(Arrays.asList(o3Product1, o3Product2, o3Product3));
             PlacedOrder order3 = new PlacedOrder();
             order3.setProducts(order3Products);
-            order3.setTotalPrice();
 
             OrderedProduct o4Product1 =
-                    new OrderedProduct(findProduct("Strawberry Waffles", databaseProducts));
+                    new OrderedProduct(productController.getByName("Strawberry Waffles"));
             OrderedProduct o4Product2 =
-                    new OrderedProduct(findProduct("Spaghetti with garlic", databaseProducts));
+                    new OrderedProduct(productController.getByName("Spaghetti with garlic"));
             List<OrderedProduct> order4Products =
                     new ArrayList<>(Arrays.asList(o4Product1, o4Product2));
             PlacedOrder order4 = new PlacedOrder();
             order4.setProducts(order4Products);
-            order4.setTotalPrice();
 
-            Set<Customer> databaseCustomers = customerController.returnCustomers();
+            Set<Customer> databaseCustomers = customerController.getCustomers();
             for (Customer c : databaseCustomers)
             {
                 if (c.getName().equals("Ionut")) {
@@ -171,36 +143,82 @@ public class BistroApplication {
             orderController.saveOrder(order2);
             orderController.saveOrder(order3);
             orderController.saveOrder(order4);
-
-            System.out.println(orderController.getTop3());
+            listTopN(orderController, 3);
+            listTopN(orderController, 2);
         }
         catch (MissingIngredientException | NonexistentProductException e) {
-            System.out.println(e.getMessage() + "\n" +
-                    Arrays.toString(Arrays.stream(e.getStackTrace()).map(s -> s + "\n").toArray()));
+            MainConsole.printMessage(e.getMessage() + "\n" +
+                    Arrays.toString(Arrays.stream(e.getStackTrace())
+                            .map(s -> s + "\n")
+                            .toArray()));
         }
     }
 
-    private static Ingredient findIngredient(IngredientType ingredientType,
-                                             Set<Ingredient> databaseIngredients)
-            throws MissingIngredientException
+    private static void listProducts(ProductController productController)
     {
-        for (Ingredient i : databaseIngredients) {
-            if (i.getName().equals(ingredientType)) {
-                return i;
-            }
-        }
-        throw new MissingIngredientException("There's been an error while searching for this " +
-                "ingredient: " + ingredientType);
+        MainConsole.printMessage("-------------List Products---------------");
+        ProductConsole.printProducts(productController.getProducts());
     }
 
-    private static Product findProduct(String productName, Set<Product> databaseProducts)
+    private static void addProduct(ProductController productController,
+                                    IngredientController ingredientController)
+    {
+        MainConsole.printMessage("-------------List with new Product---------------");
+        Product fruitCake = new Product();
+        fruitCake.setName("Fruit Cake");
+        fruitCake.setProductType(ProductType.CAKE);
+        Set<Ingredient> ingredients = new HashSet<>();
+        ingredients.add(ingredientController.getIngredient(IngredientType.FLOUR.getName()));
+        ingredients.add(ingredientController.getIngredient(IngredientType.SUGAR.getName()));
+        ingredients.add(ingredientController.getIngredient(IngredientType.EGGS.getName()));
+        ingredients.add(ingredientController.getIngredient(IngredientType.MILK.getName()));
+        ingredients.add(ingredientController.getIngredient(IngredientType.BUTTER.getName()));
+        ingredients.add(ingredientController.getIngredient(IngredientType.STRAWBERRY.getName()));
+        ingredients.add(ingredientController.getIngredient(IngredientType.PEACHES.getName()));
+        ingredients.add(ingredientController.getIngredient(IngredientType.RASPBERRY.getName()));
+        fruitCake.setIngredients(ingredients);
+
+        productController.saveProduct(fruitCake);
+        ProductConsole.printProducts(productController.getProducts());
+    }
+
+    private static void listProductByID(ProductController productController, Integer id)
             throws NonexistentProductException
     {
-        for (Product p : databaseProducts) {
-            if (p.getName().equals(productName)) {
-                return p;
-            }
-        }
-        throw new NonexistentProductException(productName + " is not a valid product name!");
+        MainConsole.printMessage("-------------Find Product By ID---------------");
+        ProductConsole.printProduct(productController.getByID(id));
+    }
+
+    private static void updatePriceOfProduct(ProductController productController, Product product,
+                                             Double newPrice) {
+        productController.updatePrice(product, BigDecimal.valueOf(newPrice));
+    }
+
+    private static void removeProductByID(ProductController productController, Integer id) {
+        productController.deleteByID(id);
+    }
+
+    private static void listCustomers(CustomerController customerController)
+    {
+        MainConsole.printMessage("-------------List Customers---------------");
+        CustomerConsole.printCustomers(customerController.getCustomers());
+    }
+
+    private static void addCustomer(CustomerController customerController, Customer customer)
+    {
+        MainConsole.printMessage("-------------Add Customer---------------");
+        customerController.addCustomer(customer);
+        CustomerConsole.printCustomers(customerController.getCustomers());
+    }
+
+    private static void removeCustomerByID(CustomerController customerController, Integer id) {
+        customerController.deleteByID(id);
+    }
+
+    private static void listTopN(OrderController orderController, Integer n)
+    {
+        MainConsole.printMessage("-------------List Top " + n +
+                " Most Wanted Products---------------");
+        ProductConsole.printProducts(orderController.getTopN(n));
     }
 }

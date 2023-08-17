@@ -1,29 +1,38 @@
 package com.ntt.bistroapplication.model;
 
 public enum IngredientType {
-    FLOUR,
-    EGGS,
-    MILK,
-    SUGAR,
-    SUNFLOWER_OIL,
-    SALT,
-    BUTTER,
-    YEAST,
-    PASTA,
-    TOMATO_SAUCE,
-    MEATBALLS,
-    GARLIC,
-    CHEESE,
-    BACON,
-    MUSHROOMS,
-    PEPPERS,
-    CORN,
-    RICE,
-    ONION,
-    CELERY,
-    BASIL,
-    CHOCOLATE_CREAM,
-    STRAWBERRY_JAM,
-    PEACHES_JAM,
-    RASPBERRIES_JAM
+    FLOUR("FLOUR"),
+    EGGS("EGGS"),
+    MILK("MILK"),
+    SUGAR("SUGAR"),
+    SUN_OIL("SUNFLOWER OIL"),
+    SALT("SALT"),
+    BUTTER("BUTTER"),
+    YEAST("YEAST"),
+    PASTA("PASTA"),
+    TOMATO_SAUCE("TOMATO SAUCE"),
+    MEATBALLS("MEATBALLS"),
+    GARLIC("GARLIC"),
+    CHEESE("CHEESE"),
+    BACON("BACON"),
+    MUSHROOMS("MUSHROOMS"),
+    PEPPERS("PEPPERS"),
+    CORN("CORN"),
+    RICE("RICE"),
+    ONION("ONION"),
+    CELERY("CELERY"),
+    BASIL("BASIL"),
+    CHOCOLATE("CHOCOLATE CREAM"),
+    STRAWBERRY("STRAWBERRY JAM"),
+    PEACHES("PEACHES JAM"),
+    RASPBERRY("RASPBERRIES JAM");
+    private final String name;
+
+    IngredientType(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
 }
