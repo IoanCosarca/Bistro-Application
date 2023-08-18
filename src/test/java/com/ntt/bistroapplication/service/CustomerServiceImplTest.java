@@ -20,8 +20,8 @@ class CustomerServiceImplTest {
     private CustomerRepository customerRepository;
     @InjectMocks
     private CustomerServiceImpl customerService;
-    static final String name1 = "Alin";
-    static final String name2 = "Lucian";
+    static final String NAME_ALIN = "Alin";
+    static final String NAME_LUCIAN = "Lucian";
 
     @BeforeEach
     void setUp()
@@ -36,7 +36,7 @@ class CustomerServiceImplTest {
     {
         // Given
         Set<Customer> customers = new HashSet<>();
-        Customer alin = new Customer(name1);
+        Customer alin = new Customer(NAME_ALIN);
         customers.add(alin);
 
         // When
@@ -56,8 +56,8 @@ class CustomerServiceImplTest {
     {
         // Given
         Set<Customer> customers = new HashSet<>();
-        Customer alin = new Customer(name1);
-        Customer lucian = new Customer(name2);
+        Customer alin = new Customer(NAME_ALIN);
+        Customer lucian = new Customer(NAME_LUCIAN);
         customers.add(alin);
         customers.add(lucian);
 
@@ -77,8 +77,8 @@ class CustomerServiceImplTest {
     {
         // Given
         Set<Customer> customers = new HashSet<>();
-        Customer alin = new Customer(name1);
-        Customer lucian = new Customer(name2);
+        Customer alin = new Customer(NAME_ALIN);
+        Customer lucian = new Customer(NAME_LUCIAN);
         customers.add(lucian);
 
         // When

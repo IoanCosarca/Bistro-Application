@@ -24,14 +24,14 @@ class ProductServiceImplTest {
     private ProductRepository productRepository;
     @InjectMocks
     private ProductServiceImpl productService;
-    static final String productName1 = "Pizza";
-    static final String productName2 = "Cake";
-    static final ProductType type1 = ProductType.PIZZA;
-    static final ProductType type2 = ProductType.CAKE;
-    static final Long id1 = 1L;
-    static final Long id2 = 2L;
-    static final BigDecimal oldPrice = BigDecimal.valueOf(6);
-    static final BigDecimal newPrice = BigDecimal.valueOf(7);
+    static final String FIRST_PRODUCT = "Pizza";
+    static final String SECOND_PRODUCT = "Cake";
+    static final ProductType FIRST_TYPE = ProductType.PIZZA;
+    static final ProductType SECOND_TYPE = ProductType.CAKE;
+    static final Long FIRST_ID = 1L;
+    static final Long SECOND_ID = 2L;
+    static final BigDecimal OLD_PRICE = BigDecimal.valueOf(6);
+    static final BigDecimal NEW_PRICE = BigDecimal.valueOf(7);
 
     @BeforeEach
     void setUp()
@@ -47,8 +47,8 @@ class ProductServiceImplTest {
         // Given
         Set<Product> products = new HashSet<>();
         Product dummyProduct = new Product();
-        dummyProduct.setName(productName1);
-        dummyProduct.setProductType(type1);
+        dummyProduct.setName(FIRST_PRODUCT);
+        dummyProduct.setProductType(FIRST_TYPE);
         products.add(dummyProduct);
 
         // When
@@ -69,11 +69,11 @@ class ProductServiceImplTest {
         // Given
         Set<Product> products = new HashSet<>();
         Product pizza = new Product();
-        pizza.setName(productName1);
-        pizza.setProductType(type1);
+        pizza.setName(FIRST_PRODUCT);
+        pizza.setProductType(FIRST_TYPE);
         Product cake = new Product();
-        cake.setName(productName2);
-        cake.setProductType(type2);
+        cake.setName(SECOND_PRODUCT);
+        cake.setProductType(SECOND_TYPE);
         products.add(pizza);
         products.add(cake);
 
@@ -93,23 +93,23 @@ class ProductServiceImplTest {
     {
         // Given
         Product pizza = new Product();
-        pizza.setName(productName1);
-        pizza.setProductType(type1);
-        pizza.setId(id1);
+        pizza.setName(FIRST_PRODUCT);
+        pizza.setProductType(FIRST_TYPE);
+        pizza.setId(FIRST_ID);
         Product cake = new Product();
-        cake.setName(productName2);
-        cake.setProductType(type2);
-        cake.setId(id2);
+        cake.setName(SECOND_PRODUCT);
+        cake.setProductType(SECOND_TYPE);
+        cake.setId(SECOND_ID);
 
         // When
         productService.addProduct(pizza);
         productService.addProduct(cake);
-        when(productRepository.findById(id2)).thenReturn(Optional.of(cake));
-        Product result = productService.getByID(id2);
+        when(productRepository.findById(SECOND_ID)).thenReturn(Optional.of(cake));
+        Product result = productService.getByID(SECOND_ID);
 
         // Then
-        assertEquals(type2, result.getProductType());
-        verify(productRepository, times(1)).findById(id2);
+        assertEquals(SECOND_TYPE, result.getProductType());
+        verify(productRepository, times(1)).findById(SECOND_ID);
     }
 
     @Test
@@ -124,19 +124,19 @@ class ProductServiceImplTest {
     {
         // Given
         Product cake = new Product();
-        cake.setName(productName2);
-        cake.setProductType(type2);
-        cake.setId(id1);
-        cake.setPrice(oldPrice);
+        cake.setName(SECOND_PRODUCT);
+        cake.setProductType(SECOND_TYPE);
+        cake.setId(FIRST_ID);
+        cake.setPrice(OLD_PRICE);
 
         // When
         productService.addProduct(cake);
-        productService.updatePrice(cake, newPrice);
-        when(productRepository.findById(id1)).thenReturn(Optional.of(cake));
-        Product result = productService.getByID(id1);
+        productService.updatePrice(cake, NEW_PRICE);
+        when(productRepository.findById(FIRST_ID)).thenReturn(Optional.of(cake));
+        Product result = productService.getByID(FIRST_ID);
 
         // Then
-        assertEquals(newPrice, result.getPrice());
+        assertEquals(NEW_PRICE, result.getPrice());
         verify(productRepository, times(2)).save(result);
     }
 
@@ -147,25 +147,25 @@ class ProductServiceImplTest {
         // Given
         Set<Product> products = new HashSet<>();
         Product pizza = new Product();
-        pizza.setName(productName1);
-        pizza.setProductType(type1);
-        pizza.setId(id1);
+        pizza.setName(FIRST_PRODUCT);
+        pizza.setProductType(FIRST_TYPE);
+        pizza.setId(FIRST_ID);
         Product cake = new Product();
-        cake.setName(productName2);
-        cake.setProductType(type2);
-        cake.setId(id2);
+        cake.setName(SECOND_PRODUCT);
+        cake.setProductType(SECOND_TYPE);
+        cake.setId(SECOND_ID);
         products.add(cake);
 
         // When
         productService.addProduct(cake);
         productService.addProduct(pizza);
-        productService.removeProduct(id1);
+        productService.removeProduct(FIRST_ID);
         when(productRepository.findAll()).thenReturn(products);
         Set<Product> databaseProducts = productService.getProducts();
 
         // Then
         assertEquals(1, databaseProducts.size());
         assertEquals(1, products.size());
-        verify(productRepository, times(1)).deleteById(id1);
+        verify(productRepository, times(1)).deleteById(FIRST_ID);
     }
 }

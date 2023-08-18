@@ -21,13 +21,13 @@ class OrderServiceImplTest {
     private OrderRepository orderRepository;
     @InjectMocks
     private OrderServiceImpl orderService;
-    static final String productName1 = "Pizza";
-    static final String productName2 = "Pasta";
-    static final ProductType type1 = ProductType.PIZZA;
-    static final ProductType type2 = ProductType.PASTA;
-    static final BigDecimal price1 = BigDecimal.valueOf(5.5);
-    static final BigDecimal price2 = BigDecimal.valueOf(4.0);
-    static final String customerName = "Mircea";
+    static final String FIRST_PRODUCT = "Pizza";
+    static final String SECOND_PRODUCT = "Pasta";
+    static final ProductType FIRST_TYPE = ProductType.PIZZA;
+    static final ProductType SECOND_TYPE = ProductType.PASTA;
+    static final BigDecimal FIRST_PRICE = BigDecimal.valueOf(5.5);
+    static final BigDecimal SECOND_PRICE = BigDecimal.valueOf(4.0);
+    static final String CUSTOMER_NAME = "Mircea";
 
     @BeforeEach
     void setUp()
@@ -42,13 +42,13 @@ class OrderServiceImplTest {
     {
         // Given
         Product product1 = new Product();
-        product1.setName(productName1);
-        product1.setProductType(type1);
-        product1.setPrice(price1);
+        product1.setName(FIRST_PRODUCT);
+        product1.setProductType(FIRST_TYPE);
+        product1.setPrice(FIRST_PRICE);
         Product product2 = new Product();
-        product2.setName(productName2);
-        product2.setProductType(type2);
-        product2.setPrice(price2);
+        product2.setName(SECOND_PRODUCT);
+        product2.setProductType(SECOND_TYPE);
+        product2.setPrice(SECOND_PRICE);
 
         OrderedProduct orderedProduct1 = new OrderedProduct(product1);
         OrderedProduct orderedProduct2 = new OrderedProduct(product2);
@@ -57,7 +57,7 @@ class OrderServiceImplTest {
         orderedProducts.add(orderedProduct1);
         orderedProducts.add(orderedProduct2);
 
-        Customer customer = new Customer(customerName);
+        Customer customer = new Customer(CUSTOMER_NAME);
 
         PlacedOrder order = new PlacedOrder();
         order.setProducts(orderedProducts);
@@ -72,7 +72,7 @@ class OrderServiceImplTest {
 
         // Then
         assertEquals(1, orders.size());
-        assertEquals(price1.add(price2), orders.get(0).getTotalPrice());
+        assertEquals(FIRST_PRICE.add(SECOND_PRICE), orders.get(0).getTotalPrice());
         verify(orderRepository, times(1)).save(order);
     }
 }

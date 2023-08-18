@@ -24,9 +24,9 @@ class IngredientServiceImplTest {
     private IngredientRepository ingredientRepository;
     @InjectMocks
     private IngredientServiceImpl ingredientService;
-    static final BigDecimal price1 = BigDecimal.valueOf(3.1);
-    static final BigDecimal price2 = BigDecimal.valueOf(2.5);
-    static final String ingredientName = "TOMATO SAUCE";
+    static final BigDecimal FIRST_PRICE = BigDecimal.valueOf(3.1);
+    static final BigDecimal SECOND_PRICE = BigDecimal.valueOf(2.5);
+    static final String INGREDIENT_NAME = "TOMATO SAUCE";
 
     @BeforeEach
     void setUp()
@@ -41,8 +41,8 @@ class IngredientServiceImplTest {
     {
         // Given
         Set<Ingredient> ingredients = new HashSet<>();
-        Ingredient salt = new Ingredient(IngredientType.SALT.getName(), price1);
-        Ingredient sugar = new Ingredient(IngredientType.SUGAR.getName(), price2);
+        Ingredient salt = new Ingredient(IngredientType.SALT.getName(), FIRST_PRICE);
+        Ingredient sugar = new Ingredient(IngredientType.SUGAR.getName(), SECOND_PRICE);
         ingredients.add(salt);
         ingredients.add(sugar);
 
@@ -61,16 +61,16 @@ class IngredientServiceImplTest {
     void testGetIngredient() throws MissingIngredientException
     {
         // Given
-        Ingredient ingredient = new Ingredient(ingredientName, price1);
+        Ingredient ingredient = new Ingredient(INGREDIENT_NAME, FIRST_PRICE);
 
         // When
-        when(ingredientRepository.findByName(ingredientName)).thenReturn(Optional.of(ingredient));
-        Ingredient result = ingredientService.getIngredient(ingredientName);
+        when(ingredientRepository.findByName(INGREDIENT_NAME)).thenReturn(Optional.of(ingredient));
+        Ingredient result = ingredientService.getIngredient(INGREDIENT_NAME);
 
         // Then
-        assertEquals(price1, result.getCost());
-        assertEquals(price1, ingredient.getCost());
-        verify(ingredientRepository, times(1)).findByName(ingredientName);
+        assertEquals(FIRST_PRICE, result.getCost());
+        assertEquals(FIRST_PRICE, ingredient.getCost());
+        verify(ingredientRepository, times(1)).findByName(INGREDIENT_NAME);
     }
 
     @Test
