@@ -25,14 +25,7 @@ public class BistroApplication {
         {
             ApplicationContext ctx = SpringApplication.run(BistroApplication.class, args);
 
-            Scanner scanner = new Scanner(System.in);
-            MainConsole.printMessage("The tables have been created and initialized!");
-            String str = "";
-            while (!str.equals("Begin"))
-            {
-                MainConsole.printMessage("Type \"Begin\" to start!");
-                str = scanner.next();
-            }
+            MainConsole.startExecution();
 
             ProductController productController =
                     (ProductController) ctx.getBean("productController");
