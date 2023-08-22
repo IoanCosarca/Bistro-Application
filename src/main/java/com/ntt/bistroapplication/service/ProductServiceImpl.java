@@ -20,17 +20,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void addProduct(Product product)
-    {
-        Optional<Product> optionalProduct = productRepository.findByName(product.getName());
-        if (optionalProduct.isEmpty())
-        {
-            setProductPrice(product);
-            productRepository.save(product);
-        }
-    }
-
-    @Override
     public Set<Product> getProducts()
     {
         Set<Product> products = new HashSet<>();
@@ -65,6 +54,17 @@ public class ProductServiceImpl implements ProductService {
                 }
         );
         return foundProduct[0];
+    }
+
+    @Override
+    public void addProduct(Product product)
+    {
+        Optional<Product> optionalProduct = productRepository.findByName(product.getName());
+        if (optionalProduct.isEmpty())
+        {
+            setProductPrice(product);
+            productRepository.save(product);
+        }
     }
 
     @Override

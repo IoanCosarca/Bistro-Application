@@ -17,6 +17,12 @@ import org.springframework.context.ApplicationContext;
 import java.math.BigDecimal;
 import java.util.*;
 
+/**
+ * Application for facilitating a bistro managing system.
+ * <a href="http://localhost:8080/h2-console">Database visualization</a>, using the url:
+ * jdbc:h2:mem:testdb
+ * <a href="http://localhost:8080/swagger-ui.html">OpenAPI documentation</a>
+ */
 @SpringBootApplication
 public class BistroApplication {
     public static void main(String[] args)
@@ -52,10 +58,8 @@ public class BistroApplication {
                                 .toArray()));
             }
 
-            Product pizzaNewPrice = productController.getByID(6);
-            updatePriceOfProduct(productController, pizzaNewPrice, 45.0);
-            Product wafflesNewPrice = productController.getByID(10);
-            updatePriceOfProduct(productController, wafflesNewPrice, 17.5);
+            updatePriceOfProduct(productController, 6L, 45.0);
+            updatePriceOfProduct(productController, 10L, 17.5);
 
             removeProductByID(productController, 3);
             removeProductByID(productController, 15);
@@ -182,13 +186,13 @@ public class BistroApplication {
         ProductConsole.printProduct(productController.getByID(id));
     }
 
-    private static void updatePriceOfProduct(ProductController productController, Product product,
+    private static void updatePriceOfProduct(ProductController productController, Long id,
                                              Double newPrice) {
-        productController.updatePrice(product, BigDecimal.valueOf(newPrice));
+        productController.updatePrice(id, BigDecimal.valueOf(newPrice));
     }
 
     private static void removeProductByID(ProductController productController, Integer id) {
-        productController.deleteByID(id);
+        productController.deleteByID(Long.valueOf(id));
     }
 
     private static void listCustomers(CustomerController customerController)
