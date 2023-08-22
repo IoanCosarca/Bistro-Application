@@ -205,7 +205,7 @@ public class BistroApplication {
     }
 
     private static void removeCustomerByID(CustomerController customerController, Integer id) {
-        customerController.deleteByID(id);
+        customerController.deleteByID(Long.valueOf(id));
     }
 
     private static void listTopN(OrderController orderController, Integer n)

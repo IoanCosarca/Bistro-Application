@@ -2,27 +2,36 @@ package com.ntt.bistroapplication.controller;
 
 import com.ntt.bistroapplication.model.Customer;
 import com.ntt.bistroapplication.service.CustomerService;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 
-@Controller
+@RestController
+@RequestMapping(CustomerController.BASE_URL)
 public class CustomerController {
+    public static final String BASE_URL = "/api/customers";
     private final CustomerService customerService;
 
     public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
     }
 
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public Set<Customer> getCustomers() {
         return customerService.getCustomers();
     }
 
-    public void addCustomer(Customer newCustomer) {
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public void addCustomer(@RequestBody Customer newCustomer) {
         customerService.addCustomer(newCustomer);
     }
 
-    public void deleteByID(Integer id) {
-        customerService.removeCustomer(Long.valueOf(id));
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteByID(@PathVariable Long id) {
+        customerService.removeCustomer(id);
     }
 }
