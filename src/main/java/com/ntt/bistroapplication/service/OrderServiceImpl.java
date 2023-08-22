@@ -39,6 +39,17 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<PlacedOrder> getCustomerOrders(Long customerID)
+    {
+        Set<PlacedOrder> allOrders = new HashSet<>();
+        orderRepository.findAll().iterator().forEachRemaining(allOrders::add);
+        return allOrders.stream()
+                .filter(placedOrder ->
+                        Objects.equals(placedOrder.getCustomer().getId(), customerID))
+                .toList();
+    }
+
+    @Override
     public Set<Product> getMostWantedProducts(int n)
     {
         Set<PlacedOrder> allOrders = new HashSet<>();

@@ -3,12 +3,16 @@ package com.ntt.bistroapplication.controller;
 import com.ntt.bistroapplication.model.PlacedOrder;
 import com.ntt.bistroapplication.model.Product;
 import com.ntt.bistroapplication.service.OrderService;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
 
-@Controller
+@RestController
+@RequestMapping(OrderController.BASE_URL)
 public class OrderController {
+    public static final String BASE_URL = "/api/orders";
     private final OrderService orderService;
 
     public OrderController(OrderService orderService) {
@@ -19,7 +23,15 @@ public class OrderController {
         orderService.addOrder(order);
     }
 
-    public Set<Product> getTopN(int n) {
+    @GetMapping("/customerOrders/{customerID}")
+    @ResponseStatus(HttpStatus.FOUND)
+    public List<PlacedOrder> getCustomerOrders(@PathVariable Long customerID) {
+        return orderService.getCustomerOrders(customerID);
+    }
+
+    @GetMapping("/top/{n}")
+    @ResponseStatus(HttpStatus.FOUND)
+    public Set<Product> getTopN(@PathVariable int n) {
         return orderService.getMostWantedProducts(n);
     }
 }

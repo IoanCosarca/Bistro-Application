@@ -3,9 +3,7 @@ package com.ntt.bistroapplication.model;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -21,8 +19,6 @@ public class Product {
             inverseJoinColumns = @JoinColumn(name = "ingredient_id"))
     private Set<Ingredient> ingredients = new HashSet<>();
     private BigDecimal price = BigDecimal.ZERO;
-    @OneToMany(mappedBy = "product")
-    private List<OrderedProduct> orderedProduct = new ArrayList<>();
 
     public Product() {}
 
@@ -64,14 +60,6 @@ public class Product {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
-    }
-
-    public List<OrderedProduct> getOrderedProduct() {
-        return orderedProduct;
-    }
-
-    public void setOrderedProduct(List<OrderedProduct> orderedProduct) {
-        this.orderedProduct = orderedProduct;
     }
 
     @Override
