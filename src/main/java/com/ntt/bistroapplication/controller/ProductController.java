@@ -25,13 +25,13 @@ public class ProductController {
         return productService.getProducts();
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/getByID/{id}")
     @ResponseStatus(HttpStatus.FOUND)
-    public Product getByID(@PathVariable Integer id) throws NonexistentProductException {
-        return productService.getByID(Long.valueOf(id));
+    public Product getByID(@PathVariable Long id) throws NonexistentProductException {
+        return productService.getByID(id);
     }
 
-    @GetMapping("{name}")
+    @GetMapping("/getByName/{name}")
     @ResponseStatus(HttpStatus.FOUND)
     public Product getByName(@PathVariable String name) throws NonexistentProductException {
         return productService.getByName(name);
@@ -51,7 +51,7 @@ public class ProductController {
         productService.updatePrice(product, newPrice);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteByID(@PathVariable Long id) {
         productService.removeProduct(id);

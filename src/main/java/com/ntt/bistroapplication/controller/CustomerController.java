@@ -29,7 +29,7 @@ public class CustomerController {
         customerService.addCustomer(newCustomer);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteByID(@PathVariable Long id) {
         customerService.removeCustomer(id);

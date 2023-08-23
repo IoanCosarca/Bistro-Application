@@ -45,9 +45,9 @@ public class BistroApplication {
 
             try
             {
-                listProductByID(productController, 7);
-                listProductByID(productController, 2);
-                listProductByID(productController, 14);
+                listProductByID(productController, 7L);
+                listProductByID(productController, 2L);
+                listProductByID(productController, 14L);
             }
             catch (NonexistentProductException e) {
                 e.printStackTrace();
@@ -171,7 +171,7 @@ public class BistroApplication {
         ProductConsole.printProducts(productController.getProducts());
     }
 
-    private static void listProductByID(ProductController productController, Integer id)
+    private static void listProductByID(ProductController productController, Long id)
             throws NonexistentProductException
     {
         MainConsole.printMessage("-------------Find Product By ID---------------");
