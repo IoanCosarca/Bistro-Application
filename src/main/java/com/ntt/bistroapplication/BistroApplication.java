@@ -19,8 +19,6 @@ import java.util.*;
 
 /**
  * Application for facilitating a bistro managing system.
- * <a href="http://localhost:8080/h2-console">Database visualization</a>, using the url:
- * jdbc:h2:mem:testdb
  * <a href="http://localhost:8080/swagger-ui.html">OpenAPI documentation</a>
  */
 @SpringBootApplication
@@ -52,10 +50,7 @@ public class BistroApplication {
                 listProductByID(productController, 14);
             }
             catch (NonexistentProductException e) {
-                MainConsole.printMessage(e.getMessage() + "\n" +
-                        Arrays.toString(Arrays.stream(e.getStackTrace())
-                                .map(s -> s + "\n")
-                                .toArray()));
+                e.printStackTrace();
             }
 
             updatePriceOfProduct(productController, 6L, 45.0);
@@ -144,10 +139,7 @@ public class BistroApplication {
             listTopN(orderController, 2);
         }
         catch (MissingIngredientException | NonexistentProductException e) {
-            MainConsole.printMessage(e.getMessage() + "\n" +
-                    Arrays.toString(Arrays.stream(e.getStackTrace())
-                            .map(s -> s + "\n")
-                            .toArray()));
+            e.printStackTrace();
         }
     }
 
