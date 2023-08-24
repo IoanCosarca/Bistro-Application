@@ -1,21 +1,26 @@
-package com.ntt.bistroapplication.model;
+package com.ntt.bistroapplication.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import java.math.BigDecimal;
+
 @Entity
-public class Customer {
+public class Ingredient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private BigDecimal cost;
 
-    public Customer() {}
+    public Ingredient() {}
 
-    public Customer(String name) {
+    public Ingredient(String name, BigDecimal cost)
+    {
         this.name = name;
+        this.cost = cost;
     }
 
     public Long getId() {
@@ -34,29 +39,37 @@ public class Customer {
         this.name = name;
     }
 
+    public BigDecimal getCost() {
+        return cost;
+    }
+
+    public void setCost(BigDecimal cost) {
+        this.cost = cost;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Customer customer = (Customer) o;
+        Ingredient that = (Ingredient) o;
 
-        if (getId() != null ? !getId().equals(customer.getId()) : customer.getId() != null)
-            return false;
-        return getName().equals(customer.getName());
+        if (!getName().equals(that.getName())) return false;
+        return getCost().equals(that.getCost());
     }
 
     @Override
     public int hashCode() {
-        int result = getId() != null ? getId().hashCode() : 0;
-        result = 31 * result + getName().hashCode();
+        int result = getName().hashCode();
+        result = 31 * result + getCost().hashCode();
         return result;
     }
 
     @Override
     public String toString() {
-        return "Customer: " +
-                "id=" + id +
-                ", name='" + name + '\'';
+        return "{id=" + id +
+                ", name=" + name +
+                ", cost=" + cost +
+                '}';
     }
 }

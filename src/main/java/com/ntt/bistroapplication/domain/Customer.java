@@ -1,26 +1,21 @@
-package com.ntt.bistroapplication.model;
+package com.ntt.bistroapplication.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-import java.math.BigDecimal;
-
 @Entity
-public class Ingredient {
+public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private BigDecimal cost;
 
-    public Ingredient() {}
+    public Customer() {}
 
-    public Ingredient(String name, BigDecimal cost)
-    {
+    public Customer(String name) {
         this.name = name;
-        this.cost = cost;
     }
 
     public Long getId() {
@@ -39,37 +34,29 @@ public class Ingredient {
         this.name = name;
     }
 
-    public BigDecimal getCost() {
-        return cost;
-    }
-
-    public void setCost(BigDecimal cost) {
-        this.cost = cost;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Ingredient that = (Ingredient) o;
+        Customer customer = (Customer) o;
 
-        if (!getName().equals(that.getName())) return false;
-        return getCost().equals(that.getCost());
+        if (getId() != null ? !getId().equals(customer.getId()) : customer.getId() != null)
+            return false;
+        return getName().equals(customer.getName());
     }
 
     @Override
     public int hashCode() {
-        int result = getName().hashCode();
-        result = 31 * result + getCost().hashCode();
+        int result = getId() != null ? getId().hashCode() : 0;
+        result = 31 * result + getName().hashCode();
         return result;
     }
 
     @Override
     public String toString() {
-        return "{id=" + id +
-                ", name=" + name +
-                ", cost=" + cost +
-                '}';
+        return "Customer: " +
+                "id=" + id +
+                ", name='" + name + '\'';
     }
 }

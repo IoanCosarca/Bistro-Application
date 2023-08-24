@@ -1,7 +1,7 @@
 package com.ntt.bistroapplication.repository;
 
-import com.ntt.bistroapplication.model.Customer;
-import com.ntt.bistroapplication.model.PlacedOrder;
+import com.ntt.bistroapplication.domain.Customer;
+import com.ntt.bistroapplication.domain.PlacedOrder;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

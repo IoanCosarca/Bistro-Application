@@ -1,6 +1,6 @@
 package com.ntt.bistroapplication.console;
 
-import com.ntt.bistroapplication.model.Product;
+import com.ntt.bistroapplication.domain.Product;
 
 import java.util.Set;
 

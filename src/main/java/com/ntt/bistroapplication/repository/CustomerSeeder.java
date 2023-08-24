@@ -1,6 +1,6 @@
 package com.ntt.bistroapplication.repository;
 
-import com.ntt.bistroapplication.model.Customer;
+import com.ntt.bistroapplication.domain.Customer;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;

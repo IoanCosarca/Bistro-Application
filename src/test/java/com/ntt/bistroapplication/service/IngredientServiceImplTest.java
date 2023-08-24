@@ -1,8 +1,8 @@
 package com.ntt.bistroapplication.service;
 
 import com.ntt.bistroapplication.exception.MissingIngredientException;
-import com.ntt.bistroapplication.model.Ingredient;
-import com.ntt.bistroapplication.model.IngredientType;
+import com.ntt.bistroapplication.domain.Ingredient;
+import com.ntt.bistroapplication.domain.IngredientType;
 import com.ntt.bistroapplication.repository.IngredientRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

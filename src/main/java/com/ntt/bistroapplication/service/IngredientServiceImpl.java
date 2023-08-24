@@ -1,7 +1,7 @@
 package com.ntt.bistroapplication.service;
 
 import com.ntt.bistroapplication.exception.MissingIngredientException;
-import com.ntt.bistroapplication.model.Ingredient;
+import com.ntt.bistroapplication.domain.Ingredient;
 import com.ntt.bistroapplication.repository.IngredientRepository;
 import org.springframework.stereotype.Service;
 

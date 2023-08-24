@@ -1,6 +1,6 @@
 package com.ntt.bistroapplication.console;
 
-import com.ntt.bistroapplication.model.Customer;
+import com.ntt.bistroapplication.domain.Customer;
 
 import java.util.Set;
 

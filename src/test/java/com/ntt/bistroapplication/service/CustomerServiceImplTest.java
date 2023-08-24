@@ -1,6 +1,6 @@
 package com.ntt.bistroapplication.service;
 
-import com.ntt.bistroapplication.model.Customer;
+import com.ntt.bistroapplication.domain.Customer;
 import com.ntt.bistroapplication.repository.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

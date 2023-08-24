@@ -1,8 +1,8 @@
 package com.ntt.bistroapplication.service;
 
-import com.ntt.bistroapplication.model.OrderedProduct;
-import com.ntt.bistroapplication.model.PlacedOrder;
-import com.ntt.bistroapplication.model.Product;
+import com.ntt.bistroapplication.domain.OrderedProduct;
+import com.ntt.bistroapplication.domain.PlacedOrder;
+import com.ntt.bistroapplication.domain.Product;
 import com.ntt.bistroapplication.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 

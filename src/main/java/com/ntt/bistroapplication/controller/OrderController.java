@@ -1,7 +1,7 @@
 package com.ntt.bistroapplication.controller;
 
-import com.ntt.bistroapplication.model.PlacedOrder;
-import com.ntt.bistroapplication.model.Product;
+import com.ntt.bistroapplication.domain.PlacedOrder;
+import com.ntt.bistroapplication.domain.Product;
 import com.ntt.bistroapplication.service.OrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

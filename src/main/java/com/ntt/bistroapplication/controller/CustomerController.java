@@ -1,6 +1,6 @@
 package com.ntt.bistroapplication.controller;
 
-import com.ntt.bistroapplication.model.Customer;
+import com.ntt.bistroapplication.domain.Customer;
 import com.ntt.bistroapplication.service.CustomerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

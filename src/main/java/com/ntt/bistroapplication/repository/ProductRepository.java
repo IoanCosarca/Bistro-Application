@@ -1,6 +1,6 @@
 package com.ntt.bistroapplication.repository;
 
-import com.ntt.bistroapplication.model.Product;
+import com.ntt.bistroapplication.domain.Product;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

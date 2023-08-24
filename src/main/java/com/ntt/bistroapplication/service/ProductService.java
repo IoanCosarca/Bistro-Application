@@ -1,7 +1,7 @@
 package com.ntt.bistroapplication.service;
 
 import com.ntt.bistroapplication.exception.NonexistentProductException;
-import com.ntt.bistroapplication.model.Product;
+import com.ntt.bistroapplication.domain.Product;
 
 import java.math.BigDecimal;
 import java.util.Set;

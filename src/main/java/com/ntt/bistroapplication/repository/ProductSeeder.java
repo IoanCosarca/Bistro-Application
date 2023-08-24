@@ -1,9 +1,9 @@
 package com.ntt.bistroapplication.repository;
 
-import com.ntt.bistroapplication.model.Ingredient;
-import com.ntt.bistroapplication.model.IngredientType;
-import com.ntt.bistroapplication.model.Product;
-import com.ntt.bistroapplication.model.ProductType;
+import com.ntt.bistroapplication.domain.Ingredient;
+import com.ntt.bistroapplication.domain.IngredientType;
+import com.ntt.bistroapplication.domain.Product;
+import com.ntt.bistroapplication.domain.ProductType;
 import com.ntt.bistroapplication.exception.MissingIngredientException;
 import com.ntt.bistroapplication.service.ProductServiceImpl;
 import jakarta.validation.constraints.NotNull;

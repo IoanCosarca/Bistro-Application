@@ -1,7 +1,7 @@
 package com.ntt.bistroapplication.controller;
 
 import com.ntt.bistroapplication.exception.NonexistentProductException;
-import com.ntt.bistroapplication.model.Product;
+import com.ntt.bistroapplication.domain.Product;
 import com.ntt.bistroapplication.service.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
