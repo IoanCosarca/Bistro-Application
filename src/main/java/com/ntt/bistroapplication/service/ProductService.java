@@ -1,21 +1,21 @@
 package com.ntt.bistroapplication.service;
 
 import com.ntt.bistroapplication.exception.NonexistentProductException;
-import com.ntt.bistroapplication.domain.Product;
+import com.ntt.bistroapplication.model.ProductDTO;
+import com.ntt.bistroapplication.model.ProductSetDTO;
 
 import java.math.BigDecimal;
-import java.util.Set;
 
 public interface ProductService {
-    Set<Product> getProducts();
+    ProductSetDTO getProducts();
 
-    Product getByID(Long id) throws NonexistentProductException;
+    ProductDTO getByID(Long id) throws NonexistentProductException;
 
-    Product getByName(String name) throws NonexistentProductException;
+    ProductDTO getDTOByName(String name) throws NonexistentProductException;
 
-    void addProduct(Product product);
+    void addProduct(ProductDTO newProduct);
 
-    void updatePrice(Product product, BigDecimal newPrice);
+    void updatePrice(Long id, BigDecimal newPrice);
 
     void removeProduct(Long id);
 }

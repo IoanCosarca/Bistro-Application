@@ -1,17 +1,16 @@
 package com.ntt.bistroapplication.console;
 
-import com.ntt.bistroapplication.domain.Product;
-
-import java.util.Set;
+import com.ntt.bistroapplication.model.ProductDTO;
+import com.ntt.bistroapplication.model.ProductSetDTO;
 
 public class ProductConsole {
-    public static void printProducts(Set<Product> products) {
-        for (Product p : products) {
+    public static void printProducts(ProductSetDTO products) {
+        for (ProductDTO p : products.getProducts()) {
             System.out.println(p.toString());
         }
     }
 
-    public static void printProduct(Product product) {
+    public static void printProduct(ProductDTO product) {
         System.out.println(product.toString());
     }
 }

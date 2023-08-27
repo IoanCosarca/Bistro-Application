@@ -1,8 +1,13 @@
 package com.ntt.bistroapplication.service;
 
-import com.ntt.bistroapplication.exception.NonexistentProductException;
 import com.ntt.bistroapplication.domain.Ingredient;
 import com.ntt.bistroapplication.domain.Product;
+import com.ntt.bistroapplication.exception.NonexistentProductException;
+import com.ntt.bistroapplication.mapper.ProductMapper;
+import com.ntt.bistroapplication.model.IngredientDTO;
+import com.ntt.bistroapplication.model.ProductDTO;
+import com.ntt.bistroapplication.model.ProductSetDTO;
+import com.ntt.bistroapplication.repository.IngredientRepository;
 import com.ntt.bistroapplication.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
@@ -13,27 +18,36 @@ import java.util.Set;
 
 @Service
 public class ProductServiceImpl implements ProductService {
+    private final ProductMapper productMapper;
     private final ProductRepository productRepository;
+    private final IngredientRepository ingredientRepository;
 
-    public ProductServiceImpl(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
-
-    @Override
-    public Set<Product> getProducts()
+    public ProductServiceImpl(ProductRepository productRepository,
+                              IngredientRepository ingredientRepository)
     {
-        Set<Product> products = new HashSet<>();
-        productRepository.findAll().iterator().forEachRemaining(products::add);
-        return products;
+        this.productMapper = ProductMapper.INSTANCE;
+        this.productRepository = productRepository;
+        this.ingredientRepository = ingredientRepository;
     }
 
     @Override
-    public Product getByID(Long id) throws NonexistentProductException
+    public ProductSetDTO getProducts()
+    {
+        Set<ProductDTO> products = new HashSet<>();
+        productRepository.findAll().iterator().forEachRemaining(p -> {
+            ProductDTO product = productMapper.productToProductDTO(p);
+            products.add(product);
+        });
+        return new ProductSetDTO(products);
+    }
+
+    @Override
+    public ProductDTO getByID(Long id) throws NonexistentProductException
     {
         Optional<Product> productOptional = productRepository.findById(id);
-        final Product[] foundProduct = { new Product() };
+        final ProductDTO[] foundProduct = { new ProductDTO() };
         productOptional.ifPresentOrElse(
-                product -> foundProduct[0] = product,
+                p -> foundProduct[0] = productMapper.productToProductDTO(p),
                 () -> {
                     throw new NonexistentProductException(
                             "The product with the given ID couldn't be found");
@@ -43,12 +57,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product getByName(String name) throws NonexistentProductException
+    public ProductDTO getDTOByName(String name) throws NonexistentProductException
     {
         Optional<Product> productOptional = productRepository.findByName(name);
-        final Product[] foundProduct = { new Product() };
+        final ProductDTO[] foundProduct = { new ProductDTO() };
         productOptional.ifPresentOrElse(
-                product -> foundProduct[0] = product,
+                p -> foundProduct[0] = productMapper.productToProductDTO(p),
                 () -> {
                     throw new NonexistentProductException(name + " is not a valid product name!");
                 }
@@ -57,26 +71,58 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void addProduct(Product product)
+    public void addProduct(ProductDTO newProduct)
     {
-        Optional<Product> optionalProduct = productRepository.findByName(product.getName());
+        Optional<Product> optionalProduct = productRepository.findByName(newProduct.getName());
         if (optionalProduct.isEmpty())
         {
-            setProductPrice(product);
+            setProductDTOPrice(newProduct);
+            Product product = productMapper.productDTOtoProduct(newProduct);
+            product.setIngredients(computeIngredients(newProduct));
             productRepository.save(product);
         }
     }
 
     @Override
-    public void updatePrice(Product product, BigDecimal newPrice)
+    public void updatePrice(Long id, BigDecimal newPrice)
     {
-        product.setPrice(newPrice);
-        productRepository.save(product);
+        ProductDTO productDTO = getByID(id);
+        if (productDTO != null)
+        {
+            productDTO.setPrice(newPrice);
+            Product product = productMapper.productDTOtoProduct(productDTO);
+            product.setIngredients(computeIngredients(productDTO));
+            product.setId(id);
+            productRepository.save(product);
+        }
     }
 
     @Override
     public void removeProduct(Long id) {
         productRepository.deleteById(id);
+    }
+
+    private Set<Ingredient> computeIngredients(ProductDTO productDTO)
+    {
+        Set<IngredientDTO> ingredientDTOS = productDTO.getIngredients();
+        Set<Ingredient> ingredients = new HashSet<>();
+        for (IngredientDTO i : ingredientDTOS)
+        {
+            Ingredient ingredient = ingredientRepository.findByName(i.getName()).orElseThrow();
+            ingredients.add(ingredient);
+        }
+
+        return ingredients;
+    }
+
+    public void setProductDTOPrice(ProductDTO product)
+    {
+        BigDecimal price = BigDecimal.ZERO;
+        Set<IngredientDTO> ingredients = product.getIngredients();
+        for (IngredientDTO ingredient : ingredients) {
+            price = price.add(ingredient.getCost());
+        }
+        product.setPrice(price);
     }
 
     public void setProductPrice(Product product)

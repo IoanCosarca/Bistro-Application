@@ -1,7 +1,7 @@
 package com.ntt.bistroapplication.controller;
 
 import com.ntt.bistroapplication.exception.MissingIngredientException;
-import com.ntt.bistroapplication.domain.Ingredient;
+import com.ntt.bistroapplication.model.IngredientDTO;
 import com.ntt.bistroapplication.service.IngredientService;
 import org.springframework.stereotype.Controller;
 
@@ -13,7 +13,7 @@ public class IngredientController {
         this.ingredientService = ingredientService;
     }
 
-    public Ingredient getIngredient(String ingredientName) throws MissingIngredientException {
+    public IngredientDTO getIngredient(String ingredientName) throws MissingIngredientException {
         return ingredientService.getIngredient(ingredientName);
     }
 }

@@ -2,15 +2,13 @@ package com.ntt.bistroapplication.model;
 
 import jakarta.validation.constraints.NotNull;
 
-public class OrderProductDTO {
+public class OrderedProductDTO {
     @NotNull(message = "Product cannot be missing")
     private ProductDTO product;
-    private IngredientDTO topping;
+    private IngredientDTO topping = null;
 
-    public OrderProductDTO(@NotNull ProductDTO product, IngredientDTO topping)
-    {
+    public OrderedProductDTO(@NotNull ProductDTO product) {
         this.product = product;
-        this.topping = topping;
     }
 
     public @NotNull ProductDTO getProduct() {

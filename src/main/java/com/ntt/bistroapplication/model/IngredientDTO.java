@@ -13,12 +13,6 @@ public class IngredientDTO {
 
     public IngredientDTO() {}
 
-    public IngredientDTO(String name, BigDecimal cost)
-    {
-        this.name = name;
-        this.cost = cost;
-    }
-
     public String getName() {
         return name;
     }
@@ -33,5 +27,12 @@ public class IngredientDTO {
 
     public void setCost(BigDecimal cost) {
         this.cost = cost;
+    }
+
+    @Override
+    public String toString() {
+        return "{name='" + name + '\'' +
+                ", cost=" + cost +
+                '}';
     }
 }

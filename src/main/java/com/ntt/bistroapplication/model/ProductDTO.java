@@ -1,13 +1,15 @@
 package com.ntt.bistroapplication.model;
 
+import com.ntt.bistroapplication.domain.Ingredient;
+import com.ntt.bistroapplication.domain.Product;
 import com.ntt.bistroapplication.domain.ProductType;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Set;
 
 public class ProductDTO {
@@ -17,17 +19,10 @@ public class ProductDTO {
     @Enumerated(value = EnumType.STRING)
     private ProductType productType;
     @NotNull(message = "A product must have ingredients")
-    private Set<IngredientDTO> ingredients;
+    private Set<IngredientDTO> ingredients = new HashSet<>();
     private BigDecimal price;
 
-    public ProductDTO(String name, ProductType productType, @NotNull Set<IngredientDTO> ingredients,
-                      BigDecimal price)
-    {
-        this.name = name;
-        this.productType = productType;
-        this.ingredients = ingredients;
-        this.price = price;
-    }
+    public ProductDTO() {}
 
     public String getName() {
         return name;
@@ -59,5 +54,15 @@ public class ProductDTO {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    @Override
+    public String toString() {
+        return "ProductDTO:" + '\n' +
+                "name='" + name + '\'' +
+                ", productType=" + productType +
+                ", ingredients=" + ingredients +
+                ", price=" + price +
+                '}';
     }
 }

@@ -10,7 +10,7 @@ public enum IngredientType {
     BUTTER("BUTTER"),
     YEAST("YEAST"),
     PASTA("PASTA"),
-    TOMATO_SAUCE("TOMATO SAUCE"),
+    TOMATO_S("TOMATO SAUCE"),
     MEATBALLS("MEATBALLS"),
     GARLIC("GARLIC"),
     CHEESE("CHEESE"),

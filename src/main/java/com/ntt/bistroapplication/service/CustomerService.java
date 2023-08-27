@@ -1,13 +1,12 @@
 package com.ntt.bistroapplication.service;
 
-import com.ntt.bistroapplication.domain.Customer;
-
-import java.util.Set;
+import com.ntt.bistroapplication.model.CustomerDTO;
+import com.ntt.bistroapplication.model.CustomerSetDTO;
 
 public interface CustomerService {
-    void addCustomer(Customer newCustomer);
+    CustomerSetDTO getCustomers();
 
-    Set<Customer> getCustomers();
+    void addCustomer(CustomerDTO newCustomer);
 
     void removeCustomer(Long id);
 }

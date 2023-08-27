@@ -8,12 +8,14 @@ import com.ntt.bistroapplication.exception.MissingIngredientException;
 import com.ntt.bistroapplication.service.ProductServiceImpl;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
 
 @Component
+@DependsOn("ingredientSeeder")
 public class ProductSeeder implements ApplicationListener<ContextRefreshedEvent> {
     private final ProductRepository productRepository;
     private final IngredientRepository ingredientRepository;
@@ -38,7 +40,6 @@ public class ProductSeeder implements ApplicationListener<ContextRefreshedEvent>
         }
     }
 
-    @SuppressWarnings("OptionalGetWithoutIsPresent")
     private List<Product> populateProducts()
     {
         List<Product> products = new ArrayList<>();
@@ -54,190 +55,116 @@ public class ProductSeeder implements ApplicationListener<ContextRefreshedEvent>
             }
         }
 
-        Product chocolateCake = new Product();
-        chocolateCake.setName("Chocolate Cake");
-        chocolateCake.setProductType(ProductType.CAKE);
-        Set<Ingredient> ingredients = new HashSet<>();
-        ingredients.add(ingredientRepository.findByName(IngredientType.FLOUR.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.EGGS.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.MILK.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.SUGAR.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.BUTTER.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.CHOCOLATE.getName()).get());
-        chocolateCake.setIngredients(ingredients);
-        productService.setProductPrice(chocolateCake);
+        Ingredient flour =
+                ingredientRepository.findByName(IngredientType.FLOUR.getName()).orElseThrow();
+        Ingredient eggs =
+                ingredientRepository.findByName(IngredientType.EGGS.getName()).orElseThrow();
+        Ingredient milk =
+                ingredientRepository.findByName(IngredientType.MILK.getName()).orElseThrow();
+        Ingredient sugar =
+                ingredientRepository.findByName(IngredientType.SUGAR.getName()).orElseThrow();
+        Ingredient sunOil =
+                ingredientRepository.findByName(IngredientType.SUN_OIL.getName()).orElseThrow();
+        Ingredient salt =
+                ingredientRepository.findByName(IngredientType.SALT.getName()).orElseThrow();
+        Ingredient butter =
+                ingredientRepository.findByName(IngredientType.BUTTER.getName()).orElseThrow();
+        Ingredient yeast =
+                ingredientRepository.findByName(IngredientType.YEAST.getName()).orElseThrow();
+        Ingredient pasta =
+                ingredientRepository.findByName(IngredientType.PASTA.getName()).orElseThrow();
+        Ingredient tomatoSauce =
+                ingredientRepository.findByName(IngredientType.TOMATO_S.getName()).orElseThrow();
+        Ingredient meatballs =
+                ingredientRepository.findByName(IngredientType.MEATBALLS.getName()).orElseThrow();
+        Ingredient garlic =
+                ingredientRepository.findByName(IngredientType.GARLIC.getName()).orElseThrow();
+        Ingredient cheese =
+                ingredientRepository.findByName(IngredientType.CHEESE.getName()).orElseThrow();
+        Ingredient bacon =
+                ingredientRepository.findByName(IngredientType.BACON.getName()).orElseThrow();
+        Ingredient mushrooms =
+                ingredientRepository.findByName(IngredientType.MUSHROOMS.getName()).orElseThrow();
+        Ingredient peppers =
+                ingredientRepository.findByName(IngredientType.PEPPERS.getName()).orElseThrow();
+        Ingredient corn =
+                ingredientRepository.findByName(IngredientType.CORN.getName()).orElseThrow();
+        Ingredient rice =
+                ingredientRepository.findByName(IngredientType.RICE.getName()).orElseThrow();
+        Ingredient onion =
+                ingredientRepository.findByName(IngredientType.ONION.getName()).orElseThrow();
+        Ingredient celery =
+                ingredientRepository.findByName(IngredientType.CELERY.getName()).orElseThrow();
+        Ingredient basil =
+                ingredientRepository.findByName(IngredientType.BASIL.getName()).orElseThrow();
+        Ingredient chocolate =
+                ingredientRepository.findByName(IngredientType.CHOCOLATE.getName()).orElseThrow();
+        Ingredient strawberry =
+                ingredientRepository.findByName(IngredientType.STRAWBERRY.getName()).orElseThrow();
+        Ingredient peaches =
+                ingredientRepository.findByName(IngredientType.PEACHES.getName()).orElseThrow();
+        Ingredient raspberry =
+                ingredientRepository.findByName(IngredientType.RASPBERRY.getName()).orElseThrow();
 
-        products.add(chocolateCake);
+        products.add(createProduct("Chocolate Cake", ProductType.CAKE,
+                flour, eggs, milk, sugar, butter, chocolate));
 
-        Product strawberryWaffles = new Product();
-        strawberryWaffles.setName("Strawberry Waffles");
-        strawberryWaffles.setProductType(ProductType.WAFFLES);
-        ingredients = new HashSet<>();
-        ingredients.add(ingredientRepository.findByName(IngredientType.MILK.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.FLOUR.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.EGGS.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.SUGAR.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.BUTTER.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.SALT.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.STRAWBERRY.getName()).get());
-        strawberryWaffles.setIngredients(ingredients);
-        productService.setProductPrice(strawberryWaffles);
+        products.add(createProduct("Strawberry Waffles", ProductType.WAFFLES,
+                milk, flour, eggs, sugar, butter, salt, strawberry));
 
-        products.add(strawberryWaffles);
+        products.add(createProduct("Simple Croissant", ProductType.CROISSANT,
+                yeast, sugar, flour, milk, salt, sunOil, butter, eggs));
 
-        Product croissant = new Product();
-        croissant.setName("Simple Croissant");
-        croissant.setProductType(ProductType.CROISSANT);
-        ingredients = new HashSet<>();
-        ingredients.add(ingredientRepository.findByName(IngredientType.YEAST.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.SUGAR.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.FLOUR.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.MILK.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.SALT.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.SUN_OIL.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.BUTTER.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.EGGS.getName()).get());
-        croissant.setIngredients(ingredients);
-        productService.setProductPrice(croissant);
+        products.add(createProduct("Chocolate Donut", ProductType.DONUT,
+                yeast, flour, sugar, butter, eggs, chocolate));
 
-        products.add(croissant);
+        products.add(createProduct("Spaghetti with garlic", ProductType.PASTA,
+                pasta, tomatoSauce, meatballs, garlic, basil));
 
-        Product chocolateDonut = new Product();
-        chocolateDonut.setName("Chocolate Donut");
-        chocolateDonut.setProductType(ProductType.DONUT);
-        ingredients = new HashSet<>();
-        ingredients.add(ingredientRepository.findByName(IngredientType.YEAST.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.FLOUR.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.SUGAR.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.BUTTER.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.EGGS.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.CHOCOLATE.getName()).get());
-        chocolateDonut.setIngredients(ingredients);
-        productService.setProductPrice(chocolateDonut);
+        products.add(createProduct("Prosciutto Fungi Plus", ProductType.PIZZA,
+                flour, yeast, tomatoSauce, cheese, bacon, basil, mushrooms, corn));
 
-        products.add(chocolateDonut);
+        products.add(createProduct("Simple Risotto", ProductType.RISOTTO,
+                rice, onion, garlic, cheese, celery, sunOil, butter));
 
-        Product spaghettiGarlic = new Product();
-        spaghettiGarlic.setName("Spaghetti with garlic");
-        spaghettiGarlic.setProductType(ProductType.PASTA);
-        ingredients = new HashSet<>();
-        ingredients.add(ingredientRepository.findByName(IngredientType.PASTA.getName()).get());
-        ingredients.add(ingredientRepository.findByName(
-                IngredientType.TOMATO_SAUCE.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.MEATBALLS.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.GARLIC.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.BASIL.getName()).get());
-        spaghettiGarlic.setIngredients(ingredients);
-        productService.setProductPrice(spaghettiGarlic);
+        products.add(createProduct("Peaches Croissant", ProductType.CROISSANT,
+                butter, eggs, yeast, sugar, flour, milk, peaches));
 
-        products.add(spaghettiGarlic);
+        products.add(createProduct("Peaches Croissant", ProductType.CROISSANT,
+                butter, eggs, yeast, sugar, flour, milk, peaches));
 
-        Product prosciuttoFungiPlus = new Product();
-        prosciuttoFungiPlus.setName("Prosciutto Fungi Plus");
-        prosciuttoFungiPlus.setProductType(ProductType.PIZZA);
-        ingredients = new HashSet<>();
-        ingredients.add(ingredientRepository.findByName(IngredientType.FLOUR.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.YEAST.getName()).get());
-        ingredients.add(ingredientRepository.findByName(
-                IngredientType.TOMATO_SAUCE.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.CHEESE.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.BACON.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.BASIL.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.MUSHROOMS.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.CORN.getName()).get());
-        prosciuttoFungiPlus.setIngredients(ingredients);
-        productService.setProductPrice(prosciuttoFungiPlus);
+        products.add(createProduct("Simple Spaghetti", ProductType.PASTA,
+                pasta, meatballs, tomatoSauce));
 
-        products.add(prosciuttoFungiPlus);
+        products.add(createProduct("Chocolate Waffles", ProductType.WAFFLES,
+                milk, sugar, butter, flour, eggs, chocolate));
 
-        Product simpleRisotto = new Product();
-        simpleRisotto.setName("Simple Risotto");
-        simpleRisotto.setProductType(ProductType.RISOTTO);
-        ingredients = new HashSet<>();
-        ingredients.add(ingredientRepository.findByName(IngredientType.RICE.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.ONION.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.GARLIC.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.CHEESE.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.CELERY.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.SUN_OIL.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.BUTTER.getName()).get());
-        simpleRisotto.setIngredients(ingredients);
-        productService.setProductPrice(simpleRisotto);
+        products.add(createProduct("Cheese Pizza", ProductType.PIZZA,
+                flour, cheese, yeast, tomatoSauce));
 
-        products.add(simpleRisotto);
+        products.add(createProduct("Plain Cake", ProductType.CAKE,
+                flour, sugar, butter, eggs, milk));
 
-        Product peachesCroissant = new Product();
-        peachesCroissant.setName("Peaches Croissant");
-        peachesCroissant.setProductType(ProductType.CROISSANT);
-        ingredients = new HashSet<>();
-        ingredients.add(ingredientRepository.findByName(IngredientType.BUTTER.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.EGGS.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.YEAST.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.SUGAR.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.FLOUR.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.MILK.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.PEACHES.getName()).get());
-        peachesCroissant.setIngredients(ingredients);
-        productService.setProductPrice(peachesCroissant);
+        products.add(createProduct("Vegetarian Pizza", ProductType.PIZZA,
+                flour, yeast, tomatoSauce, mushrooms, peppers, corn, basil));
 
-        products.add(peachesCroissant);
-
-        Product simpleSpaghetti = new Product();
-        simpleSpaghetti.setName("Simple Spaghetti");
-        simpleSpaghetti.setProductType(ProductType.PASTA);
-        ingredients = new HashSet<>();
-        ingredients.add(ingredientRepository.findByName(IngredientType.PASTA.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.MEATBALLS.getName()).get());
-        ingredients.add(ingredientRepository.findByName(
-                IngredientType.TOMATO_SAUCE.getName()).get());
-        simpleSpaghetti.setIngredients(ingredients);
-        productService.setProductPrice(simpleSpaghetti);
-
-        products.add(simpleSpaghetti);
-
-        Product chocolateWaffles = new Product();
-        chocolateWaffles.setName("Chocolate Waffles");
-        chocolateWaffles.setProductType(ProductType.WAFFLES);
-        ingredients = new HashSet<>();
-        ingredients.add(ingredientRepository.findByName(IngredientType.MILK.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.SUGAR.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.BUTTER.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.FLOUR.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.EGGS.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.CHOCOLATE.getName()).get());
-        chocolateWaffles.setIngredients(ingredients);
-        productService.setProductPrice(chocolateWaffles);
-
-        products.add(chocolateWaffles);
-
-        Product cheesePizza = new Product();
-        cheesePizza.setName("Cheese Pizza");
-        cheesePizza.setProductType(ProductType.PIZZA);
-        ingredients = new HashSet<>();
-        ingredients.add(ingredientRepository.findByName(IngredientType.FLOUR.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.CHEESE.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.YEAST.getName()).get());
-        ingredients.add(ingredientRepository.findByName(
-                IngredientType.TOMATO_SAUCE.getName()).get());
-        cheesePizza.setIngredients(ingredients);
-        productService.setProductPrice(cheesePizza);
-
-        products.add(cheesePizza);
-
-        Product plainCake = new Product();
-        plainCake.setName("Plain Cake");
-        plainCake.setProductType(ProductType.CAKE);
-        ingredients = new HashSet<>();
-        ingredients.add(ingredientRepository.findByName(IngredientType.FLOUR.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.SUGAR.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.BUTTER.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.EGGS.getName()).get());
-        ingredients.add(ingredientRepository.findByName(IngredientType.MILK.getName()).get());
-        plainCake.setIngredients(ingredients);
-        productService.setProductPrice(plainCake);
-
-        products.add(plainCake);
+        products.add(createProduct("Raspberry Croissant", ProductType.CROISSANT,
+                butter, eggs, yeast, sugar, flour, milk, raspberry));
 
         return products;
+    }
+
+    private Product createProduct(String name, ProductType productType, Ingredient... ingredients)
+    {
+        Set<Ingredient> ingredientSet = new HashSet<>(Arrays.asList(ingredients));
+
+        Product product = new Product();
+        product.setName(name);
+        product.setProductType(productType);
+        product.setIngredients(ingredientSet);
+
+        productService.setProductPrice(product);
+
+        return product;
     }
 }

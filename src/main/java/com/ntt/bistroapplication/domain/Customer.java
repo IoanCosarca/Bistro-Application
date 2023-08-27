@@ -41,16 +41,12 @@ public class Customer {
 
         Customer customer = (Customer) o;
 
-        if (getId() != null ? !getId().equals(customer.getId()) : customer.getId() != null)
-            return false;
         return getName().equals(customer.getName());
     }
 
     @Override
     public int hashCode() {
-        int result = getId() != null ? getId().hashCode() : 0;
-        result = 31 * result + getName().hashCode();
-        return result;
+        return getName().hashCode();
     }
 
     @Override

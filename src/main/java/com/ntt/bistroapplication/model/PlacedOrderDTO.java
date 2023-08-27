@@ -1,26 +1,23 @@
 package com.ntt.bistroapplication.model;
 
+import com.ntt.bistroapplication.domain.OrderedProduct;
+import com.ntt.bistroapplication.domain.PlacedOrder;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PlacedOrderDTO {
     @NotNull(message = "There needs to be a customer for an order to be placed")
-    private CustomerDTO customer;
+    private CustomerDTO customer = new CustomerDTO();
     @NotNull(message = "An order must have products")
-    private List<OrderProductDTO> products;
+    private List<OrderedProductDTO> products = new ArrayList<>();
     @Positive(message = "The total price of an order must be a positive number")
     private BigDecimal totalPrice;
 
-    public PlacedOrderDTO(@NotNull CustomerDTO customer, @NotNull List<OrderProductDTO> products,
-                          BigDecimal totalPrice)
-    {
-        this.customer = customer;
-        this.products = products;
-        this.totalPrice = totalPrice;
-    }
+    public PlacedOrderDTO() {}
 
     public @NotNull CustomerDTO getCustomer() {
         return customer;
@@ -30,11 +27,11 @@ public class PlacedOrderDTO {
         this.customer = customer;
     }
 
-    public @NotNull List<OrderProductDTO> getProducts() {
+    public @NotNull List<OrderedProductDTO> getProducts() {
         return products;
     }
 
-    public void setProducts(@NotNull List<OrderProductDTO> products) {
+    public void setProducts(@NotNull List<OrderedProductDTO> products) {
         this.products = products;
     }
 

@@ -1,13 +1,11 @@
 package com.ntt.bistroapplication.controller;
 
-import com.ntt.bistroapplication.domain.PlacedOrder;
-import com.ntt.bistroapplication.domain.Product;
+import com.ntt.bistroapplication.model.OrderListDTO;
+import com.ntt.bistroapplication.model.PlacedOrderDTO;
+import com.ntt.bistroapplication.model.ProductSetDTO;
 import com.ntt.bistroapplication.service.OrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping(OrderController.BASE_URL)
@@ -19,19 +17,19 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    public void saveOrder(PlacedOrder order) {
-        orderService.addOrder(order);
-    }
-
     @GetMapping("/customerOrders/{customerID}")
     @ResponseStatus(HttpStatus.FOUND)
-    public List<PlacedOrder> getCustomerOrders(@PathVariable Long customerID) {
+    public OrderListDTO getCustomerOrders(@PathVariable Long customerID) {
         return orderService.getCustomerOrders(customerID);
     }
 
     @GetMapping("/top/{n}")
     @ResponseStatus(HttpStatus.FOUND)
-    public Set<Product> getTopN(@PathVariable int n) {
+    public ProductSetDTO getTopN(@PathVariable int n) {
         return orderService.getMostWantedProducts(n);
+    }
+
+    public void saveOrder(PlacedOrderDTO order) {
+        orderService.addOrder(order);
     }
 }

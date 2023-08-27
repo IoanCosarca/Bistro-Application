@@ -1,11 +1,10 @@
 package com.ntt.bistroapplication.controller;
 
-import com.ntt.bistroapplication.domain.Customer;
+import com.ntt.bistroapplication.model.CustomerDTO;
+import com.ntt.bistroapplication.model.CustomerSetDTO;
 import com.ntt.bistroapplication.service.CustomerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Set;
 
 @RestController
 @RequestMapping(CustomerController.BASE_URL)
@@ -19,13 +18,13 @@ public class CustomerController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Set<Customer> getCustomers() {
+    public CustomerSetDTO getCustomers() {
         return customerService.getCustomers();
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void addCustomer(@RequestBody Customer newCustomer) {
+    public void addCustomer(@RequestBody CustomerDTO newCustomer) {
         customerService.addCustomer(newCustomer);
     }
 

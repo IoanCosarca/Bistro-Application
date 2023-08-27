@@ -10,6 +10,7 @@ import com.ntt.bistroapplication.controller.ProductController;
 import com.ntt.bistroapplication.exception.MissingIngredientException;
 import com.ntt.bistroapplication.exception.NonexistentProductException;
 import com.ntt.bistroapplication.domain.*;
+import com.ntt.bistroapplication.model.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -54,16 +55,15 @@ public class BistroApplication {
             }
 
             updatePriceOfProduct(productController, 6L, 45.0);
-            updatePriceOfProduct(productController, 10L, 17.5);
+            updatePriceOfProduct(productController, 11L, 17.5);
 
             removeProductByID(productController, 3);
             removeProductByID(productController, 15);
             listProducts(productController);
 
-            Customer andreea = new Customer("Andreea");
+            CustomerDTO andreea = new CustomerDTO("Andreea");
             addCustomer(customerController, andreea);
-            customerController.addCustomer(andreea);
-            Customer roxana = new Customer();
+            CustomerDTO roxana = new CustomerDTO();
             roxana.setName("Roxana");
             addCustomer(customerController, roxana);
 
@@ -71,52 +71,52 @@ public class BistroApplication {
             removeCustomerByID(customerController, 5);
             listCustomers(customerController);
 
-            OrderedProduct o1Product1 =
-                    new OrderedProduct(productController.getByName("Spaghetti with garlic"));
-            OrderedProduct o1Product2 =
-                    new OrderedProduct(productController.getByName("Prosciutto Fungi Plus"));
-            OrderedProduct o1Product3 =
-                    new OrderedProduct(productController.getByName("Chocolate Cake"));
-            List<OrderedProduct> order1Products =
+            OrderedProductDTO o1Product1 =
+                    new OrderedProductDTO(productController.getByName("Spaghetti with garlic"));
+            OrderedProductDTO o1Product2 =
+                    new OrderedProductDTO(productController.getByName("Prosciutto Fungi Plus"));
+            OrderedProductDTO o1Product3 =
+                    new OrderedProductDTO(productController.getByName("Chocolate Cake"));
+            List<OrderedProductDTO> order1Products =
                     new ArrayList<>(Arrays.asList(o1Product1, o1Product2, o1Product3));
-            PlacedOrder order1 = new PlacedOrder();
+            PlacedOrderDTO order1 = new PlacedOrderDTO();
             order1.setProducts(order1Products);
 
-            OrderedProduct o2Product1 =
-                    new OrderedProduct(productController.getByName("Chocolate Donut"));
-            OrderedProduct o2Product2 =
-                    new OrderedProduct(productController.getByName("Chocolate Cake"));
-            OrderedProduct o2Product3 =
-                    new OrderedProduct(productController.getByName("Plain Cake"));
+            OrderedProductDTO o2Product1 =
+                    new OrderedProductDTO(productController.getByName("Chocolate Donut"));
+            OrderedProductDTO o2Product2 =
+                    new OrderedProductDTO(productController.getByName("Chocolate Cake"));
+            OrderedProductDTO o2Product3 =
+                    new OrderedProductDTO(productController.getByName("Plain Cake"));
             o2Product3.setTopping(
                     ingredientController.getIngredient(IngredientType.RASPBERRY.getName()));
-            List<OrderedProduct> order2Products =
+            List<OrderedProductDTO> order2Products =
                     new ArrayList<>(Arrays.asList(o2Product1, o2Product2, o2Product3));
-            PlacedOrder order2 = new PlacedOrder();
+            PlacedOrderDTO order2 = new PlacedOrderDTO();
             order2.setProducts(order2Products);
 
-            OrderedProduct o3Product1 =
-                    new OrderedProduct(productController.getByName("Prosciutto Fungi Plus"));
-            OrderedProduct o3Product2 =
-                    new OrderedProduct(productController.getByName("Cheese Pizza"));
-            OrderedProduct o3Product3 =
-                    new OrderedProduct(productController.getByName("Chocolate Waffles"));
-            List<OrderedProduct> order3Products =
+            OrderedProductDTO o3Product1 =
+                    new OrderedProductDTO(productController.getByName("Prosciutto Fungi Plus"));
+            OrderedProductDTO o3Product2 =
+                    new OrderedProductDTO(productController.getByName("Cheese Pizza"));
+            OrderedProductDTO o3Product3 =
+                    new OrderedProductDTO(productController.getByName("Chocolate Waffles"));
+            List<OrderedProductDTO> order3Products =
                     new ArrayList<>(Arrays.asList(o3Product1, o3Product2, o3Product3));
-            PlacedOrder order3 = new PlacedOrder();
+            PlacedOrderDTO order3 = new PlacedOrderDTO();
             order3.setProducts(order3Products);
 
-            OrderedProduct o4Product1 =
-                    new OrderedProduct(productController.getByName("Strawberry Waffles"));
-            OrderedProduct o4Product2 =
-                    new OrderedProduct(productController.getByName("Spaghetti with garlic"));
-            List<OrderedProduct> order4Products =
+            OrderedProductDTO o4Product1 =
+                    new OrderedProductDTO(productController.getByName("Strawberry Waffles"));
+            OrderedProductDTO o4Product2 =
+                    new OrderedProductDTO(productController.getByName("Spaghetti with garlic"));
+            List<OrderedProductDTO> order4Products =
                     new ArrayList<>(Arrays.asList(o4Product1, o4Product2));
-            PlacedOrder order4 = new PlacedOrder();
+            PlacedOrderDTO order4 = new PlacedOrderDTO();
             order4.setProducts(order4Products);
 
-            Set<Customer> databaseCustomers = customerController.getCustomers();
-            for (Customer c : databaseCustomers)
+            CustomerSetDTO databaseCustomers = customerController.getCustomers();
+            for (CustomerDTO c : databaseCustomers.getCustomers())
             {
                 if (c.getName().equals("Ionut")) {
                     order1.setCustomer(c);
@@ -153,10 +153,10 @@ public class BistroApplication {
                                     IngredientController ingredientController)
     {
         MainConsole.printMessage("-------------List with new Product---------------");
-        Product fruitCake = new Product();
+        ProductDTO fruitCake = new ProductDTO();
         fruitCake.setName("Fruit Cake");
         fruitCake.setProductType(ProductType.CAKE);
-        Set<Ingredient> ingredients = new HashSet<>();
+        Set<IngredientDTO> ingredients = new HashSet<>();
         ingredients.add(ingredientController.getIngredient(IngredientType.FLOUR.getName()));
         ingredients.add(ingredientController.getIngredient(IngredientType.SUGAR.getName()));
         ingredients.add(ingredientController.getIngredient(IngredientType.EGGS.getName()));
@@ -193,7 +193,7 @@ public class BistroApplication {
         CustomerConsole.printCustomers(customerController.getCustomers());
     }
 
-    private static void addCustomer(CustomerController customerController, Customer customer)
+    private static void addCustomer(CustomerController customerController, CustomerDTO customer)
     {
         MainConsole.printMessage("-------------Add Customer---------------");
         customerController.addCustomer(customer);

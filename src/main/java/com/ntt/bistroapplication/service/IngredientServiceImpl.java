@@ -2,6 +2,8 @@ package com.ntt.bistroapplication.service;
 
 import com.ntt.bistroapplication.exception.MissingIngredientException;
 import com.ntt.bistroapplication.domain.Ingredient;
+import com.ntt.bistroapplication.mapper.IngredientMapper;
+import com.ntt.bistroapplication.model.IngredientDTO;
 import com.ntt.bistroapplication.repository.IngredientRepository;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +13,12 @@ import java.util.Set;
 
 @Service
 public class IngredientServiceImpl implements IngredientService {
+    private final IngredientMapper ingredientMapper;
     private final IngredientRepository ingredientRepository;
 
-    public IngredientServiceImpl(IngredientRepository ingredientRepository) {
+    public IngredientServiceImpl(IngredientRepository ingredientRepository)
+    {
+        ingredientMapper = IngredientMapper.INSTANCE;
         this.ingredientRepository = ingredientRepository;
     }
 
@@ -26,12 +31,12 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public Ingredient getIngredient(String ingredientName) throws MissingIngredientException
+    public IngredientDTO getIngredient(String ingredientName) throws MissingIngredientException
     {
         Optional<Ingredient> ingredientOptional = ingredientRepository.findByName(ingredientName);
-        final Ingredient[] foundIngredient = { new Ingredient() };
+        final IngredientDTO[] foundIngredient = { new IngredientDTO() };
         ingredientOptional.ifPresentOrElse(
-                ingredient -> foundIngredient[0] = ingredient,
+                i -> foundIngredient[0] = ingredientMapper.ingredientToIngredientDTO(i),
                 () -> {
                     throw new MissingIngredientException(
                             "There's been an error while searching for this ingredient: " +
