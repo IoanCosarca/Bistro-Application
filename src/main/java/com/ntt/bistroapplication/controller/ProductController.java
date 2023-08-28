@@ -4,10 +4,15 @@ import com.ntt.bistroapplication.exception.NonexistentProductException;
 import com.ntt.bistroapplication.model.ProductDTO;
 import com.ntt.bistroapplication.model.ProductSetDTO;
 import com.ntt.bistroapplication.service.ProductService;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.Set;
 
 @RestController
 @RequestMapping(ProductController.BASE_URL)
@@ -39,8 +44,19 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void saveProduct(@RequestBody ProductDTO productDTO) {
-        productService.addProduct(productDTO);
+    public void saveProduct(@RequestBody ProductDTO productDTO)
+    {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+        Set<ConstraintViolation<ProductDTO>> violations = validator.validate(productDTO);
+        if (violations.size() != 0) {
+            for (ConstraintViolation<ProductDTO> violation : violations) {
+                System.out.println(violation.getMessage());
+            }
+        }
+        else {
+            productService.addProduct(productDTO);
+        }
     }
 
     @PutMapping("/{id}/{newPrice}")
