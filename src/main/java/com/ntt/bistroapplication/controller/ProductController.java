@@ -1,5 +1,6 @@
 package com.ntt.bistroapplication.controller;
 
+import com.ntt.bistroapplication.exception.InvalidInputException;
 import com.ntt.bistroapplication.exception.NonexistentProductException;
 import com.ntt.bistroapplication.model.ProductDTO;
 import com.ntt.bistroapplication.model.ProductSetDTO;
@@ -51,7 +52,7 @@ public class ProductController {
         Set<ConstraintViolation<ProductDTO>> violations = validator.validate(productDTO);
         if (violations.size() != 0) {
             for (ConstraintViolation<ProductDTO> violation : violations) {
-                System.out.println(violation.getMessage());
+                throw new InvalidInputException(violation.getMessage());
             }
         }
         else {

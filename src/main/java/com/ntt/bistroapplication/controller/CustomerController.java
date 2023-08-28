@@ -1,5 +1,6 @@
 package com.ntt.bistroapplication.controller;
 
+import com.ntt.bistroapplication.exception.InvalidInputException;
 import com.ntt.bistroapplication.model.CustomerDTO;
 import com.ntt.bistroapplication.model.CustomerSetDTO;
 import com.ntt.bistroapplication.service.CustomerService;
@@ -37,7 +38,7 @@ public class CustomerController {
         Set<ConstraintViolation<CustomerDTO>> violations = validator.validate(newCustomer);
         if (violations.size() != 0) {
             for (ConstraintViolation<CustomerDTO> violation : violations) {
-                System.out.println(violation.getMessage());
+                throw new InvalidInputException(violation.getMessage());
             }
         }
         else {
