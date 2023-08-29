@@ -1,7 +1,7 @@
 package com.ntt.bistroapplication.service;
 
 import com.ntt.bistroapplication.exception.MissingIngredientException;
-import com.ntt.bistroapplication.domain.Ingredient;
+import com.ntt.bistroapplication.model.Ingredient;
 import com.ntt.bistroapplication.mapper.IngredientMapper;
 import com.ntt.bistroapplication.model.IngredientDTO;
 import com.ntt.bistroapplication.repository.IngredientRepository;
@@ -13,12 +13,10 @@ import java.util.Set;
 
 @Service
 public class IngredientServiceImpl implements IngredientService {
-    private final IngredientMapper ingredientMapper;
+    private final IngredientMapper ingredientMapper = IngredientMapper.INSTANCE;
     private final IngredientRepository ingredientRepository;
 
-    public IngredientServiceImpl(IngredientRepository ingredientRepository)
-    {
-        ingredientMapper = IngredientMapper.INSTANCE;
+    public IngredientServiceImpl(IngredientRepository ingredientRepository) {
         this.ingredientRepository = ingredientRepository;
     }
 

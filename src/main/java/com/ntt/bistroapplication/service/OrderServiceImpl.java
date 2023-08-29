@@ -1,9 +1,9 @@
 package com.ntt.bistroapplication.service;
 
-import com.ntt.bistroapplication.domain.Customer;
-import com.ntt.bistroapplication.domain.OrderedProduct;
-import com.ntt.bistroapplication.domain.PlacedOrder;
-import com.ntt.bistroapplication.domain.Product;
+import com.ntt.bistroapplication.model.Customer;
+import com.ntt.bistroapplication.model.OrderedProduct;
+import com.ntt.bistroapplication.model.PlacedOrder;
+import com.ntt.bistroapplication.model.Product;
 import com.ntt.bistroapplication.mapper.OrderMapper;
 import com.ntt.bistroapplication.mapper.ProductMapper;
 import com.ntt.bistroapplication.model.*;
@@ -19,8 +19,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
-    private final OrderMapper orderMapper;
-    private final ProductMapper productMapper;
+    private final OrderMapper orderMapper = OrderMapper.INSTANCE;
+    private final ProductMapper productMapper = ProductMapper.INSTANCE;
     private final OrderRepository orderRepository;
     private final CustomerRepository customerRepository;
     private final ProductRepository productRepository;
@@ -30,8 +30,6 @@ public class OrderServiceImpl implements OrderService {
                             ProductRepository productRepository,
                             IngredientRepository ingredientRepository)
     {
-        this.orderMapper = OrderMapper.INSTANCE;
-        this.productMapper = ProductMapper.INSTANCE;
         this.orderRepository = orderRepository;
         this.customerRepository = customerRepository;
         this.productRepository = productRepository;

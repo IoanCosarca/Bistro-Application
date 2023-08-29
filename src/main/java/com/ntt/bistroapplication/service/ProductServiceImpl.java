@@ -1,7 +1,7 @@
 package com.ntt.bistroapplication.service;
 
-import com.ntt.bistroapplication.domain.Ingredient;
-import com.ntt.bistroapplication.domain.Product;
+import com.ntt.bistroapplication.model.Ingredient;
+import com.ntt.bistroapplication.model.Product;
 import com.ntt.bistroapplication.exception.NonexistentProductException;
 import com.ntt.bistroapplication.mapper.ProductMapper;
 import com.ntt.bistroapplication.model.IngredientDTO;
@@ -18,14 +18,13 @@ import java.util.Set;
 
 @Service
 public class ProductServiceImpl implements ProductService {
-    private final ProductMapper productMapper;
+    private final ProductMapper productMapper = ProductMapper.INSTANCE;
     private final ProductRepository productRepository;
     private final IngredientRepository ingredientRepository;
 
     public ProductServiceImpl(ProductRepository productRepository,
                               IngredientRepository ingredientRepository)
     {
-        this.productMapper = ProductMapper.INSTANCE;
         this.productRepository = productRepository;
         this.ingredientRepository = ingredientRepository;
     }

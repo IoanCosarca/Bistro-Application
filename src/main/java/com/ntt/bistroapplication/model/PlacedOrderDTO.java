@@ -1,7 +1,5 @@
 package com.ntt.bistroapplication.model;
 
-import com.ntt.bistroapplication.domain.OrderedProduct;
-import com.ntt.bistroapplication.domain.PlacedOrder;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 

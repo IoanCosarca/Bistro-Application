@@ -9,7 +9,6 @@ import com.ntt.bistroapplication.controller.OrderController;
 import com.ntt.bistroapplication.controller.ProductController;
 import com.ntt.bistroapplication.exception.MissingIngredientException;
 import com.ntt.bistroapplication.exception.NonexistentProductException;
-import com.ntt.bistroapplication.domain.*;
 import com.ntt.bistroapplication.model.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

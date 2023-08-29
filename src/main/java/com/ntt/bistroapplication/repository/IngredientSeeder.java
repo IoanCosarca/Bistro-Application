@@ -1,7 +1,7 @@
 package com.ntt.bistroapplication.repository;
 
-import com.ntt.bistroapplication.domain.Ingredient;
-import com.ntt.bistroapplication.domain.IngredientType;
+import com.ntt.bistroapplication.model.Ingredient;
+import com.ntt.bistroapplication.model.IngredientType;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;

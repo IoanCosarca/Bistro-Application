@@ -1,13 +1,9 @@
 package com.ntt.bistroapplication.service;
 
-import com.ntt.bistroapplication.domain.*;
 import com.ntt.bistroapplication.mapper.CustomerMapper;
 import com.ntt.bistroapplication.mapper.OrderMapper;
 import com.ntt.bistroapplication.mapper.ProductMapper;
-import com.ntt.bistroapplication.model.CustomerDTO;
-import com.ntt.bistroapplication.model.OrderedProductDTO;
-import com.ntt.bistroapplication.model.PlacedOrderDTO;
-import com.ntt.bistroapplication.model.ProductDTO;
+import com.ntt.bistroapplication.model.*;
 import com.ntt.bistroapplication.repository.CustomerRepository;
 import com.ntt.bistroapplication.repository.IngredientRepository;
 import com.ntt.bistroapplication.repository.OrderRepository;

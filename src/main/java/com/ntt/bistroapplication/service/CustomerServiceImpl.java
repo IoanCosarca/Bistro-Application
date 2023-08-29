@@ -1,11 +1,10 @@
 package com.ntt.bistroapplication.service;
 
-import com.ntt.bistroapplication.domain.Customer;
+import com.ntt.bistroapplication.model.Customer;
 import com.ntt.bistroapplication.mapper.CustomerMapper;
 import com.ntt.bistroapplication.model.CustomerDTO;
 import com.ntt.bistroapplication.model.CustomerSetDTO;
 import com.ntt.bistroapplication.repository.CustomerRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -14,13 +13,10 @@ import java.util.Set;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
-    private final CustomerMapper customerMapper;
+    private final CustomerMapper customerMapper = CustomerMapper.INSTANCE;
     private final CustomerRepository customerRepository;
 
-    @Autowired
-    public CustomerServiceImpl(CustomerRepository customerRepository)
-    {
-        this.customerMapper = CustomerMapper.INSTANCE;
+    public CustomerServiceImpl(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
     }
 

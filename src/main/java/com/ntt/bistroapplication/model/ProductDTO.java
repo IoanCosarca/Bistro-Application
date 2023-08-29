@@ -1,8 +1,5 @@
 package com.ntt.bistroapplication.model;
 
-import com.ntt.bistroapplication.domain.Ingredient;
-import com.ntt.bistroapplication.domain.Product;
-import com.ntt.bistroapplication.domain.ProductType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

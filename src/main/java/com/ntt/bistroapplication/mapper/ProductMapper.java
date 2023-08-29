@@ -1,6 +1,6 @@
 package com.ntt.bistroapplication.mapper;
 
-import com.ntt.bistroapplication.domain.Product;
+import com.ntt.bistroapplication.model.Product;
 import com.ntt.bistroapplication.model.ProductDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

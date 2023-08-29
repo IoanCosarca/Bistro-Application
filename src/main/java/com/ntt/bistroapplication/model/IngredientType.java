@@ -1,4 +1,4 @@
-package com.ntt.bistroapplication.domain;
+package com.ntt.bistroapplication.model;
 
 public enum IngredientType {
     FLOUR("FLOUR"),

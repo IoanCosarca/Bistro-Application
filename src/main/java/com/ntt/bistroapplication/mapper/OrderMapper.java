@@ -1,6 +1,6 @@
 package com.ntt.bistroapplication.mapper;
 
-import com.ntt.bistroapplication.domain.PlacedOrder;
+import com.ntt.bistroapplication.model.PlacedOrder;
 import com.ntt.bistroapplication.model.PlacedOrderDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
