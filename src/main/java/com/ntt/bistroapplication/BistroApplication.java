@@ -130,10 +130,10 @@ public class BistroApplication {
                     order4.setCustomer(c);
                 }
             }
-            orderController.saveOrder(order1);
-            orderController.saveOrder(order2);
-            orderController.saveOrder(order3);
-            orderController.saveOrder(order4);
+            orderController.addOrder(order1);
+            orderController.addOrder(order2);
+            orderController.addOrder(order3);
+            orderController.addOrder(order4);
             listTopN(orderController, 3);
             listTopN(orderController, 2);
         }
@@ -183,7 +183,7 @@ public class BistroApplication {
     }
 
     private static void removeProductByID(ProductController productController, Integer id) {
-        productController.deleteByID(Long.valueOf(id));
+        productController.deleteProduct(Long.valueOf(id));
     }
 
     private static void listCustomers(CustomerController customerController)
@@ -200,7 +200,7 @@ public class BistroApplication {
     }
 
     private static void removeCustomerByID(CustomerController customerController, Integer id) {
-        customerController.deleteByID(Long.valueOf(id));
+        customerController.deleteCustomer(Long.valueOf(id));
     }
 
     private static void listTopN(OrderController orderController, Integer n)

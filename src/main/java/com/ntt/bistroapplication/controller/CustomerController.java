@@ -1,54 +1,42 @@
 package com.ntt.bistroapplication.controller;
 
-import com.ntt.bistroapplication.exception.InvalidInputException;
 import com.ntt.bistroapplication.model.CustomerDTO;
 import com.ntt.bistroapplication.model.CustomerSetDTO;
 import com.ntt.bistroapplication.service.CustomerService;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
-import jakarta.validation.ValidatorFactory;
+import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Set;
 
 @RestController
 @RequestMapping(CustomerController.BASE_URL)
 public class CustomerController {
-    public static final String BASE_URL = "/api/customers";
+    public static final String BASE_URL = "/api/v1/customers";
     private final CustomerService customerService;
 
     public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
     }
 
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Retrieves all the customers in the database")
     public CustomerSetDTO getCustomers() {
         return customerService.getCustomers();
     }
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public void addCustomer(@RequestBody CustomerDTO newCustomer)
-    {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
-        Set<ConstraintViolation<CustomerDTO>> violations = validator.validate(newCustomer);
-        if (violations.size() != 0) {
-            for (ConstraintViolation<CustomerDTO> violation : violations) {
-                throw new InvalidInputException(violation.getMessage());
-            }
-        }
-        else {
-            customerService.addCustomer(newCustomer);
-        }
+    @Operation(summary = "Creates a new customer entry and inserts it in the table")
+    public void addCustomer(@Valid @RequestBody CustomerDTO newCustomer) {
+        customerService.addCustomer(newCustomer);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(path = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteByID(@PathVariable Long id) {
+    @Operation(summary = "Deletes a customer entry specified by its id from the database")
+    public void deleteCustomer(@PathVariable Long id) {
         customerService.removeCustomer(id);
     }
 }
