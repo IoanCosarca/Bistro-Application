@@ -5,7 +5,7 @@ import com.ntt.bistroapplication.model.PlacedOrderDTO;
 import com.ntt.bistroapplication.model.ProductSetDTO;
 
 /**
- * The service interface for the PlacedOrder Table.
+ * The service interface for the PlacedOrder.
  */
 public interface OrderService {
     /**
@@ -16,7 +16,7 @@ public interface OrderService {
     OrderListDTO getCustomerOrders(Long customerID);
 
     /**
-     * Abstract method for retrieving the n most wanted products.
+     * Abstract method for retrieving the most wanted products.
      * @param n the number of desired popular products
      * @return set of products
      */

@@ -4,7 +4,7 @@ import com.ntt.bistroapplication.model.CustomerDTO;
 import com.ntt.bistroapplication.model.CustomerSetDTO;
 
 /**
- * The service interface for the Customer Table.
+ * The service interface for the Customer.
  */
 public interface CustomerService {
     /**

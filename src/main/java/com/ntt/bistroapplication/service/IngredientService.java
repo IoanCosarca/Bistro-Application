@@ -7,7 +7,7 @@ import com.ntt.bistroapplication.model.IngredientDTO;
 import java.util.Set;
 
 /**
- * The service interface for the Ingredient Table.
+ * The service interface for the Ingredient.
  */
 public interface IngredientService {
     /**

@@ -28,7 +28,7 @@ public class OrderController {
 
     @GetMapping(path = "/top/{n}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.FOUND)
-    @Operation(summary = "Retrieves the most ordered n products")
+    @Operation(summary = "Retrieves the most ordered number of products")
     public ProductSetDTO getTopN(@PathVariable int n) {
         return orderService.getMostWantedProducts(n);
     }

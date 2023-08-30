@@ -57,7 +57,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * Retrieves the n most wanted products.
+     * Retrieves the most wanted products.
      * @param n the number of desired popular products
      * @return set of products
      */

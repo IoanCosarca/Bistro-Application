@@ -7,7 +7,7 @@ import com.ntt.bistroapplication.model.ProductSetDTO;
 import java.math.BigDecimal;
 
 /**
- * The service interface for the Product Table.
+ * The service interface for the Product.
  */
 public interface ProductService {
     /**
