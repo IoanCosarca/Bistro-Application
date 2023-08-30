@@ -47,10 +47,13 @@ public class BistroApplication {
             {
                 listProductByID(productController, 7L);
                 listProductByID(productController, 2L);
-                listProductByID(productController, 14L);
+                listProductByID(productController, 20L);
             }
             catch (NonexistentProductException e) {
-                e.printStackTrace();
+                MainConsole.printMessage(e.getMessage() + "\n" +
+                        Arrays.toString(Arrays.stream(e.getStackTrace())
+                                .map(s -> s + "\n")
+                                .toArray()));
             }
 
             updatePriceOfProduct(productController, 6L, 45.0);
@@ -138,7 +141,10 @@ public class BistroApplication {
             listTopN(orderController, 2);
         }
         catch (MissingIngredientException | NonexistentProductException e) {
-            e.printStackTrace();
+            MainConsole.printMessage(e.getMessage() + "\n" +
+                    Arrays.toString(Arrays.stream(e.getStackTrace())
+                            .map(s -> s + "\n")
+                            .toArray()));
         }
     }
 
