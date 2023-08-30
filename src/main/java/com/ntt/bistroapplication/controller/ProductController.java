@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 @RestController
 @RequestMapping(ProductController.BASE_URL)
 public class ProductController {
-    public static final String BASE_URL = "/api/v1/products";
+    public static final String BASE_URL = "/products";
     private final ProductService productService;
 
     public ProductController(ProductService productService) {

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(OrderController.BASE_URL)
 public class OrderController {
-    public static final String BASE_URL = "/api/v1/orders";
+    public static final String BASE_URL = "/orders";
     private final OrderService orderService;
 
     public OrderController(OrderService orderService) {
@@ -33,6 +33,11 @@ public class OrderController {
         return orderService.getMostWantedProducts(n);
     }
 
+    /**
+     * (This is not part of the controller Endpoints)
+     * Commands the service to add a new order to the database.
+     * @param order entry to be added in the table
+     */
     public void addOrder(PlacedOrderDTO order) {
         orderService.addOrder(order);
     }
