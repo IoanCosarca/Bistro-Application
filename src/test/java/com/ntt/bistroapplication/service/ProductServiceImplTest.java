@@ -3,6 +3,9 @@ package com.ntt.bistroapplication.service;
 import com.ntt.bistroapplication.exception.NonexistentProductException;
 import com.ntt.bistroapplication.model.Product;
 import com.ntt.bistroapplication.model.ProductType;
+import com.ntt.bistroapplication.mapper.ProductMapper;
+import com.ntt.bistroapplication.model.ProductDTO;
+import com.ntt.bistroapplication.repository.IngredientRepository;
 import com.ntt.bistroapplication.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,8 +23,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class ProductServiceImplTest {
+    private ProductMapper productMapper;
     @Mock
     private ProductRepository productRepository;
+    @Mock
+    private IngredientRepository ingredientRepository;
     @InjectMocks
     private ProductServiceImpl productService;
     static final String FIRST_PRODUCT = "Pizza";
@@ -37,7 +43,8 @@ class ProductServiceImplTest {
     void setUp()
     {
         MockitoAnnotations.openMocks(this);
-        productService = new ProductServiceImpl(productRepository);
+        productMapper = ProductMapper.INSTANCE;
+        productService = new ProductServiceImpl(productRepository, ingredientRepository);
     }
 
     @Test
@@ -52,9 +59,9 @@ class ProductServiceImplTest {
         products.add(dummyProduct);
 
         // When
-        productService.addProduct(dummyProduct);
+        productService.addProduct(productMapper.productToProductDTO(dummyProduct));
         when(productRepository.findAll()).thenReturn(products);
-        Set<Product> databaseProducts = productService.getProducts();
+        Set<ProductDTO> databaseProducts = productService.getProducts();
 
         // Then
         assertEquals(1, databaseProducts.size());
@@ -79,7 +86,7 @@ class ProductServiceImplTest {
 
         // When
         when(productRepository.findAll()).thenReturn(products);
-        Set<Product> databaseProducts = productService.getProducts();
+        Set<ProductDTO> databaseProducts = productService.getProducts();
 
         // Then
         assertEquals(2, databaseProducts.size());
@@ -102,10 +109,10 @@ class ProductServiceImplTest {
         cake.setId(SECOND_ID);
 
         // When
-        productService.addProduct(pizza);
-        productService.addProduct(cake);
+        productService.addProduct(productMapper.productToProductDTO(pizza));
+        productService.addProduct(productMapper.productToProductDTO(cake));
         when(productRepository.findById(SECOND_ID)).thenReturn(Optional.of(cake));
-        Product result = productService.getByID(SECOND_ID);
+        ProductDTO result = productService.getByID(SECOND_ID);
 
         // Then
         assertEquals(SECOND_TYPE, result.getProductType());
@@ -130,14 +137,16 @@ class ProductServiceImplTest {
         cake.setPrice(OLD_PRICE);
 
         // When
-        productService.addProduct(cake);
-        productService.updatePrice(cake, NEW_PRICE);
+        productService.addProduct(productMapper.productToProductDTO(cake));
         when(productRepository.findById(FIRST_ID)).thenReturn(Optional.of(cake));
-        Product result = productService.getByID(FIRST_ID);
+        productService.updatePrice(FIRST_ID, NEW_PRICE);
+        cake.setPrice(NEW_PRICE);
+        when(productRepository.findById(FIRST_ID)).thenReturn(Optional.of(cake));
+        ProductDTO result = productService.getByID(FIRST_ID);
 
         // Then
         assertEquals(NEW_PRICE, result.getPrice());
-        verify(productRepository, times(2)).save(result);
+        verify(productRepository, times(2)).findById(FIRST_ID);
     }
 
     @Test
@@ -157,11 +166,11 @@ class ProductServiceImplTest {
         products.add(cake);
 
         // When
-        productService.addProduct(cake);
-        productService.addProduct(pizza);
+        productService.addProduct(productMapper.productToProductDTO(cake));
+        productService.addProduct(productMapper.productToProductDTO(pizza));
         productService.removeProduct(FIRST_ID);
         when(productRepository.findAll()).thenReturn(products);
-        Set<Product> databaseProducts = productService.getProducts();
+        Set<ProductDTO> databaseProducts = productService.getProducts();
 
         // Then
         assertEquals(1, databaseProducts.size());

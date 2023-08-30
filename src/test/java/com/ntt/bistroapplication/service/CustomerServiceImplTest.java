@@ -1,6 +1,8 @@
 package com.ntt.bistroapplication.service;
 
 import com.ntt.bistroapplication.model.Customer;
+import com.ntt.bistroapplication.mapper.CustomerMapper;
+import com.ntt.bistroapplication.model.CustomerDTO;
 import com.ntt.bistroapplication.repository.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class CustomerServiceImplTest {
+    private CustomerMapper customerMapper;
     @Mock
     private CustomerRepository customerRepository;
     @InjectMocks
@@ -27,27 +30,8 @@ class CustomerServiceImplTest {
     void setUp()
     {
         MockitoAnnotations.openMocks(this);
+        customerMapper = CustomerMapper.INSTANCE;
         customerService = new CustomerServiceImpl(customerRepository);
-    }
-
-    @Test
-    @DisplayName(value = "Test if a customer is added.")
-    void testAddCustomer()
-    {
-        // Given
-        Set<Customer> customers = new HashSet<>();
-        Customer alin = new Customer(NAME_ALIN);
-        customers.add(alin);
-
-        // When
-        customerService.addCustomer(alin);
-        when(customerRepository.findAll()).thenReturn(customers);
-        Set<Customer> databaseCustomers = customerService.getCustomers();
-
-        // Then
-        assertEquals(1, databaseCustomers.size());
-        assertEquals(1, customers.size());
-        verify(customerRepository, times(1)).save(alin);
     }
 
     @Test
@@ -57,13 +41,35 @@ class CustomerServiceImplTest {
         // Given
         Set<Customer> customers = new HashSet<>();
         Customer alin = new Customer(NAME_ALIN);
+        customers.add(alin);
+
+        // When
+        customerService.addCustomer(customerMapper.customerToCustomerDTO(alin));
+        when(customerRepository.findAll()).thenReturn(customers);
+        Set<CustomerDTO> databaseCustomers = customerService.getCustomers();
+
+        // Then
+        assertEquals(1, databaseCustomers.size());
+        assertEquals(1, customers.size());
+        verify(customerRepository, times(1)).save(alin);
+    }
+
+    @Test
+    @DisplayName(value = "Test if a customer is added.")
+    void testAddCustomer()
+    {
+        // Given
+        Set<Customer> customers = new HashSet<>();
+        Customer alin = new Customer(NAME_ALIN);
         Customer lucian = new Customer(NAME_LUCIAN);
         customers.add(alin);
         customers.add(lucian);
 
         // When
+        customerService.addCustomer(customerMapper.customerToCustomerDTO(alin));
+        customerService.addCustomer(customerMapper.customerToCustomerDTO(lucian));
         when(customerRepository.findAll()).thenReturn(customers);
-        Set<Customer> databaseCustomers = customerService.getCustomers();
+        Set<CustomerDTO> databaseCustomers = customerService.getCustomers();
 
         // Then
         assertEquals(2, databaseCustomers.size());
@@ -82,11 +88,11 @@ class CustomerServiceImplTest {
         customers.add(lucian);
 
         // When
-        customerService.addCustomer(alin);
-        customerService.addCustomer(lucian);
+        customerService.addCustomer(customerMapper.customerToCustomerDTO(alin));
+        customerService.addCustomer(customerMapper.customerToCustomerDTO(lucian));
         customerService.removeCustomer(1L);
         when(customerRepository.findAll()).thenReturn(customers);
-        Set<Customer> databaseCustomers = customerService.getCustomers();
+        Set<CustomerDTO> databaseCustomers = customerService.getCustomers();
 
         // Then
         assertEquals(1, databaseCustomers.size());

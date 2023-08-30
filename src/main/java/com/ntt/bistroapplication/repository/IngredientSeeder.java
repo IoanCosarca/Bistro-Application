@@ -63,7 +63,7 @@ public class IngredientSeeder implements ApplicationListener<ContextRefreshedEve
         ingredients.add(pasta);
 
         Ingredient tomatoSauce =
-                new Ingredient(IngredientType.TOMATO_SAUCE.getName(), BigDecimal.valueOf(4.5));
+                new Ingredient(IngredientType.TOMATO_S.getName(), BigDecimal.valueOf(4.5));
         ingredients.add(tomatoSauce);
 
         Ingredient meatballs =

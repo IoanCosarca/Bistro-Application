@@ -1,28 +1,43 @@
 package com.ntt.bistroapplication.controller;
 
-import com.ntt.bistroapplication.model.Customer;
+import com.ntt.bistroapplication.model.CustomerDTO;
 import com.ntt.bistroapplication.service.CustomerService;
-import org.springframework.stereotype.Controller;
+import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 
-@Controller
+@RestController
+@RequestMapping(CustomerController.BASE_URL)
 public class CustomerController {
+    public static final String BASE_URL = "/customers";
     private final CustomerService customerService;
 
     public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
     }
 
-    public Set<Customer> getCustomers() {
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Retrieves all the customers in the database")
+    public Set<CustomerDTO> getCustomers() {
         return customerService.getCustomers();
     }
 
-    public void addCustomer(Customer newCustomer) {
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Creates a new customer entry and inserts it in the table")
+    public void addCustomer(@Valid @RequestBody CustomerDTO newCustomer) {
         customerService.addCustomer(newCustomer);
     }
 
-    public void deleteByID(Integer id) {
-        customerService.removeCustomer(Long.valueOf(id));
+    @DeleteMapping(path = "/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Deletes a customer entry specified by its id from the database")
+    public void deleteCustomer(@PathVariable Long id) {
+        customerService.removeCustomer(id);
     }
 }

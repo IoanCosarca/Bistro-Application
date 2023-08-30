@@ -17,6 +17,10 @@ import org.springframework.context.ApplicationContext;
 import java.math.BigDecimal;
 import java.util.*;
 
+/**
+ * Application for facilitating a bistro managing system.
+ * <a href="http://localhost:8080/swagger-ui.html">OpenAPI documentation</a>
+ */
 @SpringBootApplication
 public class BistroApplication {
     public static void main(String[] args)
@@ -41,9 +45,9 @@ public class BistroApplication {
 
             try
             {
-                listProductByID(productController, 7);
-                listProductByID(productController, 2);
-                listProductByID(productController, 14);
+                listProductByID(productController, 7L);
+                listProductByID(productController, 2L);
+                listProductByID(productController, 20L);
             }
             catch (NonexistentProductException e) {
                 MainConsole.printMessage(e.getMessage() + "\n" +
@@ -52,19 +56,16 @@ public class BistroApplication {
                                 .toArray()));
             }
 
-            Product pizzaNewPrice = productController.getByID(6);
-            updatePriceOfProduct(productController, pizzaNewPrice, 45.0);
-            Product wafflesNewPrice = productController.getByID(10);
-            updatePriceOfProduct(productController, wafflesNewPrice, 17.5);
+            updatePriceOfProduct(productController, 6L, 45.0);
+            updatePriceOfProduct(productController, 11L, 17.5);
 
             removeProductByID(productController, 3);
             removeProductByID(productController, 15);
             listProducts(productController);
 
-            Customer andreea = new Customer("Andreea");
+            CustomerDTO andreea = new CustomerDTO("Andreea");
             addCustomer(customerController, andreea);
-            customerController.addCustomer(andreea);
-            Customer roxana = new Customer();
+            CustomerDTO roxana = new CustomerDTO();
             roxana.setName("Roxana");
             addCustomer(customerController, roxana);
 
@@ -72,52 +73,52 @@ public class BistroApplication {
             removeCustomerByID(customerController, 5);
             listCustomers(customerController);
 
-            OrderedProduct o1Product1 =
-                    new OrderedProduct(productController.getByName("Spaghetti with garlic"));
-            OrderedProduct o1Product2 =
-                    new OrderedProduct(productController.getByName("Prosciutto Fungi Plus"));
-            OrderedProduct o1Product3 =
-                    new OrderedProduct(productController.getByName("Chocolate Cake"));
-            List<OrderedProduct> order1Products =
+            OrderedProductDTO o1Product1 =
+                    new OrderedProductDTO(productController.getByName("Spaghetti with garlic"));
+            OrderedProductDTO o1Product2 =
+                    new OrderedProductDTO(productController.getByName("Prosciutto Fungi Plus"));
+            OrderedProductDTO o1Product3 =
+                    new OrderedProductDTO(productController.getByName("Chocolate Cake"));
+            List<OrderedProductDTO> order1Products =
                     new ArrayList<>(Arrays.asList(o1Product1, o1Product2, o1Product3));
-            PlacedOrder order1 = new PlacedOrder();
+            PlacedOrderDTO order1 = new PlacedOrderDTO();
             order1.setProducts(order1Products);
 
-            OrderedProduct o2Product1 =
-                    new OrderedProduct(productController.getByName("Chocolate Donut"));
-            OrderedProduct o2Product2 =
-                    new OrderedProduct(productController.getByName("Chocolate Cake"));
-            OrderedProduct o2Product3 =
-                    new OrderedProduct(productController.getByName("Plain Cake"));
+            OrderedProductDTO o2Product1 =
+                    new OrderedProductDTO(productController.getByName("Chocolate Donut"));
+            OrderedProductDTO o2Product2 =
+                    new OrderedProductDTO(productController.getByName("Chocolate Cake"));
+            OrderedProductDTO o2Product3 =
+                    new OrderedProductDTO(productController.getByName("Plain Cake"));
             o2Product3.setTopping(
                     ingredientController.getIngredient(IngredientType.RASPBERRY.getName()));
-            List<OrderedProduct> order2Products =
+            List<OrderedProductDTO> order2Products =
                     new ArrayList<>(Arrays.asList(o2Product1, o2Product2, o2Product3));
-            PlacedOrder order2 = new PlacedOrder();
+            PlacedOrderDTO order2 = new PlacedOrderDTO();
             order2.setProducts(order2Products);
 
-            OrderedProduct o3Product1 =
-                    new OrderedProduct(productController.getByName("Prosciutto Fungi Plus"));
-            OrderedProduct o3Product2 =
-                    new OrderedProduct(productController.getByName("Cheese Pizza"));
-            OrderedProduct o3Product3 =
-                    new OrderedProduct(productController.getByName("Chocolate Waffles"));
-            List<OrderedProduct> order3Products =
+            OrderedProductDTO o3Product1 =
+                    new OrderedProductDTO(productController.getByName("Prosciutto Fungi Plus"));
+            OrderedProductDTO o3Product2 =
+                    new OrderedProductDTO(productController.getByName("Cheese Pizza"));
+            OrderedProductDTO o3Product3 =
+                    new OrderedProductDTO(productController.getByName("Chocolate Waffles"));
+            List<OrderedProductDTO> order3Products =
                     new ArrayList<>(Arrays.asList(o3Product1, o3Product2, o3Product3));
-            PlacedOrder order3 = new PlacedOrder();
+            PlacedOrderDTO order3 = new PlacedOrderDTO();
             order3.setProducts(order3Products);
 
-            OrderedProduct o4Product1 =
-                    new OrderedProduct(productController.getByName("Strawberry Waffles"));
-            OrderedProduct o4Product2 =
-                    new OrderedProduct(productController.getByName("Spaghetti with garlic"));
-            List<OrderedProduct> order4Products =
+            OrderedProductDTO o4Product1 =
+                    new OrderedProductDTO(productController.getByName("Strawberry Waffles"));
+            OrderedProductDTO o4Product2 =
+                    new OrderedProductDTO(productController.getByName("Spaghetti with garlic"));
+            List<OrderedProductDTO> order4Products =
                     new ArrayList<>(Arrays.asList(o4Product1, o4Product2));
-            PlacedOrder order4 = new PlacedOrder();
+            PlacedOrderDTO order4 = new PlacedOrderDTO();
             order4.setProducts(order4Products);
 
-            Set<Customer> databaseCustomers = customerController.getCustomers();
-            for (Customer c : databaseCustomers)
+            Set<CustomerDTO> databaseCustomers = customerController.getCustomers();
+            for (CustomerDTO c : databaseCustomers)
             {
                 if (c.getName().equals("Ionut")) {
                     order1.setCustomer(c);
@@ -132,10 +133,10 @@ public class BistroApplication {
                     order4.setCustomer(c);
                 }
             }
-            orderController.saveOrder(order1);
-            orderController.saveOrder(order2);
-            orderController.saveOrder(order3);
-            orderController.saveOrder(order4);
+            orderController.addOrder(order1);
+            orderController.addOrder(order2);
+            orderController.addOrder(order3);
+            orderController.addOrder(order4);
             listTopN(orderController, 3);
             listTopN(orderController, 2);
         }
@@ -157,10 +158,10 @@ public class BistroApplication {
                                     IngredientController ingredientController)
     {
         MainConsole.printMessage("-------------List with new Product---------------");
-        Product fruitCake = new Product();
+        ProductDTO fruitCake = new ProductDTO();
         fruitCake.setName("Fruit Cake");
         fruitCake.setProductType(ProductType.CAKE);
-        Set<Ingredient> ingredients = new HashSet<>();
+        Set<IngredientDTO> ingredients = new HashSet<>();
         ingredients.add(ingredientController.getIngredient(IngredientType.FLOUR.getName()));
         ingredients.add(ingredientController.getIngredient(IngredientType.SUGAR.getName()));
         ingredients.add(ingredientController.getIngredient(IngredientType.EGGS.getName()));
@@ -175,20 +176,20 @@ public class BistroApplication {
         ProductConsole.printProducts(productController.getProducts());
     }
 
-    private static void listProductByID(ProductController productController, Integer id)
+    private static void listProductByID(ProductController productController, Long id)
             throws NonexistentProductException
     {
         MainConsole.printMessage("-------------Find Product By ID---------------");
         ProductConsole.printProduct(productController.getByID(id));
     }
 
-    private static void updatePriceOfProduct(ProductController productController, Product product,
+    private static void updatePriceOfProduct(ProductController productController, Long id,
                                              Double newPrice) {
-        productController.updatePrice(product, BigDecimal.valueOf(newPrice));
+        productController.updatePrice(id, BigDecimal.valueOf(newPrice));
     }
 
     private static void removeProductByID(ProductController productController, Integer id) {
-        productController.deleteByID(id);
+        productController.deleteProduct(Long.valueOf(id));
     }
 
     private static void listCustomers(CustomerController customerController)
@@ -197,7 +198,7 @@ public class BistroApplication {
         CustomerConsole.printCustomers(customerController.getCustomers());
     }
 
-    private static void addCustomer(CustomerController customerController, Customer customer)
+    private static void addCustomer(CustomerController customerController, CustomerDTO customer)
     {
         MainConsole.printMessage("-------------Add Customer---------------");
         customerController.addCustomer(customer);
@@ -205,7 +206,7 @@ public class BistroApplication {
     }
 
     private static void removeCustomerByID(CustomerController customerController, Integer id) {
-        customerController.deleteByID(id);
+        customerController.deleteCustomer(Long.valueOf(id));
     }
 
     private static void listTopN(OrderController orderController, Integer n)

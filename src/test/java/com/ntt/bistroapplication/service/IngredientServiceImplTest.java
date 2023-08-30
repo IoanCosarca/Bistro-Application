@@ -3,6 +3,7 @@ package com.ntt.bistroapplication.service;
 import com.ntt.bistroapplication.exception.MissingIngredientException;
 import com.ntt.bistroapplication.model.Ingredient;
 import com.ntt.bistroapplication.model.IngredientType;
+import com.ntt.bistroapplication.model.IngredientDTO;
 import com.ntt.bistroapplication.repository.IngredientRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -65,7 +66,7 @@ class IngredientServiceImplTest {
 
         // When
         when(ingredientRepository.findByName(INGREDIENT_NAME)).thenReturn(Optional.of(ingredient));
-        Ingredient result = ingredientService.getIngredient(INGREDIENT_NAME);
+        IngredientDTO result = ingredientService.getIngredient(INGREDIENT_NAME);
 
         // Then
         assertEquals(FIRST_PRICE, result.getCost());

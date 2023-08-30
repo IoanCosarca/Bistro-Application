@@ -1,25 +1,46 @@
 package com.ntt.bistroapplication.controller;
 
-import com.ntt.bistroapplication.model.PlacedOrder;
-import com.ntt.bistroapplication.model.Product;
+import com.ntt.bistroapplication.model.PlacedOrderDTO;
+import com.ntt.bistroapplication.model.ProductDTO;
 import com.ntt.bistroapplication.service.OrderService;
-import org.springframework.stereotype.Controller;
+import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
 
-@Controller
+@RestController
+@RequestMapping(OrderController.BASE_URL)
 public class OrderController {
+    public static final String BASE_URL = "/orders";
     private final OrderService orderService;
 
     public OrderController(OrderService orderService) {
         this.orderService = orderService;
     }
 
-    public void saveOrder(PlacedOrder order) {
-        orderService.addOrder(order);
+    @GetMapping(path = "/customerOrders/{customerID}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.FOUND)
+    @Operation(summary = "Retrieves all the orders placed by a specific customer")
+    public List<PlacedOrderDTO> getCustomerOrders(@PathVariable Long customerID) {
+        return orderService.getCustomerOrders(customerID);
     }
 
-    public Set<Product> getTopN(int n) {
+    @GetMapping(path = "/top/{n}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.FOUND)
+    @Operation(summary = "Retrieves the most ordered number of products")
+    public Set<ProductDTO> getTopN(@PathVariable int n) {
         return orderService.getMostWantedProducts(n);
+    }
+
+    /**
+     * (This is not part of the controller Endpoints)
+     * Commands the service to add a new order to the database.
+     * @param order entry to be added in the table
+     */
+    public void addOrder(PlacedOrderDTO order) {
+        orderService.addOrder(order);
     }
 }

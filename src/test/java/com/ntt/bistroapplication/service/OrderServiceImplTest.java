@@ -1,7 +1,13 @@
 package com.ntt.bistroapplication.service;
 
+import com.ntt.bistroapplication.mapper.CustomerMapper;
+import com.ntt.bistroapplication.mapper.OrderMapper;
+import com.ntt.bistroapplication.mapper.ProductMapper;
 import com.ntt.bistroapplication.model.*;
+import com.ntt.bistroapplication.repository.CustomerRepository;
+import com.ntt.bistroapplication.repository.IngredientRepository;
 import com.ntt.bistroapplication.repository.OrderRepository;
+import com.ntt.bistroapplication.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,15 +18,29 @@ import org.mockito.MockitoAnnotations;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 class OrderServiceImplTest {
+    private OrderMapper orderMapper;
+    private CustomerMapper customerMapper;
+    private ProductMapper productMapper;
     @Mock
     private OrderRepository orderRepository;
+    @Mock
+    private CustomerRepository customerRepository;
+    @Mock
+    private ProductRepository productRepository;
+    @Mock
+    private IngredientRepository ingredientRepository;
     @InjectMocks
     private OrderServiceImpl orderService;
+    @InjectMocks
+    private CustomerServiceImpl customerService;
+    @InjectMocks
+    private ProductServiceImpl productService;
     static final String FIRST_PRODUCT = "Pizza";
     static final String SECOND_PRODUCT = "Pasta";
     static final ProductType FIRST_TYPE = ProductType.PIZZA;
@@ -33,7 +53,13 @@ class OrderServiceImplTest {
     void setUp()
     {
         MockitoAnnotations.openMocks(this);
-        orderService = new OrderServiceImpl(orderRepository);
+        orderMapper = OrderMapper.INSTANCE;
+        customerMapper = CustomerMapper.INSTANCE;
+        productMapper = ProductMapper.INSTANCE;
+        orderService = new OrderServiceImpl(orderRepository, customerRepository, productRepository,
+                ingredientRepository);
+        customerService = new CustomerServiceImpl(customerRepository);
+        productService = new ProductServiceImpl(productRepository, ingredientRepository);
     }
 
     @Test
@@ -50,6 +76,11 @@ class OrderServiceImplTest {
         product2.setProductType(SECOND_TYPE);
         product2.setPrice(SECOND_PRICE);
 
+        productService.addProduct(productMapper.productToProductDTO(product1));
+        when(productRepository.findByName(FIRST_PRODUCT)).thenReturn(Optional.of(product1));
+        productService.addProduct(productMapper.productToProductDTO(product2));
+        when(productRepository.findByName(SECOND_PRODUCT)).thenReturn(Optional.of(product2));
+
         OrderedProduct orderedProduct1 = new OrderedProduct(product1);
         OrderedProduct orderedProduct2 = new OrderedProduct(product2);
 
@@ -58,16 +89,19 @@ class OrderServiceImplTest {
         orderedProducts.add(orderedProduct2);
 
         Customer customer = new Customer(CUSTOMER_NAME);
+        customerService.addCustomer(customerMapper.customerToCustomerDTO(customer));
+        when(customerRepository.findByName(CUSTOMER_NAME)).thenReturn(Optional.of(customer));
 
         PlacedOrder order = new PlacedOrder();
         order.setProducts(orderedProducts);
         order.setCustomer(customer);
+        order.setTotalPrice(FIRST_PRICE.add(SECOND_PRICE));
 
         List<PlacedOrder> orders = new ArrayList<>();
         orders.add(order);
 
         // When
-        orderService.addOrder(order);
+        orderService.addOrder(orderMapper.orderToOrderDTO(order));
         when(orderRepository.findAll()).thenReturn(orders);
 
         // Then
