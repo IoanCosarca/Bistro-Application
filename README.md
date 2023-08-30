@@ -8,7 +8,7 @@ Define a database model that could be used to manage a bistro. Information about
 
 The following type of products can be ordered by a customer from the bistro: cake, waffles, croissant, donut, pasta, pizza, risotto. Each product has its price and a recipe with different ingredients. The ingredients have their own cost. For example, if a customer orders a waffle with extra topping, the topping ingredient will be added to the price of the product.
 
-Use the following technologies: java 8, maven, spring boot, spring data, rest and a MVC architecture (you should also have a repository layer). Apply SOLID principles. Application logic will be implemented at the service layer.
+Use the following technologies: java 8, maven, spring boot, spring data, rest and an MVC architecture (you should also have a repository layer). Apply SOLID principles. Application logic will be implemented at the service layer.
 
 Using spring-boot-starter-data-jpa, implement a solution to perform the following actions:
 - add a product to the bistro database
