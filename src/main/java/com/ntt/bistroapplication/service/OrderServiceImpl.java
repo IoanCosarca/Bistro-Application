@@ -17,6 +17,9 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Implementation of the Order Service.
+ */
 @Service
 public class OrderServiceImpl implements OrderService {
     private final OrderMapper orderMapper = OrderMapper.INSTANCE;
@@ -36,6 +39,11 @@ public class OrderServiceImpl implements OrderService {
         this.ingredientRepository = ingredientRepository;
     }
 
+    /**
+     * Retrieves all the orders placed by the customer with the specified id.
+     * @param customerID identification of the customer whose orders must be retrieved
+     * @return list of orders
+     */
     @Override
     public OrderListDTO getCustomerOrders(Long customerID)
     {
@@ -48,6 +56,11 @@ public class OrderServiceImpl implements OrderService {
                 .toList());
     }
 
+    /**
+     * Retrieves the n most wanted products.
+     * @param n the number of desired popular products
+     * @return set of products
+     */
     @Override
     public ProductSetDTO getMostWantedProducts(int n)
     {
@@ -66,6 +79,10 @@ public class OrderServiceImpl implements OrderService {
                 .collect(Collectors.toSet()));
     }
 
+    /**
+     * Inserts a new order in the table.
+     * @param placedOrderDTO placed order entry to be inserted
+     */
     @Override
     public void addOrder(PlacedOrderDTO placedOrderDTO)
     {
@@ -74,20 +91,26 @@ public class OrderServiceImpl implements OrderService {
         Optional<Set<PlacedOrder>> optionalCustomer = orderRepository.findByCustomer(customer);
         if (optionalCustomer.isEmpty())
         {
-            PlacedOrder order = getOrder(placedOrderDTO, customer);
+            PlacedOrder order = computeOrder(placedOrderDTO, customer);
             orderRepository.save(order);
             return;
         }
         Set<PlacedOrder> customerOrders = optionalCustomer.get();
 
-        PlacedOrder order = getOrder(placedOrderDTO, customer);
+        PlacedOrder order = computeOrder(placedOrderDTO, customer);
         if (customerOrders.stream().anyMatch(placedOrder -> placedOrder.equals(order))) {
             return;
         }
         orderRepository.save(order);
     }
 
-    private PlacedOrder getOrder(PlacedOrderDTO placedOrderDTO, Customer customer)
+    /**
+     * Converts a placedOrderDTO into a PlacedOrder object.
+     * @param placedOrderDTO object to be converted
+     * @param customer Customer entry to be associated with the order
+     * @return PlacedOrder object
+     */
+    private PlacedOrder computeOrder(PlacedOrderDTO placedOrderDTO, Customer customer)
     {
         setOrderPrice(placedOrderDTO);
         PlacedOrder order = orderMapper.orderDTOtoOrder(placedOrderDTO);
@@ -96,6 +119,12 @@ public class OrderServiceImpl implements OrderService {
         return order;
     }
 
+    /**
+     * Constructs a list of OrderedProducts from the given PlacedOrderDTO.
+     * @param placedOrderDTO entry from where to extract the information to compute the ordered
+     * products
+     * @return list of OrderedProducts
+     */
     private List<OrderedProduct> computeOrderedProducts(PlacedOrderDTO placedOrderDTO)
     {
         List<OrderedProductDTO> orderedProductDTOS = placedOrderDTO.getProducts();
@@ -114,6 +143,10 @@ public class OrderServiceImpl implements OrderService {
         return orderedProducts;
     }
 
+    /**
+     * Calculates the price of an order DTO.
+     * @param order instance whose price must be calculated
+     */
     public void setOrderPrice(PlacedOrderDTO order)
     {
         List<OrderedProductDTO> products = order.getProducts();

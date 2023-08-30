@@ -11,6 +11,9 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+/**
+ * Implementation of the Customer Service.
+ */
 @Service
 public class CustomerServiceImpl implements CustomerService {
     private final CustomerMapper customerMapper = CustomerMapper.INSTANCE;
@@ -20,6 +23,10 @@ public class CustomerServiceImpl implements CustomerService {
         this.customerRepository = customerRepository;
     }
 
+    /**
+     * Retrieves all the customers in the database.
+     * @return set of customers
+     */
     @Override
     public CustomerSetDTO getCustomers()
     {
@@ -31,6 +38,10 @@ public class CustomerServiceImpl implements CustomerService {
         return new CustomerSetDTO(customerSet);
     }
 
+    /**
+     * Inserts a new customer entry in the database.
+     * @param newCustomer customer entry to be inserted
+     */
     @Override
     public void addCustomer(CustomerDTO newCustomer)
     {
@@ -40,6 +51,10 @@ public class CustomerServiceImpl implements CustomerService {
         }
     }
 
+    /**
+     * Deletes from the database the customer with the specified id.
+     * @param id identifier of the customer to be deleted
+     */
     @Override
     public void removeCustomer(Long id) {
         customerRepository.deleteById(id);

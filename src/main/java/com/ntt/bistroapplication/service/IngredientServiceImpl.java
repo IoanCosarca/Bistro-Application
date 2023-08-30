@@ -11,6 +11,9 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+/**
+ * Implementation of the Ingredient Service.
+ */
 @Service
 public class IngredientServiceImpl implements IngredientService {
     private final IngredientMapper ingredientMapper = IngredientMapper.INSTANCE;
@@ -20,6 +23,10 @@ public class IngredientServiceImpl implements IngredientService {
         this.ingredientRepository = ingredientRepository;
     }
 
+    /**
+     * Retrieves all the ingredients in the database.
+     * @return set of ingredients
+     */
     @Override
     public Set<Ingredient> getIngredients()
     {
@@ -28,6 +35,12 @@ public class IngredientServiceImpl implements IngredientService {
         return ingredients;
     }
 
+    /**
+     * Retrieves the ingredient with the specified name.
+     * @param ingredientName name of the ingredient to be found
+     * @return DTO of the ingredient
+     * @throws MissingIngredientException when the name is not valid or the ingredient doesn't exist
+     */
     @Override
     public IngredientDTO getIngredient(String ingredientName) throws MissingIngredientException
     {

@@ -16,6 +16,9 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+/**
+ * Implementation of the Product Service.
+ */
 @Service
 public class ProductServiceImpl implements ProductService {
     private final ProductMapper productMapper = ProductMapper.INSTANCE;
@@ -29,6 +32,10 @@ public class ProductServiceImpl implements ProductService {
         this.ingredientRepository = ingredientRepository;
     }
 
+    /**
+     * Retrieves all the products in the database.
+     * @return set of products
+     */
     @Override
     public ProductSetDTO getProducts()
     {
@@ -40,6 +47,12 @@ public class ProductServiceImpl implements ProductService {
         return new ProductSetDTO(products);
     }
 
+    /**
+     * Retrieves the product with the specified id.
+     * @param id id of the product to be found
+     * @return DTO of the product
+     * @throws NonexistentProductException when the product with the provided id doesn't exist
+     */
     @Override
     public ProductDTO getByID(Long id) throws NonexistentProductException
     {
@@ -55,6 +68,12 @@ public class ProductServiceImpl implements ProductService {
         return foundProduct[0];
     }
 
+    /**
+     * Retrieves the product with the specified name.
+     * @param name name of the product to be found
+     * @return DTO of the product
+     * @throws NonexistentProductException when the product with the provided name doesn't exist
+     */
     @Override
     public ProductDTO getDTOByName(String name) throws NonexistentProductException
     {
@@ -69,6 +88,10 @@ public class ProductServiceImpl implements ProductService {
         return foundProduct[0];
     }
 
+    /**
+     * Inserts a new product in the table.
+     * @param newProduct product entry to be inserted
+     */
     @Override
     public void addProduct(ProductDTO newProduct)
     {
@@ -82,6 +105,11 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
+    /**
+     * Update the price of a product given by its id.
+     * @param id       id of the product whose price must be changed
+     * @param newPrice the new product price
+     */
     @Override
     public void updatePrice(Long id, BigDecimal newPrice)
     {
@@ -96,11 +124,20 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
+    /**
+     * Deletes a product from the table.
+     * @param id identifier of the customer to be deleted
+     */
     @Override
     public void removeProduct(Long id) {
         productRepository.deleteById(id);
     }
 
+    /**
+     * Constructs a set of ingredients from a given ProductDTO.
+     * @param productDTO entry from where to extract the information to compute the ingredients
+     * @return set of ingredients
+     */
     private Set<Ingredient> computeIngredients(ProductDTO productDTO)
     {
         Set<IngredientDTO> ingredientDTOS = productDTO.getIngredients();
@@ -114,16 +151,24 @@ public class ProductServiceImpl implements ProductService {
         return ingredients;
     }
 
-    public void setProductDTOPrice(ProductDTO product)
+    /**
+     * Calculates the price of a ProductDTO.
+     * @param productDTO instance whose price must be calculated
+     */
+    public void setProductDTOPrice(ProductDTO productDTO)
     {
         BigDecimal price = BigDecimal.ZERO;
-        Set<IngredientDTO> ingredients = product.getIngredients();
+        Set<IngredientDTO> ingredients = productDTO.getIngredients();
         for (IngredientDTO ingredient : ingredients) {
             price = price.add(ingredient.getCost());
         }
-        product.setPrice(price);
+        productDTO.setPrice(price);
     }
 
+    /**
+     * Calculates the price of a Product.
+     * @param product instance whose price must be calculated
+     */
     public void setProductPrice(Product product)
     {
         BigDecimal price = BigDecimal.ZERO;
