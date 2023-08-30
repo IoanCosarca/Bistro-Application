@@ -46,7 +46,7 @@ class CustomerServiceImplTest {
         // When
         customerService.addCustomer(customerMapper.customerToCustomerDTO(alin));
         when(customerRepository.findAll()).thenReturn(customers);
-        Set<CustomerDTO> databaseCustomers = customerService.getCustomers().getCustomers();
+        Set<CustomerDTO> databaseCustomers = customerService.getCustomers();
 
         // Then
         assertEquals(1, databaseCustomers.size());
@@ -69,7 +69,7 @@ class CustomerServiceImplTest {
         customerService.addCustomer(customerMapper.customerToCustomerDTO(alin));
         customerService.addCustomer(customerMapper.customerToCustomerDTO(lucian));
         when(customerRepository.findAll()).thenReturn(customers);
-        Set<CustomerDTO> databaseCustomers = customerService.getCustomers().getCustomers();
+        Set<CustomerDTO> databaseCustomers = customerService.getCustomers();
 
         // Then
         assertEquals(2, databaseCustomers.size());
@@ -92,7 +92,7 @@ class CustomerServiceImplTest {
         customerService.addCustomer(customerMapper.customerToCustomerDTO(lucian));
         customerService.removeCustomer(1L);
         when(customerRepository.findAll()).thenReturn(customers);
-        Set<CustomerDTO> databaseCustomers = customerService.getCustomers().getCustomers();
+        Set<CustomerDTO> databaseCustomers = customerService.getCustomers();
 
         // Then
         assertEquals(1, databaseCustomers.size());

@@ -2,9 +2,9 @@ package com.ntt.bistroapplication.service;
 
 import com.ntt.bistroapplication.exception.NonexistentProductException;
 import com.ntt.bistroapplication.model.ProductDTO;
-import com.ntt.bistroapplication.model.ProductSetDTO;
 
 import java.math.BigDecimal;
+import java.util.Set;
 
 /**
  * The service interface for the Product.
@@ -14,7 +14,7 @@ public interface ProductService {
      * Abstract method for retrieving all the products in the table.
      * @return set of products
      */
-    ProductSetDTO getProducts();
+    Set<ProductDTO> getProducts();
 
     /**
      * Abstract method for retrieving the product with the specified id.

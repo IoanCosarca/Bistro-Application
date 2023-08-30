@@ -1,8 +1,10 @@
 package com.ntt.bistroapplication.service;
 
-import com.ntt.bistroapplication.model.OrderListDTO;
 import com.ntt.bistroapplication.model.PlacedOrderDTO;
-import com.ntt.bistroapplication.model.ProductSetDTO;
+import com.ntt.bistroapplication.model.ProductDTO;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * The service interface for the PlacedOrder.
@@ -13,14 +15,14 @@ public interface OrderService {
      * @param customerID identification of the customer whose orders must be retrieved
      * @return list of orders
      */
-    OrderListDTO getCustomerOrders(Long customerID);
+    List<PlacedOrderDTO> getCustomerOrders(Long customerID);
 
     /**
      * Abstract method for retrieving the most wanted products.
      * @param n the number of desired popular products
      * @return set of products
      */
-    ProductSetDTO getMostWantedProducts(int n);
+    Set<ProductDTO> getMostWantedProducts(int n);
 
     /**
      * Abstract method for inserting a new order in the table.

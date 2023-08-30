@@ -117,8 +117,8 @@ public class BistroApplication {
             PlacedOrderDTO order4 = new PlacedOrderDTO();
             order4.setProducts(order4Products);
 
-            CustomerSetDTO databaseCustomers = customerController.getCustomers();
-            for (CustomerDTO c : databaseCustomers.getCustomers())
+            Set<CustomerDTO> databaseCustomers = customerController.getCustomers();
+            for (CustomerDTO c : databaseCustomers)
             {
                 if (c.getName().equals("Ionut")) {
                     order1.setCustomer(c);

@@ -3,7 +3,6 @@ package com.ntt.bistroapplication.service;
 import com.ntt.bistroapplication.model.Customer;
 import com.ntt.bistroapplication.mapper.CustomerMapper;
 import com.ntt.bistroapplication.model.CustomerDTO;
-import com.ntt.bistroapplication.model.CustomerSetDTO;
 import com.ntt.bistroapplication.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
 
@@ -28,14 +27,14 @@ public class CustomerServiceImpl implements CustomerService {
      * @return set of customers
      */
     @Override
-    public CustomerSetDTO getCustomers()
+    public Set<CustomerDTO> getCustomers()
     {
         Set<CustomerDTO> customerSet = new HashSet<>();
         customerRepository.findAll().iterator().forEachRemaining(c -> {
             CustomerDTO customer = customerMapper.customerToCustomerDTO(c);
             customerSet.add(customer);
         });
-        return new CustomerSetDTO(customerSet);
+        return customerSet;
     }
 
     /**

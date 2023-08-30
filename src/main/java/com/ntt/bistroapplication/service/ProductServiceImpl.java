@@ -6,7 +6,6 @@ import com.ntt.bistroapplication.exception.NonexistentProductException;
 import com.ntt.bistroapplication.mapper.ProductMapper;
 import com.ntt.bistroapplication.model.IngredientDTO;
 import com.ntt.bistroapplication.model.ProductDTO;
-import com.ntt.bistroapplication.model.ProductSetDTO;
 import com.ntt.bistroapplication.repository.IngredientRepository;
 import com.ntt.bistroapplication.repository.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -37,14 +36,14 @@ public class ProductServiceImpl implements ProductService {
      * @return set of products
      */
     @Override
-    public ProductSetDTO getProducts()
+    public Set<ProductDTO> getProducts()
     {
         Set<ProductDTO> products = new HashSet<>();
         productRepository.findAll().iterator().forEachRemaining(p -> {
             ProductDTO product = productMapper.productToProductDTO(p);
             products.add(product);
         });
-        return new ProductSetDTO(products);
+        return products;
     }
 
     /**

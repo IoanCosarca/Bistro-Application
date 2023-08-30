@@ -1,13 +1,14 @@
 package com.ntt.bistroapplication.controller;
 
 import com.ntt.bistroapplication.model.CustomerDTO;
-import com.ntt.bistroapplication.model.CustomerSetDTO;
 import com.ntt.bistroapplication.service.CustomerService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Set;
 
 @RestController
 @RequestMapping(CustomerController.BASE_URL)
@@ -22,7 +23,7 @@ public class CustomerController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Retrieves all the customers in the database")
-    public CustomerSetDTO getCustomers() {
+    public Set<CustomerDTO> getCustomers() {
         return customerService.getCustomers();
     }
 

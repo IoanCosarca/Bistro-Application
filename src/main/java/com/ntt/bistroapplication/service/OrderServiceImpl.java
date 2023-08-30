@@ -45,15 +45,15 @@ public class OrderServiceImpl implements OrderService {
      * @return list of orders
      */
     @Override
-    public OrderListDTO getCustomerOrders(Long customerID)
+    public List<PlacedOrderDTO> getCustomerOrders(Long customerID)
     {
         List<PlacedOrder> allOrders = new ArrayList<>();
         orderRepository.findAll().iterator().forEachRemaining(allOrders::add);
-        return new OrderListDTO(allOrders.stream()
+        return allOrders.stream()
                 .filter(placedOrder ->
                         Objects.equals(placedOrder.getCustomer().getId(), customerID))
                 .map(orderMapper::orderToOrderDTO)
-                .toList());
+                .toList();
     }
 
     /**
@@ -62,7 +62,7 @@ public class OrderServiceImpl implements OrderService {
      * @return set of products
      */
     @Override
-    public ProductSetDTO getMostWantedProducts(int n)
+    public Set<ProductDTO> getMostWantedProducts(int n)
     {
         Set<PlacedOrder> allOrders = new HashSet<>();
         orderRepository.findAll().iterator().forEachRemaining(allOrders::add);
@@ -70,13 +70,13 @@ public class OrderServiceImpl implements OrderService {
                 .flatMap(placedOrder -> placedOrder.getProducts().stream())
                 .collect(Collectors.groupingBy(OrderedProduct::getProduct, Collectors.counting()));
 
-        return new ProductSetDTO(MapFrequency.entrySet()
+        return MapFrequency.entrySet()
                 .stream()
                 .sorted(Map.Entry.<Product, Long>comparingByValue().reversed())
                 .limit(n)
                 .map(Map.Entry::getKey)
                 .map(productMapper::productToProductDTO)
-                .collect(Collectors.toSet()));
+                .collect(Collectors.toSet());
     }
 
     /**

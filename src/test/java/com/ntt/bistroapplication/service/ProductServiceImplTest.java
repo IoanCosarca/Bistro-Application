@@ -61,7 +61,7 @@ class ProductServiceImplTest {
         // When
         productService.addProduct(productMapper.productToProductDTO(dummyProduct));
         when(productRepository.findAll()).thenReturn(products);
-        Set<ProductDTO> databaseProducts = productService.getProducts().getProducts();
+        Set<ProductDTO> databaseProducts = productService.getProducts();
 
         // Then
         assertEquals(1, databaseProducts.size());
@@ -86,7 +86,7 @@ class ProductServiceImplTest {
 
         // When
         when(productRepository.findAll()).thenReturn(products);
-        Set<ProductDTO> databaseProducts = productService.getProducts().getProducts();
+        Set<ProductDTO> databaseProducts = productService.getProducts();
 
         // Then
         assertEquals(2, databaseProducts.size());
@@ -170,7 +170,7 @@ class ProductServiceImplTest {
         productService.addProduct(productMapper.productToProductDTO(pizza));
         productService.removeProduct(FIRST_ID);
         when(productRepository.findAll()).thenReturn(products);
-        Set<ProductDTO> databaseProducts = productService.getProducts().getProducts();
+        Set<ProductDTO> databaseProducts = productService.getProducts();
 
         // Then
         assertEquals(1, databaseProducts.size());

@@ -2,7 +2,6 @@ package com.ntt.bistroapplication.controller;
 
 import com.ntt.bistroapplication.exception.NonexistentProductException;
 import com.ntt.bistroapplication.model.ProductDTO;
-import com.ntt.bistroapplication.model.ProductSetDTO;
 import com.ntt.bistroapplication.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.*;
@@ -11,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.Set;
 
 @RestController
 @RequestMapping(ProductController.BASE_URL)
@@ -25,7 +25,7 @@ public class ProductController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Retrieves all the products in the database")
-    public ProductSetDTO getProducts() {
+    public Set<ProductDTO> getProducts() {
         return productService.getProducts();
     }
 
