@@ -130,9 +130,6 @@ public class ProductSeeder implements ApplicationListener<ContextRefreshedEvent>
         products.add(createProduct("Peaches Croissant", ProductType.CROISSANT,
                 butter, eggs, yeast, sugar, flour, milk, peaches));
 
-        products.add(createProduct("Peaches Croissant", ProductType.CROISSANT,
-                butter, eggs, yeast, sugar, flour, milk, peaches));
-
         products.add(createProduct("Simple Spaghetti", ProductType.PASTA,
                 pasta, meatballs, tomatoSauce));
 

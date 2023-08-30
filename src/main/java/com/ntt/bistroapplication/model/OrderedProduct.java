@@ -2,6 +2,9 @@ package com.ntt.bistroapplication.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 public class OrderedProduct {
     @Id
@@ -11,6 +14,8 @@ public class OrderedProduct {
     private Product product;
     @ManyToOne
     private Ingredient topping = null;
+    @ManyToMany(mappedBy = "products")
+    private List<PlacedOrder> order = new ArrayList<>();
 
     public OrderedProduct() {}
 
@@ -40,6 +45,14 @@ public class OrderedProduct {
 
     public void setTopping(Ingredient topping) {
         this.topping = topping;
+    }
+
+    public List<PlacedOrder> getOrder() {
+        return order;
+    }
+
+    public void setOrder(List<PlacedOrder> order) {
+        this.order = order;
     }
 
     @Override

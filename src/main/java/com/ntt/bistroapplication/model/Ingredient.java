@@ -1,11 +1,11 @@
 package com.ntt.bistroapplication.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Ingredient {
@@ -14,6 +14,10 @@ public class Ingredient {
     private Long id;
     private String name;
     private BigDecimal cost;
+    @ManyToMany(mappedBy = "ingredients")
+    private Set<Product> product;
+    @OneToMany(mappedBy = "topping")
+    private List<OrderedProduct> toppings = new ArrayList<>();
 
     public Ingredient() {}
 
@@ -45,6 +49,22 @@ public class Ingredient {
 
     public void setCost(BigDecimal cost) {
         this.cost = cost;
+    }
+
+    public Set<Product> getProduct() {
+        return product;
+    }
+
+    public void setProduct(Set<Product> product) {
+        this.product = product;
+    }
+
+    public List<OrderedProduct> getToppings() {
+        return toppings;
+    }
+
+    public void setToppings(List<OrderedProduct> toppings) {
+        this.toppings = toppings;
     }
 
     @Override
