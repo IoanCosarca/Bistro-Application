@@ -66,12 +66,9 @@ class CustomerControllerTest {
     @DisplayName(value = "Test if a customer is added.")
     void addCustomer() throws Exception
     {
-        Set<CustomerDTO> customers = new HashSet<>();
         CustomerDTO customer = new CustomerDTO(NAME_ALIN);
-        customers.add(customer);
         customerService.addCustomer(customer);
 
-        when(customerService.getCustomers()).thenReturn(customers);
         ObjectMapper objectMapper = new ObjectMapper();
         String customerJson = objectMapper.writeValueAsString(customer);
         mockMvc.perform(post(CustomerController.BASE_URL)
