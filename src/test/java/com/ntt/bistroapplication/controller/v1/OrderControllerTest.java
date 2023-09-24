@@ -1,17 +1,15 @@
 package com.ntt.bistroapplication.controller.v1;
 
-import com.ntt.bistroapplication.exception.RestResponseEntityExceptionHandler;
 import com.ntt.bistroapplication.model.CustomerDTO;
 import com.ntt.bistroapplication.model.PlacedOrderDTO;
 import com.ntt.bistroapplication.service.OrderService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,11 +20,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@WebMvcTest(OrderController.class)
 class OrderControllerTest {
-    @Mock
+    @MockBean
     OrderService orderService;
-    @InjectMocks
-    OrderController orderController;
+    @Autowired
     MockMvc mockMvc;
     static final String CUSTOMER_NAME = "Mircea";
     static final Long ID = 1L;
@@ -34,10 +32,6 @@ class OrderControllerTest {
     @BeforeEach
     void setUp()
     {
-        MockitoAnnotations.openMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(orderController)
-                .setControllerAdvice(new RestResponseEntityExceptionHandler())
-                .build();
     }
 
     @Test

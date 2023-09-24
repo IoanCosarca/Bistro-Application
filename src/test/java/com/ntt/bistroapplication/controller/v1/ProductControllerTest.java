@@ -1,19 +1,17 @@
 package com.ntt.bistroapplication.controller.v1;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ntt.bistroapplication.exception.RestResponseEntityExceptionHandler;
 import com.ntt.bistroapplication.model.ProductDTO;
 import com.ntt.bistroapplication.model.ProductType;
 import com.ntt.bistroapplication.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -25,11 +23,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@WebMvcTest(ProductController.class)
 class ProductControllerTest {
-    @Mock
+    @MockBean
     ProductService productService;
-    @InjectMocks
-    ProductController productController;
+    @Autowired
     MockMvc mockMvc;
     static final String FIRST_PRODUCT = "Pizza";
     static final String SECOND_PRODUCT = "Cake";
@@ -43,10 +41,6 @@ class ProductControllerTest {
     @BeforeEach
     void setUp()
     {
-        MockitoAnnotations.initMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(productController)
-                .setControllerAdvice(new RestResponseEntityExceptionHandler())
-                .build();
     }
 
     @Test
@@ -68,8 +62,8 @@ class ProductControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].name", is(FIRST_PRODUCT)))
-                .andExpect(jsonPath("$[1].name", is(SECOND_PRODUCT)));
+                .andExpect(jsonPath("$[*].name",
+                        containsInAnyOrder(FIRST_PRODUCT, SECOND_PRODUCT)));
     }
 
     @Test
