@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -28,19 +29,21 @@ class OrderControllerTest {
     MockMvc mockMvc;
     static final String CUSTOMER_NAME = "Mircea";
     static final Long ID = 1L;
+    private List<PlacedOrderDTO> placedOrderDTOS;
+    private PlacedOrderDTO order;
 
     @BeforeEach
     void setUp()
     {
+        placedOrderDTOS = new ArrayList<>();
+        order = new PlacedOrderDTO();
+        CustomerDTO customer = new CustomerDTO(CUSTOMER_NAME);
+        order.setCustomer(customer);
     }
 
     @Test
     void getCustomerOrders() throws Exception
     {
-        List<PlacedOrderDTO> placedOrderDTOS = new ArrayList<>();
-        PlacedOrderDTO order = new PlacedOrderDTO();
-        CustomerDTO customer = new CustomerDTO(CUSTOMER_NAME);
-        order.setCustomer(customer);
         orderService.addOrder(order);
         placedOrderDTOS.add(order);
 
@@ -48,6 +51,7 @@ class OrderControllerTest {
         mockMvc.perform(get(OrderController.BASE_URL + "/customerOrders/" + ID)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isFound())
-                .andExpect(jsonPath("$", hasSize(1)));
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].customer.name", is(CUSTOMER_NAME)));
     }
 }

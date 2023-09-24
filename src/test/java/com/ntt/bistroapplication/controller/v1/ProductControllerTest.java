@@ -37,26 +37,38 @@ class ProductControllerTest {
     static final Long SECOND_ID = 2L;
     static final BigDecimal OLD_PRICE = BigDecimal.valueOf(6);
     static final BigDecimal NEW_PRICE = BigDecimal.valueOf(7);
+    private Set<ProductDTO> products;
+    private ProductDTO pizza;
+    private ProductDTO cake;
+    private ProductDTO modifiedProduct;
 
     @BeforeEach
     void setUp()
     {
+        products = new HashSet<>();
+
+        pizza = new ProductDTO();
+        pizza.setName(FIRST_PRODUCT);
+        pizza.setProductType(FIRST_TYPE);
+        pizza.setPrice(OLD_PRICE);
+
+        cake = new ProductDTO();
+        cake.setName(SECOND_PRODUCT);
+        cake.setProductType(SECOND_TYPE);
+
+        products.add(pizza);
+        products.add(cake);
+
+        modifiedProduct = new ProductDTO();
+        modifiedProduct.setName(FIRST_PRODUCT);
+        modifiedProduct.setProductType(FIRST_TYPE);
+        modifiedProduct.setPrice(NEW_PRICE);
     }
 
     @Test
     @DisplayName(value = "Test if all products can be returned.")
     void getProducts() throws Exception
     {
-        Set<ProductDTO> products = new HashSet<>();
-        ProductDTO pizza = new ProductDTO();
-        pizza.setName(FIRST_PRODUCT);
-        pizza.setProductType(FIRST_TYPE);
-        ProductDTO cake = new ProductDTO();
-        cake.setName(SECOND_PRODUCT);
-        cake.setProductType(SECOND_TYPE);
-        products.add(pizza);
-        products.add(cake);
-
         when(productService.getProducts()).thenReturn(products);
         mockMvc.perform(get(ProductController.BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -70,12 +82,6 @@ class ProductControllerTest {
     @DisplayName(value = "Test if a product can be found by it's id.")
     void getByID() throws Exception
     {
-        ProductDTO pizza = new ProductDTO();
-        pizza.setName(FIRST_PRODUCT);
-        pizza.setProductType(FIRST_TYPE);
-        ProductDTO cake = new ProductDTO();
-        cake.setName(SECOND_PRODUCT);
-        cake.setProductType(SECOND_TYPE);
         productService.addProduct(pizza);
         productService.addProduct(cake);
 
@@ -90,12 +96,6 @@ class ProductControllerTest {
     @DisplayName(value = "Test if a product can be found by it's name.")
     void getByName() throws Exception
     {
-        ProductDTO pizza = new ProductDTO();
-        pizza.setName(FIRST_PRODUCT);
-        pizza.setProductType(FIRST_TYPE);
-        ProductDTO cake = new ProductDTO();
-        cake.setName(SECOND_PRODUCT);
-        cake.setProductType(SECOND_TYPE);
         productService.addProduct(pizza);
         productService.addProduct(cake);
 
@@ -110,13 +110,10 @@ class ProductControllerTest {
     @DisplayName(value = "Test if a product is added.")
     void saveProduct() throws Exception
     {
-        ProductDTO product = new ProductDTO();
-        product.setName(FIRST_PRODUCT);
-        product.setProductType(FIRST_TYPE);
-        productService.addProduct(product);
+        productService.addProduct(pizza);
 
         ObjectMapper objectMapper = new ObjectMapper();
-        String productJson = objectMapper.writeValueAsString(product);
+        String productJson = objectMapper.writeValueAsString(pizza);
         mockMvc.perform(post(ProductController.BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(productJson))
@@ -127,16 +124,7 @@ class ProductControllerTest {
     @DisplayName(value = "Test if the price of a product can be updated.")
     void updatePrice() throws Exception
     {
-        ProductDTO product = new ProductDTO();
-        product.setName(FIRST_PRODUCT);
-        product.setProductType(FIRST_TYPE);
-        product.setPrice(OLD_PRICE);
-        productService.addProduct(product);
-
-        ProductDTO modifiedProduct = new ProductDTO();
-        modifiedProduct.setName(FIRST_PRODUCT);
-        modifiedProduct.setProductType(FIRST_TYPE);
-        modifiedProduct.setPrice(NEW_PRICE);
+        productService.addProduct(pizza);
         productService.updatePrice(FIRST_ID, NEW_PRICE);
 
         when(productService.getByID(FIRST_ID)).thenReturn(modifiedProduct);

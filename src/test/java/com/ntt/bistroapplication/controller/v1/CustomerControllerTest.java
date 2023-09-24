@@ -30,22 +30,24 @@ class CustomerControllerTest {
     static final String NAME_ALIN = "Alin";
     static final String NAME_LUCIAN = "Lucian";
     static final Long ID = 6L;
+    private Set<CustomerDTO> customers;
+    private CustomerDTO customer1;
+    private CustomerDTO customer2;
 
     @BeforeEach
     void setUp()
     {
+        customers = new HashSet<>();
+        customer1 = new CustomerDTO(NAME_ALIN);
+        customer2 = new CustomerDTO(NAME_LUCIAN);
+        customers.add(customer1);
+        customers.add(customer2);
     }
 
     @Test
     @DisplayName(value = "Test if all the customers can be returned.")
     void getCustomers() throws Exception
     {
-        Set<CustomerDTO> customers = new HashSet<>();
-        CustomerDTO customer1 = new CustomerDTO(NAME_ALIN);
-        CustomerDTO customer2 = new CustomerDTO(NAME_LUCIAN);
-        customers.add(customer1);
-        customers.add(customer2);
-
         when(customerService.getCustomers()).thenReturn(customers);
         mockMvc.perform(get(CustomerController.BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -58,11 +60,11 @@ class CustomerControllerTest {
     @DisplayName(value = "Test if a customer is added.")
     void addCustomer() throws Exception
     {
-        CustomerDTO customer = new CustomerDTO(NAME_ALIN);
-        customerService.addCustomer(customer);
+        customerService.addCustomer(customer1);
+        customerService.addCustomer(customer2);
 
         ObjectMapper objectMapper = new ObjectMapper();
-        String customerJson = objectMapper.writeValueAsString(customer);
+        String customerJson = objectMapper.writeValueAsString(customer1);
         mockMvc.perform(post(CustomerController.BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(customerJson))
