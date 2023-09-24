@@ -30,6 +30,7 @@ class CustomerControllerTest {
     static final String NAME_ALIN = "Alin";
     static final String NAME_LUCIAN = "Lucian";
     static final Long ID = 6L;
+    static final String path = CustomerController.BASE_URL + "/" + ID;
     private Set<CustomerDTO> customers;
     private CustomerDTO customer1;
     private CustomerDTO customer2;
@@ -74,8 +75,7 @@ class CustomerControllerTest {
     @Test
     @DisplayName(value = "Test if a customer can be removed.")
     void deleteCustomer() throws Exception {
-        mockMvc.perform(delete(CustomerController.BASE_URL + "/" + ID)
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(delete(path).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 }

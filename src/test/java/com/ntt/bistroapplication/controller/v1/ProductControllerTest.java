@@ -37,6 +37,8 @@ class ProductControllerTest {
     static final Long SECOND_ID = 2L;
     static final BigDecimal OLD_PRICE = BigDecimal.valueOf(6);
     static final BigDecimal NEW_PRICE = BigDecimal.valueOf(7);
+    static final String pathID = ProductController.BASE_URL + "/getByID/" + SECOND_ID;
+    static final String pathName = ProductController.BASE_URL + "/getByName/" + SECOND_PRODUCT;
     private Set<ProductDTO> products;
     private ProductDTO pizza;
     private ProductDTO cake;
@@ -86,8 +88,7 @@ class ProductControllerTest {
         productService.addProduct(cake);
 
         when(productService.getByID(SECOND_ID)).thenReturn(cake);
-        mockMvc.perform(get(ProductController.BASE_URL + "/getByID/" + SECOND_ID)
-                .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get(pathID).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isFound())
                 .andExpect(jsonPath("$.name", equalTo(SECOND_PRODUCT)));
     }
@@ -100,8 +101,7 @@ class ProductControllerTest {
         productService.addProduct(cake);
 
         when(productService.getDTOByName(SECOND_PRODUCT)).thenReturn(cake);
-        mockMvc.perform(get(ProductController.BASE_URL + "/getByName/" + SECOND_PRODUCT)
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get(pathName).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isFound())
                 .andExpect(jsonPath("$.name", equalTo(SECOND_PRODUCT)));
     }

@@ -29,6 +29,7 @@ class OrderControllerTest {
     MockMvc mockMvc;
     static final String CUSTOMER_NAME = "Mircea";
     static final Long ID = 1L;
+    static final String path = OrderController.BASE_URL + "/customerOrders/" + ID;
     private List<PlacedOrderDTO> placedOrderDTOS;
     private PlacedOrderDTO order;
 
@@ -48,8 +49,7 @@ class OrderControllerTest {
         placedOrderDTOS.add(order);
 
         when(orderService.getCustomerOrders(ID)).thenReturn(placedOrderDTOS);
-        mockMvc.perform(get(OrderController.BASE_URL + "/customerOrders/" + ID)
-                .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get(path).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isFound())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].customer.name", is(CUSTOMER_NAME)));
