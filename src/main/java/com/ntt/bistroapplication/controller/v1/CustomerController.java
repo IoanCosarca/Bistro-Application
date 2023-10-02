@@ -1,4 +1,4 @@
-package com.ntt.bistroapplication.controller;
+package com.ntt.bistroapplication.controller.v1;
 
 import com.ntt.bistroapplication.model.CustomerDTO;
 import com.ntt.bistroapplication.service.CustomerService;

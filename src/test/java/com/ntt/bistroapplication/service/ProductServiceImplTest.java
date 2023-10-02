@@ -48,28 +48,6 @@ class ProductServiceImplTest {
     }
 
     @Test
-    @DisplayName(value = "Test if a product is added.")
-    void testAddProduct()
-    {
-        // Given
-        Set<Product> products = new HashSet<>();
-        Product dummyProduct = new Product();
-        dummyProduct.setName(FIRST_PRODUCT);
-        dummyProduct.setProductType(FIRST_TYPE);
-        products.add(dummyProduct);
-
-        // When
-        productService.addProduct(productMapper.productToProductDTO(dummyProduct));
-        when(productRepository.findAll()).thenReturn(products);
-        Set<ProductDTO> databaseProducts = productService.getProducts();
-
-        // Then
-        assertEquals(1, databaseProducts.size());
-        assertEquals(1, products.size());
-        verify(productRepository, times(1)).save(dummyProduct);
-    }
-
-    @Test
     @DisplayName(value = "Test if all products can be returned.")
     void testGetProducts()
     {
@@ -123,6 +101,28 @@ class ProductServiceImplTest {
     @DisplayName(value = "Test if finding method fails when it should.")
     void testGetProductFail() throws NonexistentProductException {
         assertThrows(NonexistentProductException.class, () -> productService.getByID(16L));
+    }
+
+    @Test
+    @DisplayName(value = "Test if a product is added.")
+    void testAddProduct()
+    {
+        // Given
+        Set<Product> products = new HashSet<>();
+        Product dummyProduct = new Product();
+        dummyProduct.setName(FIRST_PRODUCT);
+        dummyProduct.setProductType(FIRST_TYPE);
+        products.add(dummyProduct);
+
+        // When
+        productService.addProduct(productMapper.productToProductDTO(dummyProduct));
+        when(productRepository.findAll()).thenReturn(products);
+        Set<ProductDTO> databaseProducts = productService.getProducts();
+
+        // Then
+        assertEquals(1, databaseProducts.size());
+        assertEquals(1, products.size());
+        verify(productRepository, times(1)).save(dummyProduct);
     }
 
     @Test
